@@ -1,0 +1,9 @@
+mypy
+types-flask
+pyright
+# pytype
+flake8
+pytest
+requests
+types-requests
+coverage

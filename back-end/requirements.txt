@@ -1,0 +1,5 @@
+# web framework
+FlaskSimpleAuth[password] >= 28.0
+# Postgres database
+anodb
+psycopg
