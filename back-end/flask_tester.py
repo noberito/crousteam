@@ -24,6 +24,7 @@
 #
 
 import re
+from typing import Any
 import logging
 log = logging.getLogger("flask_tester")
 
@@ -74,7 +75,7 @@ class Authenticator:
         else:
             kwargs["data"] = {key: val}
 
-    def setAuth(self, login: str|None, kwargs: dict[str, str]):
+    def setAuth(self, login: str|None, kwargs: dict[str, Any]):
         """Set request authentication stuff."""
 
         if login is None:  # not needed
