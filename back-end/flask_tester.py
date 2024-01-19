@@ -143,7 +143,7 @@ class Client:
         """Associate a password to a login, None to remove."""
         self._auth.setPass(login, password)
 
-    def _request(method: str, path: str, **kwargs):
+    def _request(self, method: str, path: str, **kwargs):
         """Run a request and return response."""
         raise Exception("not implemented")
 
