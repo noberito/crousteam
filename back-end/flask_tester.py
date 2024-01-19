@@ -63,7 +63,7 @@ class Authenticator:
         """Associate a token to a user."""
         self._set(login, token, self._tokens)
 
-    def _param(self, kwargs, key, val):
+    def _param(self, kwargs: dict[str, Any], key: str, val: Any):
         """Add request parameter to "json" or "data"."""
 
         if "json" in kwargs:
@@ -191,7 +191,7 @@ class RequestClient(Client):
         from requests import Session
         self._requests = Session()
 
-    def _request(self, method, path, **kwargs):
+    def _request(self, method: str, path: str, **kwargs):
         res = self._requests.request(method, self._base_url + path, **kwargs)
         return RequestFlaskResponse(res)
 
@@ -205,5 +205,5 @@ class FlaskClient(Client):
         from app import app
         self._client = app.test_client()
 
-    def _request(self, method, path, **kwargs):
+    def _request(self, method: str, path: str, **kwargs):
         return self._client.open(method=method, path=path, **kwargs)
