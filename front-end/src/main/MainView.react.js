@@ -1,6 +1,8 @@
-import React from 'react';
-import { Button, View, StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import { Button, View, StyleSheet, } from 'react-native';
 import AllUsers from './AllUsers.react';
+import BottomBar from './BottomBar.react';
+import Menu from './Menu.react';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -11,8 +13,7 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     marginBottom:8,
   },
-  bottomButton: {
-    flexShrink:0,
+  bottom: {
     flexBasis:100,
   },
 });
@@ -23,16 +24,15 @@ const styles = StyleSheet.create({
  * @param {()=>{}} logOutUser return to the logged out state
  * @returns
  */
+
+
 export default function MainView({ authToken, logoutUser}) {
+  const [page, setPage] = useState('friender')
   return (
     <View style={styles.mainContainer}>
-      <View
-        style={styles.cardContainer}>
-        <AllUsers authToken={authToken} />
-      </View>
-      <View
-        style={styles.bottomButton}>
-        <Button title="Log out" onPress={logoutUser} />
+      <Menu choixPage={page} authToken={authToken}/>
+      <View style={styles.bottom}>
+        <BottomBar page={page} setPage={setPage}/>
       </View>
     </View>
   );
