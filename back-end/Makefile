@@ -95,6 +95,11 @@ $(PYTHON_VENV):
 	pip install -r dev-requirements.txt
 	pip install -r requirements.txt
 
+.PHONY: venv.up
+venv.up: $(PYTHON_VENV)
+	source $(PYTHON_VENV)/bin/activate
+	pip install -U $$(pip freeze | cut -d= -f1)
+
 #
 # Generated Files
 #
