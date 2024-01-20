@@ -88,7 +88,7 @@ def get_version(sleep: float = 0.0):
         "db-version": db._db_version,
         "now": db.now(),
         "connections": db._nobjs,
-        "hits": app._fsa._cm._cache.hits(),
+        "hits": app._fsa._cm._cache.hits(),  # type: ignore
         # package versions
         "python": sys.version,
         db._db: db._db_version,
