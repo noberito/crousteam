@@ -24,6 +24,7 @@
 #
 
 import re
+import io
 from typing import Any
 import logging
 log = logging.getLogger("flask_tester")
@@ -115,7 +116,6 @@ class RequestFlaskResponse:
     def __init__(self, response):
         self._response = response
         self.status_code = response.status_code
-        self.raw = response.content
         self.data = response.content
         self.text = response.text
         self.headers = response.headers
@@ -192,6 +192,28 @@ class RequestClient(Client):
         self._requests = Session()
 
     def _request(self, method: str, path: str, **kwargs):
+        # ensure file upload compatibility
+        if "data" in kwargs:
+            data = kwargs["data"]
+            files: dict[str, Any] = {}
+            for name, whatever in data.items():
+                # FIXME what types should be accepted?
+                if isinstance(whatever, io.BufferedReader):
+                    files[name] = whatever
+                elif isinstance(whatever, tuple):
+                    # reorder tuple to match requests expectations:
+                    file_handle, file_name, file_type = whatever
+                    whatever = (file_name, file_handle, file_type)
+                    files[name] = whatever
+                else:
+                    pass
+            # complete "data" to "files" parameter transfer
+            for name in files:
+                del data[name]
+            assert "files" not in kwargs
+            kwargs["files"] = files
+            # sanity
+            assert not (files and "json" in kwargs), "cannot mix file upload and json?"
         res = self._requests.request(method, self._base_url + path, **kwargs)
         return RequestFlaskResponse(res)
 
