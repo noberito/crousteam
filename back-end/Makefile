@@ -319,3 +319,7 @@ counts:
 	# tables: $(shell egrep -i "^\\s*create\\s+table" $(F.sql) | wc -l)
 	# routes: $(shell egrep -i "^\\s*@app\.(route|get|post|patch|put|delete)" $(F.py) | wc -l)
 	cloc --by-file-by-lang $(F.py) test.py $(F.sql)
+
+.PHONY: commits
+commits:
+	git log | grep "^Author" | cut -d: -f2 | sort | uniq -c | sort -nr
