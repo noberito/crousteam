@@ -214,6 +214,7 @@ def test_redir(api):
         pytest.skip("cannot test ssl redir without ssl")
 
 
+# /messages
 def test_messages(api):
     api.check(
         "GET",
@@ -223,3 +224,33 @@ def test_messages(api):
         data={"pseudo": "calvin", "gname": "copaing"},
         login=ADMIN,
     )
+
+
+# /Profile -> Post Information
+def test_add_profile(api):
+    api.check(
+        "POST",
+        "/profile",
+        201,
+        data={
+            "lid": 1,
+            "pseudo": "foobla",
+            "naissance": "1999-01-08",
+            "photoPath": "/this/is/photo/path",
+        },
+        login=ADMIN,
+    )
+    api.check(
+        "POST",
+        "/profile",
+        404,
+        data={
+            "lid": 1,
+            "pseudo": "foobla",
+            "naissance": "1999-01-08",
+            "photoPath": "/this/is/photo/path",
+        },
+        login=ADMIN,
+    )
+    # nettoyer : créer un delete (et le tester)
+    # tester get_single_pseudo

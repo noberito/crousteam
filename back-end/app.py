@@ -194,5 +194,23 @@ def get_messages(pseudo: str, gname: str):
     return json(res), 200
 
 
+@app.get("/profile", authorize="ALL")
+def get_single_pseudo(pseudo: str):
+    res = db.get_single_pseudo(pseudo=pseudo)
+    return json(res), 200
+
+
+@app.post("/profile", authorize="ALL")
+def post_info_register(lid: int, pseudo: str, naissance: str, photoPath: str):
+    already_exist = db.get_single_pseudo(pseudo=pseudo)
+    # log.info(f"already_exist: {already_exist}")
+    if already_exist:
+        return "pseudo already exist", 404
+    res = db.post_info_register(
+        lid=lid, pseudo=pseudo, naissance=naissance, photoPath=photoPath
+    )
+    return json(res), 201
+
+
 # SHOULD STAY AS LAST LOC
 log.debug("running…")

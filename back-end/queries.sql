@@ -39,3 +39,10 @@ JOIN AppGroup USING (gid)
 JOIN Profile USING (lid)
 WHERE gname = :gname
 ORDER BY mtime DESC;
+
+-- name: post_info_register!
+INSERT INTO Profile(lid, pseudo, naissance, photoPath)
+VALUES (:lid, :pseudo, :naissance, :photoPath);
+
+-- name: get_single_pseudo^
+SELECT TRUE FROM Profile WHERE pseudo = :pseudo;
