@@ -39,10 +39,10 @@ export default function CreateAccount({ onSuccess, onCancel }) {
   const sendUserCreationRequest = () => {
     setIsLoading(true);
     axios({
-      baseURL : baseUrl,
-      url : '/register',
-      method : 'POST',
-      data : { login: username, password: password }
+      baseURL: baseUrl,
+      url: '/register',
+      method: 'POST',
+      data: { login: username, password: password }
     }).then(response => {
       setIsLoading(false)
       if (response.status >= 200 && response.status < 300) {
@@ -80,7 +80,7 @@ export default function CreateAccount({ onSuccess, onCancel }) {
           <Button title="< Login" disabled={isLoading} onPress={() => { onCancel(); }} />
         </View>
         <View style={styles.button}>
-          <Button title="Create Account" disabled={isLoading} onPress={() => { sendUserCreationRequest(); }} />
+          <Button title="Continue" disabled={isLoading} onPress={() => { onSuccess(); }} />
         </View>
       </View>
     </KivCard>
