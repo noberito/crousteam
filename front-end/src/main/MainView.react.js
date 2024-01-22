@@ -6,16 +6,18 @@ import Menu from './Menu.react';
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flexGrow:1,
+    flex:1,
+    padding:16,
+    justifyContent:"space-between"
   },
   cardContainer: {
     flexGrow:1,
     justifyContent:'center',
     marginBottom:8,
   },
-  bottom: {
+  footer: {
     flexBasis:100,
-  },
+  }
 });
 
 /**
@@ -29,9 +31,9 @@ const styles = StyleSheet.create({
 export default function MainView({ authToken, logoutUser}) {
   const [page, setPage] = useState('friender')
   return (
-    <View style={styles.mainContainer}>
+    <View style = {styles.mainContainer}>
       <Menu choixPage={page} authToken={authToken}/>
-      <View style={styles.bottom}>
+      <View style = {styles.footer}>
         <BottomBar page={page} setPage={setPage}/>
       </View>
     </View>

@@ -1,9 +1,22 @@
 import React from 'react'
 import { Button, View, StyleSheet } from 'react-native';
 
+const styles = StyleSheet.create({
+  bottomBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#3498db', // You can change the background color as needed
+    height: 50, // Set the height of the bar
+    width: '100%', // Make it take the entire width
+  }
+
+});
+
+
 export default function BottomBar ({page, setPage}) {
     return (
-      <View style={{ flexDirection:"row",justifyContent:"center", position: 'absolute', width:'100%', bottom: 0, left: 0, right: 0,padding:0, textAlign: 'center' }}>
+      <View style={styles.bottomBar}>
         <Button title = "My Profile" style={{marginRight: '10px' }} onPress = {() => {setPage('myprofile')}}/>
         <Button title = "Friender" style={{ marginRight: '10px' }} onPress = {() => {setPage('friender')}}/>
         <Button title = "Chat" style={{ marginRight: '10px' }} onPress = {() => {setPage('chat')}}/>

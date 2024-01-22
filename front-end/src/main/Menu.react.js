@@ -13,7 +13,7 @@ const Menu = (props) => {
       return (<ChatView></ChatView>)
     }
     if (props.choixPage == 'friender') {
-        return (<FrienderView authtoken={props.authtoken}></FrienderView>)
+        return (<FrienderView authToken={props.authToken}></FrienderView>)
     }
     if (props.choixPage == 'event') {
         return (<EventView></EventView>)
