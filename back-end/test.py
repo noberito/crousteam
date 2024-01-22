@@ -21,6 +21,7 @@ log = logging.getLogger("test")
 # real (or fake) authentication logins
 ADMIN, NOADM = "calvin", "hobbes"
 
+
 @pytest.fixture
 def authenticator():
     auth = ft.Authenticator()
@@ -33,6 +34,7 @@ def authenticator():
         log.warning("use default fake users")
     yield auth
 
+
 @pytest.fixture
 def api(authenticator):
     # return Request or Flask test client depending on "APP_URL"
@@ -43,12 +45,14 @@ def api(authenticator):
         log.warning("# running internal tests")
         yield ft.FlaskClient(authenticator)
 
+
 # sanity check
 def test_sanity(api):
     if "APP_URL" in os.environ:
         assert re.match(r"https?://", os.environ["APP_URL"])
     res = api.check("GET", "/version", 200, login=ADMIN, data={"sleep": 0.1})
     assert res.json and isinstance(res.json, dict)
+
 
 def test_who_am_i(api):
     api.check("GET", "/who-am-i", 401)
@@ -58,6 +62,7 @@ def test_who_am_i(api):
     api.check("PUT", "/who-am-i", 405, login=ADMIN)
     api.check("PATCH", "/who-am-i", 405, login=ADMIN)
     api.check("DELETE", "/who-am-i", 405, login=ADMIN)
+
 
 # /login and keep tokens
 def test_login(api):
@@ -79,17 +84,30 @@ def test_login(api):
     api.setToken(NOADM, noadm_token)
     # same with POST and parameters
     api.check("POST", "/login", 401, login=None)
-    res = api.check("POST", "/login", 201, data={"login": "calvin", "password": "hobbes"}, login=None)
+    res = api.check(
+        "POST",
+        "/login",
+        201,
+        data={"login": "calvin", "password": "hobbes"},
+        login=None,
+    )
     tok = res.json
     assert ":calvin:" in tok
     assert res.headers["FSA-User"] == "calvin (param)"
-    res = api.check("POST", "/login", 201, json={"login": "calvin", "password": "hobbes"}, login=None)
+    res = api.check(
+        "POST",
+        "/login",
+        201,
+        json={"login": "calvin", "password": "hobbes"},
+        login=None,
+    )
     tok = res.json
     assert ":calvin:" in tok
     assert res.headers["FSA-User"] == "calvin (param)"
     # test token auth
     api.setToken(ADMIN, None)
     api.setToken(NOADM, None)
+
 
 # /whatever # BAD URI
 def test_whatever(api):
@@ -98,6 +116,7 @@ def test_whatever(api):
     api.check("DELETE", "/whatever", 404)
     api.check("PUT", "/whatever", 404)
     api.check("PATCH", "/whatever", 404)
+
 
 # /version
 def test_version(api):
@@ -110,6 +129,7 @@ def test_version(api):
     api.check("PUT", "/version", 405)
     api.check("PATCH", "/version", 405)
 
+
 def test_stats(api):
     api.check("GET", "/stats", 401, login=None)
     api.check("GET", "/stats", 200, r"[0-9]", login=ADMIN)
@@ -121,27 +141,42 @@ def test_stats(api):
     res = api.check("GET", "/stats", 200, login=ADMIN)
     assert res.json is not None
 
+
 # /register
 def test_register(api):
     # register a new user
     user, pswd = "dyna-user", "dyna-user-pass-123"
     api.setPass(user, pswd)
     # bad login with a space
-    api.check("POST", "/register", 400, data={"login": "this is a bad login", "password": pswd}, login=None)
+    api.check(
+        "POST",
+        "/register",
+        400,
+        data={"login": "this is a bad login", "password": pswd},
+        login=None,
+    )
     # login too short
-    api.check("POST", "/register", 400, json={"login": "x", "password": pswd}, login=None)
+    api.check(
+        "POST", "/register", 400, json={"login": "x", "password": pswd}, login=None
+    )
     # login already exists
-    api.check("POST", "/register", 409, data={"login": "calvin", "password": "p"}, login=None)
+    api.check(
+        "POST", "/register", 409, data={"login": "calvin", "password": "p"}, login=None
+    )
     # missing "login" parameter
     api.check("POST", "/register", 400, json={"password": pswd}, login=None)
     # missing "password" parameter
     api.check("POST", "/register", 400, data={"login": user}, login=None)
     # password is too short
-    api.check("POST", "/register", 400, json={"login": "hello", "password": ""}, login=None)
+    api.check(
+        "POST", "/register", 400, json={"login": "hello", "password": ""}, login=None
+    )
     # password is too simple
     # api.check("POST", "/register", 400, json={"login": "hello", "password": "world!"}, login=None)
     # at last one which is expected to work!
-    api.check("POST", "/register", 201, json={"login": user, "password": pswd}, login=None)
+    api.check(
+        "POST", "/register", 201, json={"login": user, "password": pswd}, login=None
+    )
     user_token = api.check("GET", "/login", 200, r"^([^:]+:){3}[^:]+$", login=user).json
     api.setToken(user, user_token)
     api.check("DELETE", f"/users/{user}", 204, login=ADMIN)
@@ -149,6 +184,7 @@ def test_register(api):
     api.check("DELETE", f"/users/{ADMIN}", 400, login=ADMIN)
     api.setToken(user, None)
     api.setPass(user, None)
+
 
 # /users
 def test_users(api):
@@ -159,6 +195,7 @@ def test_users(api):
     api.check("PUT", "/users", 405, login=ADMIN)
     api.check("PATCH", "/users", 405, login=ADMIN)
     api.check("DELETE", "/users", 405, login=ADMIN)
+
 
 # http -> https
 def test_redir(api):
@@ -175,3 +212,14 @@ def test_redir(api):
         api._base_url = url
     else:
         pytest.skip("cannot test ssl redir without ssl")
+
+
+def test_messages(api):
+    api.check(
+        "GET",
+        "/messages",
+        200,
+        r"petit",
+        data={"pseudo": "calvin", "gname": "copaing"},
+        login=ADMIN,
+    )

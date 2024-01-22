@@ -31,3 +31,11 @@ RETURNING lid;
 
 -- name: delete_user!
 DELETE FROM Auth WHERE login = :login;
+
+-- name: get_messages
+SELECT mtext, CASE WHEN pseudo = :pseudo THEN 1 ELSE 0 END AS a_ecrit, mtime
+FROM Messages
+JOIN AppGroup USING (gid)
+JOIN Profile USING (lid)
+WHERE gname = :gname
+ORDER BY mtime DESC;

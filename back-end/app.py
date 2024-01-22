@@ -32,6 +32,7 @@ logging.basicConfig(level=logging.INFO)
 # start and configure flask service
 import FlaskSimpleAuth as fsa
 from FlaskSimpleAuth import jsonify as json  # type: ignore
+
 app = fsa.Flask(os.environ["APP_NAME"])
 app.config.from_envvar("APP_CONFIG")
 
@@ -45,12 +46,15 @@ log.info(f"started on {started}")
 
 # create database connection and load queries based on DB_* directives
 import database
+
 database.init_app(app)
 from database import db
 
 # authentication and authorization for the app
 import auth
+
 auth.init_app(app)
+
 
 #
 # General information about running app.
@@ -60,12 +64,12 @@ auth.init_app(app)
 # GET /version (sleep?)
 @app.get("/version", authorize="ANY")
 def get_version(sleep: float = 0.0):
-
     import version
 
     # possibly include a delay, for testing purposes…
     if sleep > 0:
         import time
+
         time.sleep(sleep)
 
     # describe app
@@ -96,11 +100,19 @@ def get_version(sleep: float = 0.0):
     }
 
     # other package versions
-    for pkg in ("FlaskSimpleAuth", "flask", "aiosql", "anodb", "cachetools",
-                "CacheToolsUtils", "ProxyPatternPool"):
+    for pkg in (
+        "FlaskSimpleAuth",
+        "flask",
+        "aiosql",
+        "anodb",
+        "cachetools",
+        "CacheToolsUtils",
+        "ProxyPatternPool",
+    ):
         info[pkg] = pkg_version(pkg)
 
     return info, 200
+
 
 # GET /stats
 @app.get("/stats", authorize="ADMIN")
@@ -109,10 +121,12 @@ def get_stats():
     dbc = db._count
     return {k: dbc[k] for k in dbc if dbc[k] != 0}, 200
 
+
 # GET /who-am-i
 @app.get("/who-am-i", authorize="ALL")
 def get_who_am_i(user: fsa.CurrentUser):
     return json(user), 200
+
 
 # POST /register (login, password)
 @app.post("/register", authorize="ANY")
@@ -127,8 +141,11 @@ def post_register(login: str, password: str):
         return f"user {login} already registered", 409
     # log.debug(f"user registration: {login}")
     # NOTE passwords have constraints, see configuration
-    aid = db.insert_auth(login=login, password=app.hash_password(password), is_admin=False)
+    aid = db.insert_auth(
+        login=login, password=app.hash_password(password), is_admin=False
+    )
     return json(aid), 201
+
 
 # GET /login
 #
@@ -137,6 +154,7 @@ def post_register(login: str, password: str):
 def get_login(user: fsa.CurrentUser):
     return json(app.create_token(user)), 200
 
+
 # POST /login (login, password)
 #
 # NOTE web-oriented approach is to use POST
@@ -144,9 +162,15 @@ def get_login(user: fsa.CurrentUser):
 def post_login(user: fsa.CurrentUser):
     return json(app.create_token(user)), 201
 
+
+@app.get("/messages", authorize="ALL")
+def get_messages(pseudo: str, gname: str):
+    res = db.get_messages(pseudo=pseudo, gname=gname)
+    return json(res), 200
+
+
 # routes mostly for testing, can be disabled
 if app.config.get("APP_TEST", False):
-
     # GET /users
     @app.get("/users", authorize="ADMIN")
     def get_users():
@@ -165,6 +189,7 @@ if app.config.get("APP_TEST", False):
         app.password_uncache(login)
         # app.token_uncache(?)
         return "", 204
+
 
 # ADD NEW CODE HERE
 
