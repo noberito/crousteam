@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import Login from './Login.react';
 import CreateAccount from './CreateAccount.react';
+import AddInfo from './AddInfo.react';
 
-const TABS = Object.freeze({ LOGIN: 'LOGIN', CREATE_ACCOUNT: 'CREATE_ACCOUNT' });
+const TABS = Object.freeze({ LOGIN: 'LOGIN', CREATE_ACCOUNT: 'CREATE_ACCOUNT', INFO: 'INFO' });
+
 
 /**
  *
@@ -21,7 +23,8 @@ export default function LoggedOutView({ onLogUser }) {
         alignItems: 'center',
       }}>
       {tab == TABS.LOGIN ? <Login onSuccess={onLogUser} onCancel={() => setTab(TABS.CREATE_ACCOUNT)} />
-        : <CreateAccount onSuccess={() => setTab(TABS.LOGIN)} onCancel={() => setTab(TABS.LOGIN)} />}
+        : tab == TABS.INFO ? <AddInfo onSuccess={() => setTab(TABS.LOGIN)} onCancel={() => setTab(TABS.LOGIN)} />
+          : <CreateAccount onSuccess={() => setTab(TABS.INFO)} onCancel={() => setTab(TABS.LOGIN)} />}
     </View>
   );
 }
