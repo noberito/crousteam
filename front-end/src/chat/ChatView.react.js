@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 
-import BottomBar from '../main/BottomBar.react';
+import BottomBar from '../friender/BottomBar.react';
 
 const ChatList = [
     { id: '1', contactName: 'John Doe', lastMessage: 'Hello!', lastMessageTime: '10:30 AM' },

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import BottomBar from '../main/BottomBar.react';
+import BottomBar from '../friender/BottomBar.react';
 
 const EventList = [
     { id: '1', title: 'Fête de Quartier', description: 'Venez nombreux pour une soirée de détente!' },

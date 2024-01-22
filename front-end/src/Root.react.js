@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import LoggedOutView from './loggedOut/LoggedOutView.react';
-import MainView from './main/MainView.react';
+import FrienderView from './friender/FrienderView.react';
 import Header from './header/Header.react';
 
 const styles = StyleSheet.create({
@@ -32,7 +32,7 @@ export default function Root() {
       <Header username={username} />
       <View style={styles.container}>
         {authToken != null ?
-          <MainView authToken={authToken} logoutUser={logoutUser} />
+          <FrienderView authToken={authToken} logoutUser={logoutUser} />
           : <LoggedOutView onLogUser={onLogUser} />}
       </View>
     </View>

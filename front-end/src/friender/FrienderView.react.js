@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
  */
 
 
-export default function MainView({ authToken, logoutUser}) {
+export default function FrienderView({ authToken, logoutUser}) {
   const [page, setPage] = useState('friender')
 
   if (page == 'friender') {

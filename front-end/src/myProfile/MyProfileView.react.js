@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import { Text, Button, View, StyleSheet } from 'react-native';
 
 import GeneralSettingsView from './GeneralSettingsView.react';
-import PreferencesView from './PreferencesView.react';
-import BottomBar from '../main/BottomBar.react';
+import ChangePreferencesView from './changePreferencesView.react';
+import BottomBar from '../friender/BottomBar.react';
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -23,7 +23,7 @@ export default function MyProfileView({username, page, setPage}) {
             return (
                  <View style={styles.mainContainer}>
                     <Button title = "General Settings" onPress= {() => {setChoosePageProfile("generalsettings")}}></Button>
-                    <Button title = "Preferences" onPress = {() => {setChoosePageProfile("preferences")}}></Button>
+                    <Button title = "Change Preferences" onPress = {() => {setChoosePageProfile("changepreferences")}}></Button>
                     <View style={styles.footer}>
                         <BottomBar page={page} setPage={setPage}/>
                     </View>
@@ -37,10 +37,10 @@ export default function MyProfileView({username, page, setPage}) {
                 </View>
                 )
             }
-        if (choosePageProfile == "preferences"){
+        if (choosePageProfile == "changepreferences"){
             return(
                 <View>
-                    <PreferencesView></PreferencesView>
+                    <ChangePreferencesView></ChangePreferencesView>
                     <Button title = "Retour" onPress= {() => {setChoosePageProfile("myprofile")}}></Button>
                 </View>
                 )

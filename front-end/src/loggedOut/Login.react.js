@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
  * @param {() => {}} onCancel
  */
 export default function Login({ onSuccess, onCancel }) {
-  const [username, setUsername] = useState('kiva');
-  const [password, setPassword] = useState('bien');
+  const [username, setUsername] = useState('calvin');
+  const [password, setPassword] = useState('hobbes');
   const [isLoading, setIsLoading] = useState(false);
   const [hasInvalidLogin, setHasInvalidLogin] = useState(false);
 
