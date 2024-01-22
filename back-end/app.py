@@ -163,12 +163,6 @@ def post_login(user: fsa.CurrentUser):
     return json(app.create_token(user)), 201
 
 
-@app.get("/messages", authorize="ALL")
-def get_messages(pseudo: str, gname: str):
-    res = db.get_messages(pseudo=pseudo, gname=gname)
-    return json(res), 200
-
-
 # routes mostly for testing, can be disabled
 if app.config.get("APP_TEST", False):
     # GET /users
@@ -192,6 +186,13 @@ if app.config.get("APP_TEST", False):
 
 
 # ADD NEW CODE HERE
+
+
+@app.get("/messages", authorize="ALL")
+def get_messages(pseudo: str, gname: str):
+    res = db.get_messages(pseudo=pseudo, gname=gname)
+    return json(res), 200
+
 
 # SHOULD STAY AS LAST LOC
 log.debug("running…")
