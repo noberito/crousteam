@@ -3,7 +3,7 @@
 --
 -- *MUST* be consistent with "data.sql" import and "test_users.in"
 CREATE TABLE IF NOT EXISTS Auth(
-  uid SERIAL8 PRIMARY KEY,
+  lid SERIAL8 PRIMARY KEY,
   login TEXT UNIQUE NOT NULL
     CHECK (LENGTH(login) >= 3 AND login ~ E'^[a-zA-Z][-a-zA-Z0-9_@\\.]*$'),
   email TEXT DEFAULT NULL CHECK (email IS NULL OR email ~ E'@') UNIQUE,
@@ -19,12 +19,12 @@ CREATE TABLE IF NOT EXISTS Preferences(
 
 CREATE TABLE IF NOT EXISTS Profile(
   pid SERIAL8 PRIMARY KEY,
-  uid INTEGER NOT NULL,
+  lid INTEGER NOT NULL,
   naissance DATE NOT NULL,
   photo TEXT DEFAULT NULL,
   CONSTRAINT fk_user
-    FOREIGN KEY (uid) 
-      REFERENCES Auth(uid)
+    FOREIGN KEY (lid) 
+      REFERENCES Auth(lid)
       ON DELETE CASCADE
 );
 
@@ -81,28 +81,28 @@ CREATE TABLE IF NOT EXISTS Event(
 
 CREATE TABLE IF NOT EXISTS UsersInEvent(
   eid INTEGER NOT NULL,
-  uid INTEGER NOT NULL,
-  UNIQUE (eid, uid),
+  lid INTEGER NOT NULL,
+  UNIQUE (eid, lid),
   CONSTRAINT fk_event
     FOREIGN KEY (eid)
     REFERENCES Event (eid)
     ON DELETE CASCADE,
   CONSTRAINT fk_user
-    FOREIGN KEY (uid)
-    REFERENCES Auth (uid)
+    FOREIGN KEY (lid)
+    REFERENCES Auth (lid)
     ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Messages(
   mid SERIAL8 PRIMARY KEY,
-  uid INTEGER NOT NULL,
+  lid INTEGER NOT NULL,
   mtext TEXT NOT NULL,
   mtime TIMESTAMP NOT NULL,
   gid INTEGER NOT NULL,
-  UNIQUE (uid, mtext, mtime),
-  CONSTRAINT fk_uid
-    FOREIGN KEY (uid)
-    REFERENCES Auth (uid)
+  UNIQUE (lid, mtext, mtime),
+  CONSTRAINT fk_lid
+    FOREIGN KEY (lid)
+    REFERENCES Auth (lid)
     ON DELETE CASCADE,
   CONSTRAINT fk_gid
     FOREIGN KEY (gid)
