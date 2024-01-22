@@ -2,7 +2,7 @@
 -- Authentication Data
 --
 -- *MUST* be consistent with "data.sql" import and "test_users.in"
-CREATE TABLE IF NOT EXISTS AppUser(
+CREATE TABLE IF NOT EXISTS Auth(
   uid SERIAL8 PRIMARY KEY,
   login TEXT UNIQUE NOT NULL
     CHECK (LENGTH(login) >= 3 AND login ~ E'^[a-zA-Z][-a-zA-Z0-9_@\\.]*$'),
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS Profile(
   photo TEXT DEFAULT NULL,
   CONSTRAINT fk_user
     FOREIGN KEY (uid) 
-      REFERENCES AppUser(uid)
+      REFERENCES Auth(uid)
       ON DELETE CASCADE
 );
 
@@ -89,7 +89,23 @@ CREATE TABLE IF NOT EXISTS UsersInEvent(
     ON DELETE CASCADE,
   CONSTRAINT fk_user
     FOREIGN KEY (uid)
-    REFERENCES AppUser (uid)
+    REFERENCES Auth (uid)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Messages(
+  mid SERIAL8 PRIMARY KEY,
+  uid INTEGER NOT NULL,
+  mtext TEXT NOT NULL,
+  mtime TIMESTAMP NOT NULL,
+  gid INTEGER NOT NULL,
+  UNIQUE (uid, mtext, mtime),
+  CONSTRAINT fk_uid
+    FOREIGN KEY (uid)
+    REFERENCES Auth (uid)
     ON DELETE CASCADE,
-    PRIMARY KEY (eid,uid)
+  CONSTRAINT fk_gid
+    FOREIGN KEY (gid)
+    REFERENCES AppGroup (gid)
+    ON DELETE CASCADE
 );

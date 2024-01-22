@@ -1,5 +1,5 @@
 -- cleanup *all* app tables
-DROP TABLE IF EXISTS AppUser CASCADE;
+DROP TABLE IF EXISTS Auth CASCADE;
 
 DROP TABLE IF EXISTS Profile CASCADE;
 
