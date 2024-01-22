@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS AppUser(
   uid SERIAL8 PRIMARY KEY,
   login TEXT UNIQUE NOT NULL
     CHECK (LENGTH(login) >= 3 AND login ~ E'^[a-zA-Z][-a-zA-Z0-9_@\\.]*$'),
-  email TEXT DEFAULT NULL CHECK (email IS NULL OR email ~ E'@'),
+  email TEXT DEFAULT NULL CHECK (email IS NULL OR email ~ E'@') UNIQUE,
   password TEXT NOT NULL,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   isAdmin BOOLEAN NOT NULL DEFAULT FALSE
@@ -38,7 +38,8 @@ CREATE TABLE IF NOT EXISTS UsersPref(
   CONSTRAINT fk_preferences
     FOREIGN KEY (pfid)
       REFERENCES Preferences (pfid)
-      ON DELETE CASCADE
+      ON DELETE CASCADE,
+  PRIMARY KEY (pid,pfid)
 );
 
 CREATE TABLE IF NOT EXISTS EventType (
@@ -49,7 +50,7 @@ CREATE TABLE IF NOT EXISTS EventType (
 
 CREATE TABLE IF NOT EXISTS AppGroup(
   gid SERIAL8 PRIMARY KEY,
-  gname TEXT NOT NULL
+  gname TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS UsersInGroup(
@@ -63,7 +64,8 @@ CREATE TABLE IF NOT EXISTS UsersInGroup(
   CONSTRAINT fk_profile
     FOREIGN KEY (pid)
     REFERENCES Profile (pid)
-    ON DELETE CASCADE
+    ON DELETE CASCADE,
+    PRIMARY KEY (gid,pid)
 );
 
 CREATE TABLE IF NOT EXISTS Event(
@@ -88,5 +90,6 @@ CREATE TABLE IF NOT EXISTS UsersInEvent(
   CONSTRAINT fk_user
     FOREIGN KEY (uid)
     REFERENCES AppUser (uid)
-    ON DELETE CASCADE
+    ON DELETE CASCADE,
+    PRIMARY KEY (eid,uid)
 );
