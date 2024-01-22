@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View } from 'react-native';
 import Login from './Login.react';
 import CreateAccount from './CreateAccount.react';
-import AddInfo from './AddInfo.react';
+import AddInfo from './AddInfo.react'
 
 const TABS = Object.freeze({ LOGIN: 'LOGIN', CREATE_ACCOUNT: 'CREATE_ACCOUNT', INFO: 'INFO' });
 

@@ -1,8 +1,11 @@
 import React, {useState} from 'react';
 import { Button, View, StyleSheet, } from 'react-native';
-import AllUsers from './AllUsers.react';
 import BottomBar from './BottomBar.react';
-import Menu from './Menu.react';
+
+import MyProfileView from '../myProfile/MyProfileView.react';
+import ChatView from '../chat/ChatView.react';
+import EventView from '../event/EventView.react';
+import AllUsers from './AllUsers.react';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -30,12 +33,23 @@ const styles = StyleSheet.create({
 
 export default function MainView({ authToken, logoutUser}) {
   const [page, setPage] = useState('friender')
-  return (
-    <View style = {styles.mainContainer}>
-      <Menu choixPage={page} authToken={authToken}/>
-      <View style = {styles.footer}>
-        <BottomBar page={page} setPage={setPage}/>
-      </View>
-    </View>
-  );
+
+  if (page == 'friender') {
+      return (<View style={styles.mainContainer}>
+        <AllUsers authToken={authToken}/>
+        <View style = {styles.footer}>
+          <BottomBar page={page} setPage={setPage}/>
+        </View>
+      </View>)
+    }
+    if (page == 'myprofile') {
+      return (<MyProfileView page={page} setPage={setPage}></MyProfileView>)
+    } 
+    if (page == 'chat') {
+      return (<ChatView page={page} setPage={setPage}></ChatView>)
+    }
+    
+    if (page == 'event') {
+        return (<EventView page={page} setPage={setPage}></EventView>)
+    }
 }
