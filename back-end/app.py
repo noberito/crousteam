@@ -274,5 +274,59 @@ def get_all_info(pseudo: str):
     return json(res), 200
 
 
+@app.get("/first-last-name/<pseudo>", authorize="ANY")
+def get_first_last_name(pseudo: str):
+    res = db.get_first_last_name(pseudo=pseudo)
+    if not res:
+        return "pseudo not found", 404
+    return json(res), 200
+
+
+@app.get("/all-info/<pseudo>", authorize="ANY")
+def get_all_info(pseudo: str):
+    res = db.get_all_info(pseudo=pseudo)
+    if not res:
+        return "pseudo not found", 404
+    return json(res), 200
+
+
+@app.post("/test/insert_preference_type", authorize="ALL")
+def test_insert_preference_type(pfid: int, pftype: str):
+    res = db.insert_preference_type(pfid=pfid, pftype=pftype)
+    if res:
+        return json(res), 201
+    return "pseudo not found", 404
+
+
+def test_insert_users_pref(pfid: int, pid: int):
+    res = db.insert_users_pref(pfid=pfid, pid=pid)
+    if res:
+        return json(res), 201
+    return "pseudo not found", 404
+
+
+@app.post("/test/insert_event", authorize="ALL")
+def test_insert_event(eid: int, ename: str, eloc: str, etime: datetime.datetime, tid: int, gid: int):
+    res = db.insert_event(eid=eid, ename=ename, eloc=eloc, etime=etime, tid=tid, gid=gid)
+    if res:
+        return json(res), 201
+    return "Couldn't insert event", 404
+
+
+@app.get("/test/get_profile_from_preference_type", authorize="ALL")
+def test_get_profile_from_preference_type(pftype: str):
+    res = db.get_profile_from_preference_type(pftype=pftype)
+    if res:
+        return json(res), 201
+    return "profile not found", 404
+
+
+@app.get("/test/get_profile_by_event_type", authorize="ALL")
+def test_get_profile_by_event_type(ename: str):
+    res = db.get_profile_by_event_type(ename=ename)
+    if res:
+        return json(res), 201
+    return "profile not found", 404
+
 # SHOULD STAY AS LAST LOC
 log.debug("running…")
