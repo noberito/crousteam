@@ -302,6 +302,7 @@ check: clean
 	$(MAKE) check.mypy
 	$(MAKE) check.flake8
 	$(MAKE) check.pytest
+	$(MAKE) clean
 	$(MAKE) check.coverage
 	$(MAKE) clean
 
