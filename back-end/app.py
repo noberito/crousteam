@@ -123,7 +123,7 @@ def get_stats():
 
 
 # GET /who-am-i
-@app.get("/who-am-i", authorize="ANY")
+@app.get("/who-am-i", authorize="ALL")
 def get_who_am_i(user: fsa.CurrentUser):
     return json(user), 200
 
@@ -168,7 +168,7 @@ if app.config.get("APP_TEST", False):
     # GET /users
     @app.get("/users", authorize="ADMIN")
     def get_users():
-        return json(db.get_auth_ANY()), 200
+        return json(db.get_auth_all()), 200
 
     # DELETE /users/<login>
     @app.delete("/users/<login>", authorize="ADMIN")
