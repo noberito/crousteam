@@ -76,7 +76,7 @@ SELECT TRUE FROM AppGroup WHERE gname = :gname;
 DELETE FROM AppGroup WHERE gname = :gname;
 
 -- name: get_first_last_name^
-SELECT firstName, lastName FROM Profile JOIN Auth USING (lid) WHERE pseudo = :pseudo;
+SELECT firstName, lastName FROM Profile WHERE pseudo = :pseudo;
 
 -- name: get_all_info^
 SELECT * FROM Profile WHERE pseudo = :pseudo;

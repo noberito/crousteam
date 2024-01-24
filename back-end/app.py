@@ -261,12 +261,16 @@ def delete_group_chat(gname: str):
 @app.get("/first-last-name/<pseudo>", authorize="ANY")
 def get_first_last_name(pseudo: str):
     res = db.get_first_last_name(pseudo=pseudo)
+    if not res:
+        return "pseudo not found", 404
     return json(res), 200
 
 
 @app.get("/all-info/<pseudo>", authorize="ANY")
 def get_all_info(pseudo: str):
     res = db.get_all_info(pseudo=pseudo)
+    if not res:
+        return "pseudo not found", 404
     return json(res), 200
 
 
