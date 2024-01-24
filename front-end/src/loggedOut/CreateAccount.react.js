@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, View, Text, StyleSheet } from 'react-native';
 import KivTextInput from '../common/KivTextInput.react';
 import KivCard from '../common/KivCard.react';
+import AppContext from '../common/appcontext';
 
 import axios from 'axios';
 import { baseUrl } from '../common/const';
@@ -36,6 +37,8 @@ export default function CreateAccount({ onSuccess, onCancel }) {
   const [isLoading, setIsLoading] = useState(false);
   const [hasFailure, setHasFailure] = useState(false);
 
+  const { setLastUid } = useContext(AppContext);
+
   const sendUserCreationRequest = () => { // get the lid from the server after sending post
     setIsLoading(true);
     axios({
@@ -47,7 +50,10 @@ export default function CreateAccount({ onSuccess, onCancel }) {
       setIsLoading(false)
       if (response.status >= 200 && response.status < 300) {
         setHasFailure(false)
+
+        setLastUid(response.data)
         onSuccess()
+
       } else {
         setHasFailure(true)
       }
@@ -80,7 +86,7 @@ export default function CreateAccount({ onSuccess, onCancel }) {
           <Button title="< Login" disabled={isLoading} onPress={() => { onCancel(); }} />
         </View>
         <View style={styles.button}>
-          <Button title="Continue" disabled={isLoading} onPress={() => { onSuccess(); }} />
+          <Button title="Continue" disabled={isLoading} onPress={() => { sendUserCreationRequest(); }} />
         </View>
       </View>
     </KivCard>

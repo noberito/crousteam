@@ -40,14 +40,14 @@ const styles = StyleSheet.create({
         color: '#888888',
     },
     mainContainer: {
-        flex:1,
-        padding:16,
-        justifyContent:"space-between"
-      },
+        flex: 1,
+        padding: 16,
+        justifyContent: "space-between"
+    },
     footer: {
-      flexBasis:100,
+        flexBasis: 100,
     }
-  });
+});
 
 export default function ChatView({ page, setPage, navigation }) {
     const [searchText, setSearchText] = useState('');
@@ -81,8 +81,8 @@ export default function ChatView({ page, setPage, navigation }) {
                 keyExtractor={(item) => item.id}
                 renderItem={renderChatItem}
             />
-            <View style = {styles.footer}>
-                <BottomBar page={page} setPage={setPage}/>
+            <View style={styles.footer}>
+                <BottomBar page={page} setPage={setPage} />
             </View>
         </View>
     );
