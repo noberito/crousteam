@@ -4,8 +4,8 @@ import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react
 import BottomBar from '../friender/BottomBar.react';
 
 const EventList = [
-    { id: '1', title: 'Fête de Quartier', description: 'Venez nombreux pour une soirée de détente!' },
-    { id: '2', title: 'Cours de Yoga en Plein Air', description: 'Rejoignez-nous pour une séance de yoga relaxante.' },
+    { id: '1', title: 'Implant capilaire', description: 'Cette technique marche !', image: require('./images/Unknown.jpg') },
+    { id: '2', title: 'Fabien Coehlo', description: 'Tu connais PSQL ?', image: require('./images/yoga.jpg') },
     // ... Autres événements
 ];
 
@@ -34,8 +34,8 @@ export default function EventView({ navigation, page, setPage }) {
                 keyExtractor={(item) => item.id}
                 renderItem={renderEventItem}
             />
-            <View style = {styles.footer}>
-                <BottomBar page={page} setPage={setPage}/>
+            <View style={styles.footer}>
+                <BottomBar page={page} setPage={setPage} />
             </View>
         </View>
     );
@@ -70,12 +70,12 @@ const styles = StyleSheet.create({
         color: '#555555',
     },
     mainContainer: {
-        flex:1,
-        padding:16,
-        justifyContent:"space-between"
-      },
+        flex: 1,
+        padding: 16,
+        justifyContent: "space-between"
+    },
     footer: {
-      flexBasis:100
-}
+        flexBasis: 100
+    }
 });
 
