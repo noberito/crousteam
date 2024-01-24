@@ -150,7 +150,7 @@ def post_register(login: str, password: str):
 # GET /login
 #
 # NOTE axios accepts `auth` to send a basic auth
-@app.get("/login", authorize="ANY", auth="basic")
+@app.get("/login", authorize="ALL", auth="basic")
 def get_login(user: fsa.CurrentUser):
     return json(app.create_token(user)), 200
 
@@ -158,7 +158,7 @@ def get_login(user: fsa.CurrentUser):
 # POST /login (login, password)
 #
 # NOTE web-oriented approach is to use POST
-@app.post("/login", authorize="ANY", auth="param")
+@app.post("/login", authorize="ALL", auth="param")
 def post_login(user: fsa.CurrentUser):
     return json(app.create_token(user)), 201
 
