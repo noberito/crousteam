@@ -4,8 +4,8 @@ import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react
 import BottomBar from '../friender/BottomBar.react';
 
 const EventList = [
-    { id: '1', title: 'Implant capilaire', description: 'Cette technique marche !', image: require('./images/Unknown.jpg') },
-    { id: '2', title: 'Fabien Coehlo', description: 'Tu connais PSQL ?', image: require('./images/yoga.jpg') },
+    { id: '1', title: 'Implant capilaire', description: 'Cette technique marche !' },
+    { id: '2', title: 'Fabien Coehlo', description: 'Tu connais PSQL ?' },
     // ... Autres événements
 ];
 

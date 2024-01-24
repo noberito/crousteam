@@ -123,7 +123,7 @@ def get_stats():
 
 
 # GET /who-am-i
-@app.get("/who-am-i", authorize="ALL")
+@app.get("/who-am-i", authorize="ANY")
 def get_who_am_i(user: fsa.CurrentUser):
     return json(user), 200
 
@@ -150,7 +150,7 @@ def post_register(login: str, password: str):
 # GET /login
 #
 # NOTE axios accepts `auth` to send a basic auth
-@app.get("/login", authorize="ALL", auth="basic")
+@app.get("/login", authorize="ANY", auth="basic")
 def get_login(user: fsa.CurrentUser):
     return json(app.create_token(user)), 200
 
@@ -158,7 +158,7 @@ def get_login(user: fsa.CurrentUser):
 # POST /login (login, password)
 #
 # NOTE web-oriented approach is to use POST
-@app.post("/login", authorize="ALL", auth="param")
+@app.post("/login", authorize="ANY", auth="param")
 def post_login(user: fsa.CurrentUser):
     return json(app.create_token(user)), 201
 
@@ -168,7 +168,7 @@ if app.config.get("APP_TEST", False):
     # GET /users
     @app.get("/users", authorize="ADMIN")
     def get_users():
-        return json(db.get_auth_all()), 200
+        return json(db.get_auth_ANY()), 200
 
     # DELETE /users/<login>
     @app.delete("/users/<login>", authorize="ADMIN")
@@ -188,20 +188,20 @@ if app.config.get("APP_TEST", False):
 # ADD NEW CODE HERE
 
 
-@app.get("/messages", authorize="ALL")
+@app.get("/messages", authorize="ANY")
 def get_messages(pseudo: str, gname: str):
     res = db.get_messages(pseudo=pseudo, gname=gname)
     return json(res), 200
 
 
-@app.post("/messages", authorize="ALL")
+@app.post("/messages", authorize="ANY")
 def post_messages(pseudo: str, mtext: str, gid: int):
     lid = db.get_lid_from_pseudo(pseudo=pseudo)
     db.post_messages(lid=lid, mtext=mtext, gid=gid)
     return "", 201
 
 
-@app.get("/profile", authorize="ALL")
+@app.get("/profile", authorize="ANY")
 def get_single_pseudo(pseudo: str):
     res = db.get_single_pseudo(pseudo=pseudo)
     if res:
@@ -209,7 +209,7 @@ def get_single_pseudo(pseudo: str):
     return "pseudo not found", 404
 
 
-@app.post("/profile", authorize="ALL")
+@app.post("/profile", authorize="ANY")
 def post_info_register(
     lid: int, pseudo: str, firstName: str, lastName: str, naissance: str, photoPath: str
 ):
@@ -228,7 +228,7 @@ def post_info_register(
     return json(res), 201
 
 
-@app.delete("/profile", authorize="ALL")
+@app.delete("/profile", authorize="ANY")
 def delete_info_profile(pseudo: str):
     exist = db.get_single_pseudo(pseudo=pseudo)
     if exist:
@@ -237,7 +237,7 @@ def delete_info_profile(pseudo: str):
     return "pseudo not found", 404
 
 
-@app.post("/group-chat-2", authorize="ALL")
+@app.post("/group-chat-2", authorize="ANY")
 def create_chat_between_2_users(lid1: int, lid2: int):
     exists2 = db.get_single_lid(lid=lid2)
     exists1 = db.get_single_lid(lid=lid1)
@@ -249,7 +249,7 @@ def create_chat_between_2_users(lid1: int, lid2: int):
     return "", 204
 
 
-@app.delete("/group-chat-2", authorize="ALL")
+@app.delete("/group-chat-2", authorize="ANY")
 def delete_group_chat(gname: str):
     to_delete = db.get_single_group_chat(gname=gname)
     if not to_delete:
