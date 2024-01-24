@@ -228,6 +228,8 @@ def test_messages(api):
 
 # /Profile -> Post Information
 def test_add_profile(api):
+    api.check("GET", "/profile", 200, data={"pseudo": "calvin"}, login=ADMIN)
+    api.check("GET", "/profile", 404, data={"pseudo": "hector"}, login=ADMIN)
     api.check(
         "POST",
         "/profile",
@@ -252,5 +254,5 @@ def test_add_profile(api):
         },
         login=ADMIN,
     )
-    # nettoyer : créer un delete (et le tester)
-    # tester get_single_pseudo
+    api.check("DELETE", "/profile", 204, data={"pseudo": "foobla"}, login=ADMIN)
+    api.check("DELETE", "/profile", 404, data={"pseudo": "foobla"}, login=ADMIN)

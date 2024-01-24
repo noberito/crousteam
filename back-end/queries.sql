@@ -46,3 +46,6 @@ VALUES (:lid, :pseudo, :naissance, :photoPath);
 
 -- name: get_single_pseudo^
 SELECT TRUE FROM Profile WHERE pseudo = :pseudo;
+
+-- name: delete_info_profile!
+DELETE FROM Profile WHERE pseudo = :pseudo;
