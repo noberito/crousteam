@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: 'white',
         fontSize: 30,
-        fontWeight: 'bold',
+        fontFamily:'Arista-Pro-Alternate-Bold-trial',
       },
 });
 
