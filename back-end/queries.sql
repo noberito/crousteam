@@ -53,9 +53,15 @@ DELETE FROM Profile WHERE pseudo = :pseudo;
 
 -- name: get_profile_from_preferences!
 SELECT pseudo, firstName, lastName , photoPath
-FROM Preferences Join Profile USING(pid)
-where pfid := pfid
+FROM Preferences
+JOIN UsersPref USING (pfid)
+Join Profile USING(pid)
+where pftype:= pftype
 ORDER BY 1;
+
+
+
+
 
 
 
