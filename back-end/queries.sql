@@ -41,11 +41,28 @@ WHERE gname = :gname
 ORDER BY mtime DESC;
 
 -- name: post_info_register!
-INSERT INTO Profile(lid, pseudo, naissance, photoPath)
-VALUES (:lid, :pseudo, :naissance, :photoPath);
+INSERT INTO Profile(lid,firstName,lastName, pseudo, naissance, photoPath)
+VALUES (:lid, :firstName, :lastName, :pseudo, :naissance, :photoPath);
 
 -- name: get_single_pseudo^
 SELECT TRUE FROM Profile WHERE pseudo = :pseudo;
 
 -- name: delete_info_profile!
 DELETE FROM Profile WHERE pseudo = :pseudo;
+
+
+-- name: get_profile_from_preferences!
+SELECT pseudo, firstName, lastName , photoPath
+FROM Preferences Join Profile USING(pid)
+where pfid := pfid
+ORDER BY 1;
+
+
+
+
+
+
+
+
+
+
