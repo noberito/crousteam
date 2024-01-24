@@ -224,6 +224,13 @@ def test_messages(api):
         data={"pseudo": "calvin", "gname": "copaing"},
         login=ADMIN,
     )
+    api.check(
+        "POST",
+        "/messages",
+        201,
+        data={"pseudo": "calvin", "mtext": "Je poste un message", "gid": 1},
+        login=ADMIN,
+    )
 
 
 # /Profile -> Post Information
@@ -237,6 +244,8 @@ def test_add_profile(api):
         data={
             "lid": 1,
             "pseudo": "foobla",
+            "firstName": "foo",
+            "lastName": "bla",
             "naissance": "1999-01-08",
             "photoPath": "/this/is/photo/path",
         },
@@ -249,6 +258,8 @@ def test_add_profile(api):
         data={
             "lid": 1,
             "pseudo": "foobla",
+            "firstName": "foo",
+            "lastName": "bla",
             "naissance": "1999-01-08",
             "photoPath": "/this/is/photo/path",
         },

@@ -5,7 +5,7 @@
 
 INSERT INTO Auth (login, password) VALUES ('jean-paul', 'farte'), ('pedro', 'spinouza'), ('issa', 'delouze');
 
-INSERT INTO Profile(lid, pseudo) VALUES (1, 'calvin'), (2, 'hobbes'), (3, 'jean-paul'), (4, 'pedro'), (5, 'issa');
+INSERT INTO Profile(lid, pseudo, firstName, lastName) VALUES (1, 'calvin', 'calvin', 'dadson'), (2, 'hobbes', 'hobbes', 'tiger'), (3, 'jean-paul', 'jean-paul', 'farte'), (4, 'pedro', 'pedro', 'spinouza'), (5, 'issa', 'issa', 'delouze');
 
 INSERT INTO AppGroup(gname) VALUES ('copaing');
 

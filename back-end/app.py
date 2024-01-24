@@ -194,9 +194,11 @@ def get_messages(pseudo: str, gname: str):
     return json(res), 200
 
 
-# @app.post("/messages", authorize="ALL")
-# def post_messages(pseudo: str, mtext: str, gname: str):
-#   pass
+@app.post("/messages", authorize="ALL")
+def post_messages(pseudo: str, mtext: str, gid: int):
+    lid = db.get_lid_from_pseudo(pseudo=pseudo)
+    db.post_messages(lid=lid, mtext=mtext, gid=gid)
+    return "", 201
 
 
 @app.get("/profile", authorize="ALL")
@@ -208,13 +210,20 @@ def get_single_pseudo(pseudo: str):
 
 
 @app.post("/profile", authorize="ALL")
-def post_info_register(lid: int, pseudo: str, naissance: str, photoPath: str):
+def post_info_register(
+    lid: int, pseudo: str, firstName: str, lastName: str, naissance: str, photoPath: str
+):
     already_exist = db.get_single_pseudo(pseudo=pseudo)
     # log.info(f"already_exist: {already_exist}")
     if already_exist:
         return "pseudo already exist", 404
     res = db.post_info_register(
-        lid=lid, pseudo=pseudo, naissance=naissance, photoPath=photoPath
+        lid=lid,
+        firstName=firstName,
+        lastName=lastName,
+        pseudo=pseudo,
+        naissance=naissance,
+        photoPath=photoPath,
     )
     return json(res), 201
 

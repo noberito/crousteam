@@ -40,8 +40,15 @@ JOIN Profile USING (lid)
 WHERE gname = :gname
 ORDER BY mtime DESC;
 
+-- name: post_messages
+INSERT INTO Messages(lid, mtext, gid)
+VALUES (:lid, :mtext, :gid);
+
+-- name: get_lid_from_pseudo^
+SELECT lid FROM Profile WHERE pseudo = :pseudo;
+
 -- name: post_info_register!
-INSERT INTO Profile(lid,firstName,lastName, pseudo, naissance, photoPath)
+INSERT INTO Profile(lid, firstName,lastName, pseudo, naissance, photoPath)
 VALUES (:lid, :firstName, :lastName, :pseudo, :naissance, :photoPath);
 
 -- name: get_single_pseudo^
@@ -70,23 +77,10 @@ DELETE FROM AppGroup WHERE gname = :gname;
 
 
 -- name: get_profile_from_preferences!
-SELECT pseudo, firstName, lastName , photoPath
+SELECT pseudo, firstName, lastName, photoPath
 FROM Preferences
 JOIN UsersPref USING (pfid)
 Join Profile USING(pid)
 where pftype:= pftype
 ORDER BY 1;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
