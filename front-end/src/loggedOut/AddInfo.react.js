@@ -6,13 +6,13 @@ import KivTextInput from '../common/KivTextInput.react';
 
 import KivCard from '../common/KivCard.react';
 
- 
+
 
 import axios from 'axios';
 
 import { baseUrl } from '../common/const';
 
- 
+
 
 const styles = StyleSheet.create({
 
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
 
 });
 
- 
+
 
 export default function CreateAccount({ onSuccess, onCancel }) {
 
@@ -74,7 +74,7 @@ export default function CreateAccount({ onSuccess, onCancel }) {
 
     const [hasFailure, setHasFailure] = useState(false);
 
- 
+
 
     const sendUserCreationRequest = () => {
 
@@ -84,11 +84,11 @@ export default function CreateAccount({ onSuccess, onCancel }) {
 
             baseURL: baseUrl,
 
-            url: '/register',
+            url: '/profile',
 
             method: 'POST',
 
-            data: { login: username, password: password }
+            data: { lid: 'integer', pseudo: 'varchar', naissance: 'date TS', photopath: 'varchar' } // TODO   
 
         }).then(response => {
 
@@ -118,7 +118,7 @@ export default function CreateAccount({ onSuccess, onCancel }) {
 
     }
 
- 
+
 
     return (
 

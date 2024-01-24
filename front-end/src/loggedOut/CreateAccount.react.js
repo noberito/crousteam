@@ -36,7 +36,7 @@ export default function CreateAccount({ onSuccess, onCancel }) {
   const [isLoading, setIsLoading] = useState(false);
   const [hasFailure, setHasFailure] = useState(false);
 
-  const sendUserCreationRequest = () => {
+  const sendUserCreationRequest = () => { // get the lid from the server after sending post
     setIsLoading(true);
     axios({
       baseURL: baseUrl,
