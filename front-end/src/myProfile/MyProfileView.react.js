@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import { Text, Button, View, StyleSheet } from 'react-native';
+import CrousteamButton from '../common/CrousteamButton.react';
+import LogOutButton from '../common/LogoutButton.react';
 
 import GeneralSettingsView from './GeneralSettingsView.react';
 import ChangePreferencesView from './changePreferencesView.react';
@@ -9,21 +11,41 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex:1,
         padding:16,
-        justifyContent:"space-between"
+        justifyContent:"space-between",
       },
+
+    identityContainer:{
+        flex:3,
+        justifyContent:'center'
+    },
+    buttonContainer :{
+        flex:2,
+    },
+    logoutContainer:{
+        justifyContent:'center',
+        marginBottom:20,
+    },
     footer: {
         flexBasis:100,
       }
 });
 
 
-export default function MyProfileView({username, page, setPage}) {
+export default function MyProfileView({username, page, setPage, logoutUser}) {
     const [choosePageProfile, setChoosePageProfile] = useState("myprofile");
         if (choosePageProfile== "myprofile"){
             return (
                  <View style={styles.mainContainer}>
-                    <Button title = "General Settings" onPress= {() => {setChoosePageProfile("generalsettings")}}></Button>
-                    <Button title = "Change Preferences" onPress = {() => {setChoosePageProfile("changepreferences")}}></Button>
+                    <View style = {styles.identityContainer}>
+                        <Text> Prout </Text>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <CrousteamButton title = "General Settings" onPress= {() => {setChoosePageProfile("generalsettings")}}/>
+                        <CrousteamButton title = "Change Preferences" onPress = {() => {setChoosePageProfile("changepreferences")}}/>
+                    </View>
+                    <View style = {styles.logoutContainer}>
+                        <LogOutButton title = "Log Out" onPress = {logoutUser}/>
+                    </View>
                     <View style={styles.footer}>
                         <BottomBar page={page} setPage={setPage}/>
                     </View>

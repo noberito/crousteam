@@ -6,7 +6,7 @@ import Header from './header/Header.react';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#E3F2FD',
+    backgroundColor:'#f6edce',
     padding: 16,
     width: '100%',
     height: '100%',
