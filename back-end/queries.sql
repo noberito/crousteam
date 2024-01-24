@@ -48,7 +48,7 @@ VALUES (:lid, :mtext, :gid);
 SELECT lid FROM Profile WHERE pseudo = :pseudo;
 
 -- name: post_info_register!
-INSERT INTO Profile(lid, firstName,lastName, pseudo, naissance, photoPath)
+INSERT INTO Profile(lid,firstName,lastName,pseudo, naissance, photoPath)
 VALUES (:lid, :firstName, :lastName, :pseudo, :naissance, :photoPath);
 
 -- name: get_single_pseudo^

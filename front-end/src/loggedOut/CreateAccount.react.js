@@ -50,7 +50,6 @@ export default function CreateAccount({ onSuccess, onCancel }) {
       setIsLoading(false)
       if (response.status >= 200 && response.status < 300) {
         setHasFailure(false)
-
         setLastUid(response.data)
         onSuccess()
 

@@ -49,11 +49,12 @@ export default function CreateAccount({ onSuccess, onCancel }) {
             baseURL: baseUrl,
             url: '/profile',
             method: 'POST',
-            data: { lid: lastUid, pseudo: 'varchar', naissance: 'date TS', photopath: 'varchar', firstName: 'varchar', lastName: 'varchar' } // TODO   
+            data: { lid: lastUid, pseudo: pseudo, firstName: firstName, lastName: lastName, naissance: naissance, photoPath: photopath } // TODO   
         }).then(response => {
             setIsLoading(false)
             if (response.status >= 200 && response.status < 300) {
                 setHasFailure(false)
+                setLastUid()
                 onSuccess()
             } else {
                 setHasFailure(true)
