@@ -50,6 +50,24 @@ SELECT TRUE FROM Profile WHERE pseudo = :pseudo;
 -- name: delete_info_profile!
 DELETE FROM Profile WHERE pseudo = :pseudo;
 
+-- name: create_group_of_two$
+INSERT INTO AppGroup(gname)
+VALUES (:gname)
+RETURNING gid;
+
+-- name: add_people_into_group!
+INSERT INTO UsersInGroup(gid, lid)
+VALUES (:gid, :lid);
+
+-- name: get_single_lid^
+SELECT pseudo FROM Profile WHERE lid = :lid;
+
+-- name: get_single_group_chat^
+SELECT TRUE FROM AppGroup WHERE gname = :gname;
+
+-- name: delete_group_chat!
+DELETE FROM AppGroup WHERE gname = :gname;
+
 
 -- name: get_profile_from_preferences!
 SELECT pseudo, firstName, lastName , photoPath

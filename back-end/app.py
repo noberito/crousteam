@@ -194,6 +194,11 @@ def get_messages(pseudo: str, gname: str):
     return json(res), 200
 
 
+# @app.post("/messages", authorize="ALL")
+# def post_messages(pseudo: str, mtext: str, gname: str):
+#   pass
+
+
 @app.get("/profile", authorize="ALL")
 def get_single_pseudo(pseudo: str):
     res = db.get_single_pseudo(pseudo=pseudo)
@@ -221,6 +226,27 @@ def delete_info_profile(pseudo: str):
         db.delete_info_profile(pseudo=pseudo)
         return "", 204
     return "pseudo not found", 404
+
+
+@app.post("/group-chat-2", authorize="ALL")
+def create_chat_between_2_users(lid1: int, lid2: int):
+    exists2 = db.get_single_lid(lid=lid2)
+    exists1 = db.get_single_lid(lid=lid1)
+    if not exists1 or not exists2:
+        return "one of the two doesn't exist", 404
+    gid = db.create_group_of_two(gname="test_name")
+    db.add_people_into_group(gid=gid, lid=lid1)
+    db.add_people_into_group(gid=gid, lid=lid2)
+    return "", 204
+
+
+@app.delete("/group-chat-2", authorize="ALL")
+def delete_group_chat(gname: str):
+    to_delete = db.get_single_group_chat(gname=gname)
+    if not to_delete:
+        return "no group to delete", 404
+    db.delete_group_chat(gname=gname)
+    return "", 204
 
 
 # SHOULD STAY AS LAST LOC

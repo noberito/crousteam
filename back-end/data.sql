@@ -3,11 +3,13 @@
 --
 \copy Auth(login, password, isAdmin) from './test_users.csv' (format csv)
 
-INSERT INTO Profile(lid, pseudo) VALUES (1, 'calvin'), (2, 'hobbes');
+INSERT INTO Auth (login, password) VALUES ('jean-paul', 'farte'), ('pedro', 'spinouza'), ('issa', 'delouze');
 
-INSERT INTO AppGroup(gid, gname) VALUES (1, 'copaing');
+INSERT INTO Profile(lid, pseudo) VALUES (1, 'calvin'), (2, 'hobbes'), (3, 'jean-paul'), (4, 'pedro'), (5, 'issa');
 
-INSERT INTO UsersInGroup(gid, pid) VALUES (1, 1), (1, 2);
+INSERT INTO AppGroup(gname) VALUES ('copaing');
+
+INSERT INTO UsersInGroup(gid, lid) VALUES (1, 1), (1, 2);
 
 INSERT INTO Messages(lid, mtext, mtime, gid) VALUES
 (1, 'Je suis grand', '1999-01-08 04:05:06', 1),

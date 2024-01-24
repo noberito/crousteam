@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS Preferences(
 );
 
 CREATE TABLE IF NOT EXISTS Profile(
-  pid SERIAL8 PRIMARY KEY,
   lid INTEGER NOT NULL,
   firstName TEXT NOT NULL,
   lastName TEXT NOT NULL,
@@ -34,17 +33,17 @@ CREATE TABLE IF NOT EXISTS Profile(
 );
 
 CREATE TABLE IF NOT EXISTS UsersPref(
-  pid INTEGER NOT NULL,
+  lid INTEGER NOT NULL,
   pfid INTEGER NOT NULL,
-  CONSTRAINT fk_profile
-    FOREIGN KEY (pid)
-      REFERENCES Profile (pid)
+  CONSTRAINT fk_auth
+    FOREIGN KEY (lid)
+      REFERENCES Auth (lid)
       ON DELETE CASCADE,
   CONSTRAINT fk_preferences
     FOREIGN KEY (pfid)
       REFERENCES Preferences (pfid)
       ON DELETE CASCADE,
-  PRIMARY KEY (pid,pfid)
+  PRIMARY KEY (lid,pfid)
 );
 
 CREATE TABLE IF NOT EXISTS EventType (
@@ -59,17 +58,17 @@ CREATE TABLE IF NOT EXISTS AppGroup(
 
 CREATE TABLE IF NOT EXISTS UsersInGroup(
   gid INTEGER NOT NULL,
-  pid INTEGER NOT NULL,
-  UNIQUE(gid, pid),
+  lid INTEGER NOT NULL,
+  UNIQUE(gid, lid),
   CONSTRAINT fk_group
     FOREIGN KEY (gid)
     REFERENCES AppGroup (gid)
     ON DELETE CASCADE,
-  CONSTRAINT fk_profile
-    FOREIGN KEY (pid)
-    REFERENCES Profile (pid)
+  CONSTRAINT fk_auth
+    FOREIGN KEY (lid)
+    REFERENCES Auth (lid)
     ON DELETE CASCADE,
-    PRIMARY KEY (gid,pid)
+  PRIMARY KEY (gid,lid)
 );
 
 CREATE TABLE IF NOT EXISTS Event(
