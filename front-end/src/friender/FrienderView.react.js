@@ -47,7 +47,7 @@ export default function FrienderView({ authToken, logoutUser }) {
     return (<MyProfileView page={page} setPage={setPage}></MyProfileView>)
   }
   if (page == 'chat') {
-    return (<Chat page={page} setPage={setPage}></Chat>)
+    return (<ChatView page={page} setPage={setPage}></ChatView>)
   }
 
   if (page == 'event') {
