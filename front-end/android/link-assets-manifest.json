@@ -1,0 +1,33 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Arista-Pro-Alternate-Bold-trial.ttf",
+      "sha1": "72571cc4b711245fc93833e07254148f05426d0b"
+    },
+    {
+      "path": "assets/fonts/Arista-Pro-Alternate-Fat-trial.ttf",
+      "sha1": "35ef80ba773a3d499c859b74c95e0cf2b80889e8"
+    },
+    {
+      "path": "assets/fonts/Arista-Pro-Alternate-Light-trial.ttf",
+      "sha1": "3cc632803784ea8d212a6a965e058bc857930148"
+    },
+    {
+      "path": "assets/fonts/Arista-Pro-Bold-trial.ttf",
+      "sha1": "64c991921024c3ae300318ad797c3ebc32e4446d"
+    },
+    {
+      "path": "assets/fonts/Arista-Pro-Family-CC-BY-NCLicensepdf.pdf",
+      "sha1": "55d9dad556832b3a74ee86a608e9ecb3c8ea2cf3"
+    },
+    {
+      "path": "assets/fonts/Arista-Pro-Fat-trial.ttf",
+      "sha1": "6ef81eb088928afa5754b567ba697baf5a025929"
+    },
+    {
+      "path": "assets/fonts/Arista-Pro-Light-trial.ttf",
+      "sha1": "ed7088eb925b98f13b77eb8970f2835031b83f87"
+    }
+  ]
+}
