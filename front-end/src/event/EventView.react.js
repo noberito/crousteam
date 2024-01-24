@@ -2,10 +2,11 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import BottomBar from '../friender/BottomBar.react';
+import Line from '../common/Line.react';
 
 const EventList = [
-    { id: '1', title: 'Implant capilaire', description: 'Cette technique marche !' },
-    { id: '2', title: 'Fabien Coehlo', description: 'Tu connais PSQL ?' },
+    { id: '1', title: 'Implant capilaire', description: 'Cette technique marche !'},
+    { id: '2', title: 'Fabien Coehlo', description: 'Tu connais PSQL ?'},
     // ... Autres événements
 ];
 

@@ -6,6 +6,7 @@ import LogOutButton from '../common/LogoutButton.react';
 import GeneralSettingsView from './GeneralSettingsView.react';
 import ChangePreferencesView from './changePreferencesView.react';
 import BottomBar from '../friender/BottomBar.react';
+import Line from '../common/Line.react';
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
     },
     logoutContainer:{
         justifyContent:'center',
-        marginBottom:20,
+        marginBottom:70,
     },
     footer: {
         flexBasis:100,

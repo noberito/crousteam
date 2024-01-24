@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 
 import BottomBar from '../friender/BottomBar.react';
+import Line from '../common/Line.react';
 
 const ChatList = [
     { id: '1', contactName: 'John Doe', lastMessage: 'Hello!', lastMessageTime: '10:30 AM' },
@@ -68,7 +69,7 @@ export default function ChatView({ page, setPage, navigation }) {
     );
 
     return (
-        <View style={styles.container}>
+        <View style={styles.mainContainer}>
             <TextInput
                 style={styles.searchInput}
                 placeholder="Search..."

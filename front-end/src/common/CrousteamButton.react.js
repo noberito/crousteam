@@ -21,7 +21,7 @@ const buttonStyles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 40,
-    fontWeight: 'bold',
+    fontFamily:'Arista-Pro-Alternate-Bold-trial',
   },
 });
 
