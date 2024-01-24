@@ -75,6 +75,11 @@ SELECT TRUE FROM AppGroup WHERE gname = :gname;
 -- name: delete_group_chat!
 DELETE FROM AppGroup WHERE gname = :gname;
 
+-- name: get_first_last_name^
+SELECT firstName, lastName FROM Profile JOIN Auth USING (lid) WHERE pseudo = :pseudo;
+
+-- name: get_all_info^
+SELECT * FROM Profile WHERE pseudo = :pseudo;
 
 -- name: get_profile_from_preferences!
 SELECT pseudo, firstName, lastName, photoPath
@@ -83,4 +88,3 @@ JOIN UsersPref USING (pfid)
 Join Profile USING(pid)
 where pftype:= pftype
 ORDER BY 1;
-

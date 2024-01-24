@@ -276,3 +276,8 @@ def test_add_group_chat_of_2(api):
         "DELETE", "/group-chat-2", 404, data={"gname": "test_false_name"}, login=ADMIN
     )
     api.check("DELETE", "/group-chat-2", 204, data={"gname": "test_name"}, login=ADMIN)
+
+
+def test_get_info_profile(api):
+    api.check("GET", "/first-last-name/calvin", 200, r"dadson", login=ADMIN)
+    api.check("GET", "/all-info/hobbes", 200, r"tiger", login=ADMIN)

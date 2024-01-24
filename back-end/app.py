@@ -258,5 +258,17 @@ def delete_group_chat(gname: str):
     return "", 204
 
 
+@app.get("/first-last-name/<pseudo>", authorize="ANY")
+def get_first_last_name(pseudo: str):
+    res = db.get_first_last_name(pseudo=pseudo)
+    return json(res), 200
+
+
+@app.get("/all-info/<pseudo>", authorize="ANY")
+def get_all_info(pseudo: str):
+    res = db.get_all_info(pseudo=pseudo)
+    return json(res), 200
+
+
 # SHOULD STAY AS LAST LOC
 log.debug("running…")
