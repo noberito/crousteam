@@ -274,22 +274,6 @@ def get_all_info(pseudo: str):
     return json(res), 200
 
 
-@app.get("/first-last-name/<pseudo>", authorize="ANY")
-def get_first_last_name(pseudo: str):
-    res = db.get_first_last_name(pseudo=pseudo)
-    if not res:
-        return "pseudo not found", 404
-    return json(res), 200
-
-
-@app.get("/all-info/<pseudo>", authorize="ANY")
-def get_all_info(pseudo: str):
-    res = db.get_all_info(pseudo=pseudo)
-    if not res:
-        return "pseudo not found", 404
-    return json(res), 200
-
-
 @app.post("/test/insert_preference_type", authorize="ALL")
 def test_insert_preference_type(pfid: int, pftype: str):
     res = db.insert_preference_type(pfid=pfid, pftype=pftype)
