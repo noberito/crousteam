@@ -79,10 +79,13 @@ VALUES (:gid, :lid);
 SELECT pseudo FROM Profile WHERE lid = :lid;
 
 -- name: get_single_group_chat^
-SELECT TRUE FROM AppGroup WHERE gname = :gname;
+SELECT TRUE FROM AppGroup WHERE gid = :gid;
 
 -- name: delete_group_chat!
-DELETE FROM AppGroup WHERE gname = :gname;
+DELETE FROM AppGroup WHERE gid = :gid;
+
+-- name: get_gid_of_a_group^
+SELECT gid FROM AppGroup ORDER BY gid DESC LIMIT 1;
 
 -- name: get_first_last_name^
 SELECT firstName, lastName FROM Profile WHERE pseudo = :pseudo;

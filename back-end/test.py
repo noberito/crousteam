@@ -14,6 +14,7 @@ import re
 import os
 import flask_tester as ft
 import logging
+from database import db
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("test")
@@ -270,13 +271,14 @@ def test_add_profile(api):
 
 
 def test_add_group_chat_of_2(api):
-    api.check("POST", "/group-chat-2", 204, data={"lid1": 3, "lid2": 4}, login=ADMIN)
-    api.check("POST", "/group-chat-2", 404, data={"lid1": 3, "lid2": 4000}, login=ADMIN)
-    api.check("POST", "/group-chat-2", 404, data={"lid1": 3, "lid2": 4}, login=ADMIN)
-    api.check(
-        "DELETE", "/group-chat-2", 404, data={"gname": "test_false_name"}, login=ADMIN
+    res = api.check(
+        "POST", "/group-chat-2", 201, data={"lid1": 3, "lid2": 4}, login=ADMIN
     )
-    api.check("DELETE", "/group-chat-2", 204, data={"gname": "test_name"}, login=ADMIN)
+    api.check("POST", "/group-chat-2", 404, data={"lid1": 3, "lid2": 4000}, login=ADMIN)
+    api.check("POST", "/group-chat-2", 404, data={"lid1": 1, "lid2": 2}, login=ADMIN)
+    gid = res.json
+    api.check("DELETE", "/group-chat-2", 204, data={"gid": gid}, login=ADMIN)
+    api.check("DELETE", "/group-chat-2", 404, data={"gid": 30}, login=ADMIN)
 
 
 def test_get_info_profile(api):

@@ -248,15 +248,15 @@ def create_chat_between_2_users(lid1: int, lid2: int):
     gid = db.create_group_of_two(gname="test_name")
     db.add_people_into_group(gid=gid, lid=lid1)
     db.add_people_into_group(gid=gid, lid=lid2)
-    return "", 204
+    return json(gid), 201
 
 
 @app.delete("/group-chat-2", authorize="ANY")
-def delete_group_chat(gname: str):
-    to_delete = db.get_single_group_chat(gname=gname)
+def delete_group_chat(gid: int):
+    to_delete = db.get_single_group_chat(gid=gid)
     if not to_delete:
         return "no group to delete", 404
-    db.delete_group_chat(gname=gname)
+    db.delete_group_chat(gid=gid)
     return "", 204
 
 
