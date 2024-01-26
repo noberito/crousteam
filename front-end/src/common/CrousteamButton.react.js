@@ -7,7 +7,7 @@ const buttonStyles = StyleSheet.create({
   buttonContainer: {
     borderRadius: 10,
     overflow: 'hidden',
-    height:100,
+    height:'30%',
     padding:5
   },
   gradient: {
@@ -20,7 +20,7 @@ const buttonStyles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
-    fontSize: 40,
+    fontSize: 30,
     fontFamily:'Arista-Pro-Alternate-Bold-trial',
   },
 });

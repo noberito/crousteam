@@ -24,10 +24,10 @@ const styles = StyleSheet.create({
     },
     logoutContainer:{
         justifyContent:'center',
-        marginBottom:70,
+        marginBottom:"10%",
     },
     footer: {
-        flexBasis:100,
+        flexBasis:"8%",
       }
 });
 

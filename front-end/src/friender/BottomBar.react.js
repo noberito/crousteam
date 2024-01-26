@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center', // You can change the background color as needed
-    height: 100, // Set the height of the bar
+    height: '100%', // Set the height of the bar
     width: '100%', // Make it take the entire width
   }
 
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 
 export default function BottomBar ({page, setPage}) {
     return (
-      <View style={{bottom:40}}>
+      <View style={{bottom:"40%"}}>
         <Line/>
       <View style={styles.bottomBar}>
         <BottomBarIcon title = "My Profile" style={{marginRight: '10px' }} imagePath = {require("../images/myprofile.png")} onPress = {() => {setPage('myprofile')}}/>

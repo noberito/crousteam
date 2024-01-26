@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, View, StyleSheet, } from 'react-native';
 import BottomBar from './BottomBar.react';
 import Line from '../common/Line.react';
+import ListFriends from './ListFriends.react';
 
 import MyProfileView from '../myProfile/MyProfileView.react';
 import ChatView from '../chat/ChatView.react';
@@ -38,6 +39,7 @@ export default function FrienderView({ authToken, logoutUser }) {
 
   if (page == 'friender') {
       return (<View style={styles.mainContainer}>
+        <ListFriends/>
         <AllUsers authToken={authToken}/>
         <View style = {styles.footer}>
           <BottomBar page={page} setPage={setPage}/>
