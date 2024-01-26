@@ -214,7 +214,6 @@ def post_info_register(
     lid: int, pseudo: str, firstName: str, lastName: str, naissance: str, photoPath: str
 ):
     already_exist = db.get_single_pseudo(pseudo=pseudo)
-    # log.info(f"already_exist: {already_exist}")
     if already_exist:
         return "pseudo already exist", 404
     res = db.post_info_register(
@@ -243,6 +242,9 @@ def create_chat_between_2_users(lid1: int, lid2: int):
     exists1 = db.get_single_lid(lid=lid1)
     if not exists1 or not exists2:
         return "one of the two doesn't exist", 404
+    group_exist = db.is_people_already_in_the_same_group(lid1=lid1, lid2=lid2)
+    if group_exist:
+        return "group already exists", 404
     gid = db.create_group_of_two(gname="test_name")
     db.add_people_into_group(gid=gid, lid=lid1)
     db.add_people_into_group(gid=gid, lid=lid2)

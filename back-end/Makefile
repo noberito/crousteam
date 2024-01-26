@@ -26,7 +26,7 @@ endif
 default: clean
 
 # special excluded python files
-E.py    = version.py flask_tester.py test.py pass2csv.py projet.wsgi
+E.py    = version.py flask_tester.py test.py pass2csv.py projet.wsgi querie.py
 
 # application files
 F.py	= $(filter-out $(E.py), $(wildcard *.py))

@@ -62,6 +62,15 @@ INSERT INTO AppGroup(gname)
 VALUES (:gname)
 RETURNING gid;
 
+-- name: is_people_already_in_the_same_group$
+SELECT DISTINCT TRUE
+ FROM UsersInGroup AS g1 
+ JOIN UsersInGroup AS g2 ON g1.gid = g2.gid
+ JOIN AppGroup AS g ON g1.gid = g.gid
+ WHERE isGroupChat = FALSE
+   AND g1.lid = :lid1
+   AND g2.lid = :lid2;
+
 -- name: add_people_into_group!
 INSERT INTO UsersInGroup(gid, lid)
 VALUES (:gid, :lid);

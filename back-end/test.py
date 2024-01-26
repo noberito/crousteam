@@ -272,6 +272,7 @@ def test_add_profile(api):
 def test_add_group_chat_of_2(api):
     api.check("POST", "/group-chat-2", 204, data={"lid1": 3, "lid2": 4}, login=ADMIN)
     api.check("POST", "/group-chat-2", 404, data={"lid1": 3, "lid2": 4000}, login=ADMIN)
+    api.check("POST", "/group-chat-2", 404, data={"lid1": 3, "lid2": 4}, login=ADMIN)
     api.check(
         "DELETE", "/group-chat-2", 404, data={"gname": "test_false_name"}, login=ADMIN
     )
