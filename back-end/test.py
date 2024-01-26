@@ -284,28 +284,3 @@ def test_get_info_profile(api):
     api.check("GET", "/all-info/hobbes", 200, r"tiger", login=ADMIN)
     api.check("GET", "/all-info/brandon", 404, login=ADMIN)
     api.check("GET", "/all-info", 404, login=ADMIN)
-
-    # /test/insert_preference_type
-    def test_insert_preference_type(api):
-        pfid, pftype = 1, "some_preference_type"
-        api.check("POST", "/test/insert_preference_type", 201, json={"pfid": pfid, "pftype": pftype}, login=ADMIN)
-
-    # /test/insert_users_pref
-    def test_insert_users_pref(api):
-        pid, pfid = 1, 1
-        api.check("POST", "/test/insert_users_pref", 201, json={"pid": pid, "pfid": pfid}, login=ADMIN)
-
-    # /test/insert_event
-    def test_insert_event(api):
-        eid, ename, eloc, etime, tid, gid = 1, "some_event", "some_location", "2024-01-24T12:00:00", 1, 1
-        api.check("POST", "/test/insert_event", 201, json={"eid": eid, "ename": ename, "eloc": eloc, "etime": etime, "tid": tid, "gid": gid}, login=ADMIN)
-
-    # /test/get_profile_from_preference_type
-    def test_get_profile_from_preference_type(api):
-        pftype = "some_preference_type"
-        api.check("GET", "/test/get_profile_from_preference_type", 200, json={"pftype": pftype}, login=ADMIN)
-
-    # /test/get_profile_by_event_type
-    def test_get_profile_by_event_type(api):
-        ename = "some_ename"
-        api.check("GET", "/test/get_profile_by_event_type", 200, json={"pftype": ename}, login=ADMIN)
