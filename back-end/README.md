@@ -62,13 +62,11 @@ The [`Makefile`](Makefile) automates some common tasks.
 Check that you understand how they work.
 
 - cleanup generated files, stop everything:
-
   ```sh
   make clean
   ```
 
 - start app in verbose dev mode on local port 5000, and check that it works from another terminal:
-
   ```sh
   # first terminal, ctrl-c to stop showing logs, show again with "make log"
   make log
@@ -102,6 +100,11 @@ Check that you understand how they work.
 - send application to remote server
   ```sh
   make deploy
+  ```
+
+- test an anodb/aiosql query directly:
+  ```sh
+  make Q='db.version()' query
   ```
 
 ## Deployment (only for information)
