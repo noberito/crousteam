@@ -26,7 +26,7 @@ endif
 default: clean
 
 # special excluded python files
-E.py    = version.py flask_tester.py test.py pass2csv.py projet.wsgi querie.py
+E.py    = version.py flask_tester.py test.py pass2csv.py query.py querie.py projet.wsgi
 
 # application files
 F.py	= $(filter-out $(E.py), $(wildcard *.py))
@@ -55,6 +55,15 @@ DB		= $(APP)
 	shopt -s -o pipefail errexit
 	createdb $(DB) || exit 1
 	$(PG) $(PGOPT) -f drop.sql -f create.sql -f data.sql $(DB) | tee $@
+
+# execute an aiosql query with the test database
+Q   = db.now()
+
+.PHONY: query
+query: $(PYTHON_VENV) .postgres
+	source $(PYTHON_VENV)/bin/activate
+	export APP_NAME=$(APP) APP_SECRET=$(APP_SECRET) APP_CONFIG=local.conf
+	$(PYTHON) ./query.py "$(subst ",\",$(Q))"
 
 #
 # Cleanup
@@ -92,8 +101,7 @@ $(PYTHON_VENV):
 	$(PYTHON) -m venv $(PYTHON_VENV)
 	source $(PYTHON_VENV)/bin/activate
 	pip install -U pip
-	pip install -r dev-requirements.txt
-	pip install -r requirements.txt
+	pip install -r requirements.txt -r dev-requirements.txt
 
 .PHONY: venv.up
 venv.up: $(PYTHON_VENV)
@@ -214,9 +222,9 @@ stop: term-stop
 # Local tests
 #
 
-LOCAL	= http://0.0.0.0:5000
-PYTEST	= pytest --log-level=debug --capture=tee-sys -v
-PYTOPT	=
+APP_URL = http://0.0.0.0:5000
+PYTEST  = pytest --log-level=debug --capture=tee-sys -v
+PYTOPT  =
 DELAY   = 2
 
 APP_AUTH	= $(shell grep '^[a-z]' test_users.in | cut -d' ' -f1,2 | tr ' \012' ':,' | sed -e 's/,$$//')
@@ -227,11 +235,11 @@ app_auth:
 
 .PHONY: check.version
 check.version:
-	curl -si -X GET $(LOCAL)/version
+	curl -si -X GET $(APP_URL)/version
 
 .PHONY: check.stats
 check.stats:
-	curl -si -X GET -u $(ADMIN) $(LOCAL)/stats
+	curl -si -X GET -u $(ADMIN) $(APP_URL)/stats
 
 .PHONY: check.local.version
 check.local.version: check.version
@@ -246,9 +254,9 @@ check.pytest.external: $(PYTHON_VENV) $(F.src)
 	# start test server
 	$(MAKE) run
 	sleep $(DELAY)
-	curl -u $(ADMIN) -s $(LOCAL)/version || { echo "# flask did not start!" >&2 ; exit 1 ; }
+	curl -u $(ADMIN) -s $(APP_URL)/version || { echo "# flask did not start!" >&2 ; exit 1 ; }
 	# external tests: URL to retrieve the server
-	export APP_URL="$(LOCAL)"
+	export APP_URL="$(APP_URL)"
 	# run tests with admin and noadmin authentication
 	export APP_AUTH="$(APP_AUTH)"
 	$(PYTEST) $(PYTOPT) test.py
@@ -300,6 +308,7 @@ check: clean
 	shopt -s -o errexit
 	$(MAKE) check.env
 	$(MAKE) check.mypy
+	# $(MAKE) check.pyright
 	$(MAKE) check.flake8
 	$(MAKE) check.pytest
 	$(MAKE) clean
