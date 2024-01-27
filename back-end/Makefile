@@ -222,7 +222,7 @@ stop: term-stop
 # Local tests
 #
 
-APP_URL = http://0.0.0.0:5000
+LOC_URL = http://0.0.0.0:5000
 PYTEST  = pytest --log-level=debug --capture=tee-sys -v
 PYTOPT  =
 DELAY   = 2
@@ -235,11 +235,11 @@ app_auth:
 
 .PHONY: check.version
 check.version:
-	curl -si -X GET $(APP_URL)/version
+	curl -si -X GET $(LOC_URL)/version
 
 .PHONY: check.stats
 check.stats:
-	curl -si -X GET -u $(ADMIN) $(APP_URL)/stats
+	curl -si -X GET -u $(ADMIN) $(LOC_URL)/stats
 
 .PHONY: check.local.version
 check.local.version: check.version
@@ -254,9 +254,9 @@ check.pytest.external: $(PYTHON_VENV) $(F.src)
 	# start test server
 	$(MAKE) run
 	sleep $(DELAY)
-	curl -u $(ADMIN) -s $(APP_URL)/version || { echo "# flask did not start!" >&2 ; exit 1 ; }
+	curl -u $(ADMIN) -s $(LOC_URL)/version || { echo "# flask did not start!" >&2 ; exit 1 ; }
 	# external tests: URL to retrieve the server
-	export APP_URL="$(APP_URL)"
+	export APP_URL="$(LOC_URL)"
 	# run tests with admin and noadmin authentication
 	export APP_AUTH="$(APP_AUTH)"
 	$(PYTEST) $(PYTOPT) test.py
