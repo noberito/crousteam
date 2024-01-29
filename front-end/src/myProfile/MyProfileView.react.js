@@ -10,24 +10,32 @@ import Line from '../common/Line.react';
 
 const styles = StyleSheet.create({
     mainContainer: {
-        flex:1,
-        padding:16,
-        justifyContent:"space-between",
-      },
+        flex: 1,
+        padding: 16,
+        justifyContent: "space-between", // This will ensure that the footer stays at the bottom
+    },
 
-    identityContainer:{
-        flex:3,
-        justifyContent:'center'
+    identityContainer: {
+        // This will take the necessary space but allow other elements to grow
+        // Removed the flex: 3 to allow this container to only take the space of its content
+        justifyContent: 'center',
+        alignItems: 'center', // Center the content horizontally
     },
-    buttonContainer :{
-        flex:2,
+    buttonContainer: {
+        // This will also take the necessary space but allow other elements to grow
+        // Removed the flex: 2 for the same reason as above
+        marginTop: 16, // Add some margin at the top for spacing
     },
-    logoutContainer:{
-        justifyContent:'center',
+    logoutContainer: {
+        // This ensures the logout button sticks to the bottom
+        // Removed justifyContent: 'center' to align the logout button at the top of its container
     },
     footer: {
-        flexBasis:"8%",
-      }
+        // Ensure the footer is always at the bottom
+        // FlexBasis removed to allow the footer to grow with its content up to 8% of the container
+        // If the BottomBar component has its own padding, this might not be necessary
+        height: '8%', // You can use height instead of flexBasis for a fixed height footer
+    },
 });
 
 
