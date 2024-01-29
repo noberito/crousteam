@@ -1,8 +1,7 @@
-<<<<<<< HEAD:front-end/src/changePreferences/changePreferencesView.react.js
-import React, { useState, useContext, useEffect } from 'react';
-=======
-import React, { useState, useEffect } from 'react';
->>>>>>> 5606cc4 (changes before simon commit):front-end/src/myProfile/changePreferencesView.react.js
+
+
+
+import React, { useState, useEffect, useContext } from 'react';
 import { Text, Button, View, StyleSheet, } from 'react-native';
 import axios from 'axios';
 import { baseUrl } from '../common/const';
@@ -31,11 +30,7 @@ export default function ChangePreferencesView({ page, setPage }) {
 
         axios({
             baseURL: baseUrl,
-<<<<<<< HEAD:front-end/src/changePreferences/changePreferencesView.react.js
             url: `/all-info/${username}`,
-=======
-            url: '/all-info/zizou',
->>>>>>> 5606cc4 (changes before simon commit):front-end/src/myProfile/changePreferencesView.react.js
             method: 'GET',
             // auth : {username : username, password : password} "Property 'btoa' doesn't exist"
         }).then(result => {
@@ -77,10 +72,6 @@ export default function ChangePreferencesView({ page, setPage }) {
     useEffect(() => {
         loadInfo();
     }, []);
-<<<<<<< HEAD:front-end/src/changePreferences/changePreferencesView.react.js
-
-=======
->>>>>>> 5606cc4 (changes before simon commit):front-end/src/myProfile/changePreferencesView.react.js
 
     return (
         <View>
@@ -105,4 +96,3 @@ export default function ChangePreferencesView({ page, setPage }) {
 
     )
 }
-
