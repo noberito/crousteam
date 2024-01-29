@@ -1,45 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { FlatList, View, Text, StyleSheet, ActivityIndicator, Button } from 'react-native';
-import KivCard from '../common/KivCard.react';
-
+import React, { useState, useEffect, useCallback } from 'react';
+import { FlatList, View, Text, StyleSheet, ActivityIndicator, RefreshControl } from 'react-native';
 import axios from 'axios';
 import { baseUrl } from '../common/const';
 import FriendProfile from './FriendProfile';
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    paddingBottom: 16,
-    alignItems: 'center',
-    width: '100%'
-  },
-  title: {
-    fontSize: 24,
-  },
-  profilePicture: {
-    width: 24,
-    height: 24,
-  },
-  userRow: {
-    flexDirection: 'row',
-  },
-  incorrectWarning: {
-    backgroundColor: '#FF8A80',
-    padding: 4,
-    borderRadius: 4,
-    marginBottom: 4,
-  },
-});
-
-/**
- * Displays all the users in Kivapp
- */
 export default function AllFriends({ authToken }) {
   const [users, setUsers] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [hasPermissionError, setPermissionError] = useState(false);
 
-  const getAllUsersRequest = () => {
+  const getAllUsersRequest = useCallback(() => {
     setIsLoading(true);
+    // Set refreshing to true when we are loading data on pull to refresh
+    setRefreshing(true);
     axios({
       baseURL : baseUrl,
       url : '/users',
@@ -47,41 +21,51 @@ export default function AllFriends({ authToken }) {
       headers : { Authorization : 'Bearer ' + authToken}
     }).then(response => {
       setIsLoading(false);
+      setRefreshing(false); // Set refreshing to false when data is loaded
       if (response.status == 200) {
         const parsedData = response.data.map(user => ({
           name: user[0], isAdmin: user[1]
-        }))
+        }));
         console.log(parsedData);
         setUsers(parsedData);
         setPermissionError(false);
       } else if(response.status == 403) {
         setPermissionError(true);
       }
-    }).catch(err => {console.error(`Something went wrong ${err.message}`); setIsLoading(false)})
-  }
+    }).catch(err => {
+      console.error(`Something went wrong ${err.message}`);
+      setIsLoading(false);
+      setRefreshing(false); 
+    });
+  }, [authToken]);
 
   useEffect(() => {
     getAllUsersRequest();
-  }, [authToken]);
+  }, [authToken, getAllUsersRequest]);
 
   const renderItem = ({item}) => <FriendProfile item={item} key={item.lid} />;
 
   return (
     <View>
       {hasPermissionError && <View style={styles.incorrectWarning}>
-        <Text
-          style={styles.inputLabel}>
+        <Text style={styles.inputLabel}>
           Access Forbidden
         </Text>
       </View>}
-      {isLoading &&
-        <ActivityIndicator size='large' animating={true} color='#FF0000' />}
-      {users != null ? <FlatList
+      {isLoading && <ActivityIndicator size='large' animating={true} color='#FF0000' />}
+      <FlatList
         data={users}
         renderItem={renderItem}
         keyExtractor={item => item.name}
-      /> : null}
-      <Button title="Reload" disabled={isLoading} onPress={() => { getAllUsersRequest(); }} />
+        // Add RefreshControl to FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={getAllUsersRequest}
+            colors={['#FF0000']} // Customize the color of the spinner
+          />
+        }
+      />
     </View>
   );
 }
