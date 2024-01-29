@@ -339,7 +339,7 @@ def get_users_with_same_preferences(login: str):
     if not is_login_in:
         return "no login", 404
     res_login = db.get_login_who_matches_with_preferences(login=login)
-    return json(res_login), 200
+    return list(res_login), 200
 
 
 @app.post("/preference-type/<pftype>", authorize="ANY")
