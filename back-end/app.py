@@ -349,9 +349,17 @@ def create_preference_type(pfid: int, pftype: str):
 def delete_preference_type(pftype: str):
     to_delete = db.get_single_preference_type(pftype=pftype)
     if not to_delete:
-        return "no preference to delete", 204
+        return "no preference to delete", 404
     db.delete_preference_type(pftype=pftype)
     return "", 204
+
+@app.get("/preferences-for-given-user/<pseudo>", authorize="ANY")
+def get_preferences_with_certain_user(pseudo: str):
+    pseudo_in = db.get_single_pseudo(pseudo=pseudo)
+    if not pseudo_in:
+        return "No pseudo", 404
+    res_pseudo = db.get_all_user_preferences(pseudo=pseudo)
+    return json(res_pseudo), 200
 
 
 # SHOULD STAY AS LAST LOC
