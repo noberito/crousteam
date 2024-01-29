@@ -287,3 +287,14 @@ def test_get_info_profile(api):
     api.check("GET", "/all-info/hobbes", 200, r"tiger", login=ADMIN)
     api.check("GET", "/all-info/brandon", 404, login=ADMIN)
     api.check("GET", "/all-info", 404, login=ADMIN)
+
+
+def test_preferences(api):
+    api.check("POST", "/preferences/calvin", 404, data={"list_pfid": [1]}, login=ADMIN)
+    api.check("POST", "/preferences/calvin", 201, data={"list_pfid": [5]}, login=ADMIN)
+    api.check(
+        "DELETE", "/preferences/calvin", 204, data={"list_pfid": [5]}, login=ADMIN
+    )
+    api.check(
+        "DELETE", "/preferences/calvin", 404, data={"list_pfid": [3]}, login=ADMIN
+    )

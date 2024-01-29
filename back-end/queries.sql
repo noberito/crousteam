@@ -93,10 +93,25 @@ SELECT firstName, lastName FROM Profile WHERE pseudo = :pseudo;
 -- name: get_all_info^
 SELECT * FROM Profile WHERE pseudo = :pseudo;
 
+-- name: preference_already^
+SELECT TRUE FROM UsersPref AS u
+JOIN Profile AS p
+ON u.lid = p.lid
+WHERE pseudo = :pseudo AND pfid = :pfid;
+
+-- name: insert_preference!
+INSERT INTO UsersPref (lid, pfid) 
+VALUES ((SELECT lid FROM Profile WHERE pseudo = :pseudo), :pfid);
+
+-- name: delete_preference!
+DELETE FROM UsersPref
+WHERE lid = (SELECT lid FROM Profile WHERE pseudo = :pseudo)
+AND pfid = :pfid;
+
 -- name: get_profile_from_preferences!
 SELECT pseudo, firstName, lastName, photoPath
 FROM Preferences
 JOIN UsersPref USING (pfid)
 Join Profile USING(pid)
-where pftype:= pftype
+where pftype = :pftype
 ORDER BY 1;

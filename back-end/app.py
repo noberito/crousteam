@@ -276,5 +276,31 @@ def get_all_info(pseudo: str):
     return json(res), 200
 
 
+@app.post("/preferences/<pseudo>", authorize="ANY")
+def post_preferences(list_pfid: list, pseudo: str):
+    s = 0
+    for pfid in list_pfid:
+        already = db.preference_already(pseudo=pseudo, pfid=pfid)
+        if not already:
+            db.insert_preference(pseudo=pseudo, pfid=pfid)
+            s += 1
+    if s == 0:
+        return "Nothing to insert", 404
+    return "", 201
+
+
+@app.delete("/preferences/<pseudo>", authorize="ANY")
+def delete_preferences(list_pfid: list, pseudo: str):
+    s = 0
+    for pfid in list_pfid:
+        already = db.preference_already(pseudo=pseudo, pfid=pfid)
+        if already:
+            db.delete_preference(pseudo=pseudo, pfid=pfid)
+            s += 1
+    if s == 0:
+        return "Nothing to delete", 404
+    return "", 204
+
+
 # SHOULD STAY AS LAST LOC
 log.debug("running…")
