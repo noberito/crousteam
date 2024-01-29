@@ -222,14 +222,14 @@ def test_messages(api):
         "/messages",
         200,
         r"petit",
-        data={"pseudo": "calvin", "gname": "copaing"},
+        data={"login": "calvin", "gname": "copaing"},
         login=ADMIN,
     )
     api.check(
         "POST",
         "/messages",
         201,
-        data={"pseudo": "calvin", "mtext": "Je poste un message", "gid": 1},
+        data={"login": "calvin", "mtext": "Je poste un message", "gid": 1},
         login=ADMIN,
     )
 
@@ -241,11 +241,11 @@ def test_add_profile(api):
     api.check("GET", "/profile", 200, r"jean-paul", login=ADMIN)
     api.check(
         "POST",
-        "/profile",
+        "/profile/foo",
         201,
         data={
-            "lid": 1,
-            "pseudo": "foobla",
+            "lid": 6,
+            "bio": "bio au pif",
             "firstName": "foo",
             "lastName": "bla",
             "naissance": "1999-01-08",
@@ -255,11 +255,11 @@ def test_add_profile(api):
     )
     api.check(
         "POST",
-        "/profile",
+        "/profile/foo",
         404,
         data={
-            "lid": 1,
-            "pseudo": "foobla",
+            "lid": 6,
+            "bio": "bio qui marche pas",
             "firstName": "foo",
             "lastName": "bla",
             "naissance": "1999-01-08",
@@ -269,7 +269,7 @@ def test_add_profile(api):
     )
     api.check(
         "PATCH",
-        "/profile/foobla",
+        "/profile/foo",
         204,
         data={
             "firstName": "foo",
@@ -293,8 +293,8 @@ def test_add_profile(api):
         },
         login=ADMIN,
     )
-    api.check("DELETE", "/profile", 204, data={"pseudo": "foobla"}, login=ADMIN)
-    api.check("DELETE", "/profile", 404, data={"pseudo": "foobla"}, login=ADMIN)
+    api.check("DELETE", "/profile/foo", 204, login=ADMIN)
+    api.check("DELETE", "/profile/foo", 404, login=ADMIN)
 
 
 def test_add_group_chat_of_2(api):
@@ -329,7 +329,7 @@ def test_preferences(api):
 
 def test_search_profile_with_preferences(api):
     api.check("GET", "/users-with-preferences/calvin", 200, r"jean-paul", login=ADMIN)
-    api.check("GET", "/users-with-preferences/foo", 404, login=ADMIN)
+    api.check("GET", "/users-with-preferences/brandon", 404, login=ADMIN)
 
 
 def test_insert_preference_type(api):

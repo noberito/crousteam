@@ -33,10 +33,10 @@ RETURNING lid;
 DELETE FROM Auth WHERE login = :login;
 
 -- name: get_messages
-SELECT mtext, CASE WHEN pseudo = :pseudo THEN 1 ELSE 0 END AS a_ecrit, mtime
+SELECT mtext, CASE WHEN login = :login THEN 1 ELSE 0 END AS a_ecrit, mtime
 FROM Messages
 JOIN AppGroup USING (gid)
-JOIN Profile USING (lid)
+JOIN Auth USING (lid)
 WHERE gname = :gname
 ORDER BY mtime DESC;
 
@@ -44,24 +44,26 @@ ORDER BY mtime DESC;
 INSERT INTO Messages(lid, mtext, gid)
 VALUES (:lid, :mtext, :gid);
 
--- name: get_lid_from_pseudo^
-SELECT lid FROM Profile WHERE pseudo = :pseudo;
+-- name: get_lid_from_login^
+SELECT lid FROM Auth WHERE login = :login;
 
 -- name: post_info_register!
-INSERT INTO Profile(lid,firstName,lastName,pseudo, naissance, photoPath)
-VALUES (:lid, :firstName, :lastName, :pseudo, :naissance, :photoPath);
+INSERT INTO Profile(lid, firstName, lastName, bio, naissance, photoPath)
+VALUES (:lid, :firstName, :lastName, :bio, :naissance, :photoPath);
 
--- name: get_single_pseudo^
-SELECT TRUE FROM Profile WHERE pseudo = :pseudo;
+-- name: get_single_profile^
+SELECT TRUE FROM Profile WHERE lid = (SELECT lid FROM Auth WHERE login = :login);
 
 -- name: delete_info_profile!
-DELETE FROM Profile WHERE pseudo = :pseudo;
+DELETE FROM Profile WHERE lid = (SELECT lid FROM Auth WHERE login = :login);
 
 -- name: all_info_profile
 SELECT * FROM Profile;
 
 -- name: update_info_profile!
-UPDATE Profile SET (firstName, lastName, bio, naissance, photoPath) = (:firstName, :lastName, :bio, :naissance, :photoPath) WHERE pseudo = :pseudo;
+UPDATE Profile
+SET (firstName, lastName, bio, naissance, photoPath) = (:firstName, :lastName, :bio, :naissance, :photoPath)
+WHERE lid = (SELECT lid FROM Auth WHERE login = :login);
 
 -- name: create_group_of_two$
 INSERT INTO AppGroup(gname)
@@ -82,7 +84,7 @@ INSERT INTO UsersInGroup(gid, lid)
 VALUES (:gid, :lid);
 
 -- name: get_single_lid^
-SELECT pseudo FROM Profile WHERE lid = :lid;
+SELECT login FROM Auth WHERE lid = :lid;
 
 -- name: get_single_group_chat^
 SELECT TRUE FROM AppGroup WHERE gid = :gid;
@@ -94,33 +96,40 @@ DELETE FROM AppGroup WHERE gid = :gid;
 SELECT gid FROM AppGroup ORDER BY gid DESC LIMIT 1;
 
 -- name: get_first_last_name^
-SELECT firstName, lastName FROM Profile WHERE pseudo = :pseudo;
+SELECT firstName, lastName
+FROM Profile
+JOIN Auth USING(lid)
+WHERE login = :login;
 
 -- name: get_all_info^
-SELECT * FROM Profile WHERE pseudo = :pseudo;
+SELECT * FROM Profile
+JOIN Auth USING(lid)
+WHERE login = :login;
 
 -- name: preference_already^
 SELECT TRUE FROM UsersPref AS u
-JOIN Profile AS p
-ON u.lid = p.lid
-WHERE pseudo = :pseudo AND pfid = :pfid;
+JOIN Auth AS a
+ON u.lid = a.lid
+WHERE login = :login AND pfid = :pfid;
 
 -- name: insert_preference!
 INSERT INTO UsersPref (lid, pfid) 
-VALUES ((SELECT lid FROM Profile WHERE pseudo = :pseudo), :pfid);
+VALUES ((SELECT lid FROM Auth WHERE login = :login), :pfid);
 
 -- name: delete_preference!
 DELETE FROM UsersPref
-WHERE lid = (SELECT lid FROM Profile WHERE pseudo = :pseudo)
+WHERE lid = (SELECT lid FROM Auth WHERE login = :login)
 AND pfid = :pfid;
 
--- name: get_pseudo_who_matches_with_preferences
-WITH PseudoPreferences AS (
-    SELECT pfid FROM UsersPref JOIN Profile USING(lid) WHERE pseudo = :pseudo
+-- name: get_login_who_matches_with_preferences
+WITH LoginPreferences AS (
+    SELECT pfid FROM UsersPref JOIN Auth USING(lid) WHERE login = :login
 )
-SELECT DISTINCT pseudo, bio, COUNT(*) FROM Profile JOIN UsersPref USING(lid)
-WHERE pfid IN (SELECT pfid FROM PseudoPreferences) AND pseudo <> :pseudo
-GROUP BY pseudo, bio
+SELECT DISTINCT login, bio, COUNT(*) FROM Auth 
+JOIN UsersPref USING(lid)
+JOIN Profile USING(lid)
+WHERE pfid IN (SELECT pfid FROM LoginPreferences) AND login <> :login
+GROUP BY login, bio
 ORDER BY 3 DESC;
 
 -- name: get_profile_from_preferences!

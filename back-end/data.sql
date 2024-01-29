@@ -3,9 +3,9 @@
 --
 \copy Auth(login, password, isAdmin) from './test_users.csv' (format csv)
 
-INSERT INTO Auth (login, password) VALUES ('jean-paul', 'farte'), ('pedro', 'spinouza'), ('issa', 'delouze');
+INSERT INTO Auth (login, password) VALUES ('jean-paul', 'farte'), ('pedro', 'spinouza'), ('issa', 'delouze'), ('foo', 'bla');
 
-INSERT INTO Profile(lid, pseudo, firstName, lastName) VALUES (1, 'calvin', 'calvin', 'dadson'), (2, 'hobbes', 'hobbes', 'tiger'), (3, 'jean-paul', 'jean-paul', 'farte'), (4, 'pedro', 'pedro', 'spinouza'), (5, 'issa', 'issa', 'delouze');
+INSERT INTO Profile(lid, firstName, lastName) VALUES (1, 'calvin', 'dadson'), (2, 'hobbes', 'tiger'), (3, 'jean-paul', 'farte'), (4, 'pedro', 'spinouza'), (5, 'issa', 'delouze');
 
 INSERT INTO AppGroup(gname) VALUES ('copaing');
 

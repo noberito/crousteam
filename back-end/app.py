@@ -189,14 +189,14 @@ if app.config.get("APP_TEST", False):
 
 
 @app.get("/messages", authorize="ANY")
-def get_messages(pseudo: str, gname: str):
-    res = db.get_messages(pseudo=pseudo, gname=gname)
+def get_messages(login: str, gname: str):
+    res = db.get_messages(login=login, gname=gname)
     return json(res), 200
 
 
 @app.post("/messages", authorize="ANY")
-def post_messages(pseudo: str, mtext: str, gid: int):
-    lid = db.get_lid_from_pseudo(pseudo=pseudo)
+def post_messages(login: str, mtext: str, gid: int):
+    lid = db.get_lid_from_login(login=login)
     db.post_messages(lid=lid, mtext=mtext, gid=gid)
     return "", 201
 
@@ -207,49 +207,56 @@ def get_all_profile():
     return json(res_tot), 200
 
 
-@app.get("/profile/<pseudo>", authorize="ANY")
-def get_single_pseudo(pseudo: str):
-    res = db.get_single_pseudo(pseudo=pseudo)
+@app.get("/profile/<login>", authorize="ANY")
+def get_single_profile(login: str):
+    res = db.get_single_profile(login=login)
     if res:
+        # BIZARRE RENVOIE VRAIMENT CA ?
         return json(res), 200
-    return "pseudo not found", 404
+    return "login not found", 404
 
 
-@app.post("/profile", authorize="ANY")
+@app.post("/profile/<login>", authorize="ANY")
 def post_info_register(
-    lid: int, pseudo: str, firstName: str, lastName: str, naissance: str, photoPath: str
+    lid: int,
+    firstName: str,
+    lastName: str,
+    login: str,
+    bio: str,
+    naissance: str,
+    photoPath: str,
 ):
-    already_exist = db.get_single_pseudo(pseudo=pseudo)
+    already_exist = db.get_single_profile(login=login)
     if already_exist:
-        return "pseudo already exist", 404
+        return "profile of this login already exist", 404
     res = db.post_info_register(
         lid=lid,
         firstName=firstName,
         lastName=lastName,
-        pseudo=pseudo,
+        bio=bio,
         naissance=naissance,
         photoPath=photoPath,
     )
     return json(res), 201
 
 
-@app.delete("/profile", authorize="ANY")
-def delete_info_profile(pseudo: str):
-    exist = db.get_single_pseudo(pseudo=pseudo)
+@app.delete("/profile/<login>", authorize="ANY")
+def delete_info_profile(login: str):
+    exist = db.get_single_profile(login=login)
     if exist:
-        db.delete_info_profile(pseudo=pseudo)
+        db.delete_info_profile(login=login)
         return "", 204
-    return "pseudo not found", 404
+    return "login not found", 404
 
 
-@app.patch("/profile/<pseudo>", authorize="ANY")
+@app.patch("/profile/<login>", authorize="ANY")
 def update_info_profile(
-    pseudo: str, firstName: str, lastName: str, bio: str, naissance: str, photoPath: str
+    login: str, firstName: str, lastName: str, bio: str, naissance: str, photoPath: str
 ):
-    exist = db.get_single_pseudo(pseudo=pseudo)
+    exist = db.get_single_profile(login=login)
     if exist:
         db.update_info_profile(
-            pseudo=pseudo,
+            login=login,
             firstName=firstName,
             lastName=lastName,
             bio=bio,
@@ -257,7 +264,7 @@ def update_info_profile(
             photoPath=photoPath,
         )
         return "", 204
-    return "pseudo not found", 404
+    return "login not found", 404
 
 
 @app.post("/group-chat-2", authorize="ANY")
@@ -284,55 +291,55 @@ def delete_group_chat(gid: int):
     return "", 204
 
 
-@app.get("/first-last-name/<pseudo>", authorize="ANY")
-def get_first_last_name(pseudo: str):
-    res = db.get_first_last_name(pseudo=pseudo)
+@app.get("/first-last-name/<login>", authorize="ANY")
+def get_first_last_name(login: str):
+    res = db.get_first_last_name(login=login)
     if not res:
-        return "pseudo not found", 404
+        return "login not found", 404
     return json(res), 200
 
 
-@app.get("/all-info/<pseudo>", authorize="ANY")
-def get_all_info(pseudo: str):
-    res = db.get_all_info(pseudo=pseudo)
+@app.get("/all-info/<login>", authorize="ANY")
+def get_all_info(login: str):
+    res = db.get_all_info(login=login)
     if not res:
-        return "pseudo not found", 404
+        return "login not found", 404
     return json(res), 200
 
 
-@app.post("/preferences/<pseudo>", authorize="ANY")
-def post_preferences(list_pfid: list, pseudo: str):
+@app.post("/preferences/<login>", authorize="ANY")
+def post_preferences(list_pfid: list, login: str):
     s = 0
     for pfid in list_pfid:
-        already = db.preference_already(pseudo=pseudo, pfid=pfid)
+        already = db.preference_already(login=login, pfid=pfid)
         if not already:
-            db.insert_preference(pseudo=pseudo, pfid=pfid)
+            db.insert_preference(login=login, pfid=pfid)
             s += 1
     if s == 0:
         return "Nothing to insert", 404
     return "", 201
 
 
-@app.delete("/preferences/<pseudo>", authorize="ANY")
-def delete_preferences(list_pfid: list, pseudo: str):
+@app.delete("/preferences/<login>", authorize="ANY")
+def delete_preferences(list_pfid: list, login: str):
     s = 0
     for pfid in list_pfid:
-        already = db.preference_already(pseudo=pseudo, pfid=pfid)
+        already = db.preference_already(login=login, pfid=pfid)
         if already:
-            db.delete_preference(pseudo=pseudo, pfid=pfid)
+            db.delete_preference(login=login, pfid=pfid)
             s += 1
     if s == 0:
         return "Nothing to delete", 404
     return "", 204
 
 
-@app.get("/users-with-preferences/<pseudo>", authorize="ANY")
-def get_users_with_same_preferences(pseudo: str):
-    pseudo_in = db.get_single_pseudo(pseudo=pseudo)
-    if not pseudo_in:
-        return "No pseudo", 404
-    res_pseudo = db.get_pseudo_who_matches_with_preferences(pseudo=pseudo)
-    return json(res_pseudo), 200
+@app.get("/users-with-preferences/<login>", authorize="ANY")
+def get_users_with_same_preferences(login: str):
+    is_login_in = db.get_single_profile(login=login)
+    if not is_login_in:
+        return "no login", 404
+    res_login = db.get_login_who_matches_with_preferences(login=login)
+    return json(res_login), 200
 
 
 @app.post("/preference-type/<pftype>", authorize="ANY")
@@ -340,7 +347,6 @@ def create_preference_type(pfid: int, pftype: str):
     exists1 = db.get_single_preference_type(pftype=pftype)
     if exists1:
         return "already exists", 400
-    # print("inserting")
     db.insert_preference_type(pfid=pfid, pftype=pftype)
     return "", 200
 
