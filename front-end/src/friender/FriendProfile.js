@@ -1,5 +1,6 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import ProfileDisplay from '../profileDisplay/profileDisplayView.react';
 
 // Define the color palette from the uploaded image
 const colors = {
@@ -7,16 +8,6 @@ const colors = {
   primaryText: '#fcb63c', // Example primary text color
   secondaryText: '#f8871f', // Example secondary text color
   accent: '#ec3124', // Example accent color
-};
-
-// Define the UserBio component
-const FriendBio = ({name, isAdmin}) => {
-  return (
-    <View style={styles.profile}>
-      <Text style={styles.pseudo}>{name}</Text>
-      <Text style={styles.bio}>{isAdmin ? ' - Admin' : null}</Text>
-    </View>
-  );
 };
 
 // Define the styles based on the color palette
@@ -36,25 +27,35 @@ const styles = StyleSheet.create({
   },
   pseudo: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily:'Arista-Pro-Alternate-Bold-trial',
     marginBottom: 8,
     color: colors.primaryText,
   },
   bio: {
     fontSize: 16,
     color: colors.secondaryText,
+    fontFamily:'Arista-Pro-Alternate-Bold-trial',
     textAlign: 'center',
   },
 });
 
 // Usage of UserBio component
-export default function FriendProfile({item}) {
-  return (
-    <View style={{backgroundColor: colors.background }}>
-      <FriendBio
-        name={item.name}
-        isAdmin= {item.isAdmin}
-      />
-    </View>
-  );
+export default function FriendProfile({page, setPage, item, key}) {
+  const [profile, setProfile] = useState("null")
+
+  useEffect(() => {
+    setProfile("null");})
+
+    if (page == 'friender') {
+      return(
+      <TouchableOpacity onPress={() => {setPage("profileDisplay")}}>
+      <View style={styles.profile}>
+        <Text style={styles.pseudo}>{item.name}</Text>
+        <Text style={styles.bio}>{item.isAdmin ? ' - Admin' : null}</Text>
+      </View>
+      </TouchableOpacity>)
+    }
+    else {
+      return (<ProfileDisplay page={page} setPage={setPage} item = {item}></ProfileDisplay>)
+    } 
 };

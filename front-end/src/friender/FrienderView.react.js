@@ -6,6 +6,8 @@ import AllFriends from './AllFriends.react';
 import MyProfileView from '../myProfile/MyProfileView.react';
 import ChatView from '../chat/ChatView.react';
 import EventView from '../event/EventView.react';
+import GeneralSettingsView from '../generalSettings/GeneralSettingsView.react';
+import ChangePreferencesView from '../changePreferences/changePreferencesView.react';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -35,8 +37,9 @@ export default function FrienderView({ authToken, logoutUser }) {
   const [page, setPage] = useState('friender')
 
   if (page == 'friender') {
-      return (<View style={styles.mainContainer}>
-        <AllFriends authToken={authToken}/>
+      return (
+      <View style={styles.mainContainer}>
+        <AllFriends page={page} setPage={setPage} authToken={authToken}/>
         <View style = {styles.footer}>
           <BottomBar page={page} setPage={setPage}/>
         </View>
@@ -49,6 +52,12 @@ export default function FrienderView({ authToken, logoutUser }) {
       return (<ChatView page={page} setPage={setPage}></ChatView>)
     }
     if (page == 'event') {
-        return (<EventView page={page} setPage={setPage}></EventView>)
+      return (<EventView page={page} setPage={setPage}></EventView>)
+    }
+    if (page == 'changepreferences') {
+      return (<ChangePreferencesView page={page} setPage={setPage}></ChangePreferencesView>)
+    }
+    if (page == 'generalsettings') {
+      return (<GeneralSettingsView page={page} setPage={setPage}></GeneralSettingsView>)
     }
 }
