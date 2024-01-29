@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   footer: {
-    flexBasis: 100,
+    flexBasis: '8%',
   }
 });
 

@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between"
     },
     footer: {
-        flexBasis: 100,
+        flexBasis: '8%',
     }
 });
 

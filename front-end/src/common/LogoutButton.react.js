@@ -1,23 +1,27 @@
 import React, {useState} from 'react';
 import { Text, Button, View, StyleSheet, TouchableOpacity } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+
+
+const colors = {
+  background: '#f6edce', // Example background color
+  primaryText: '#fcb63c', // Example primary text color
+  secondaryText: '#f8871f', // Example secondary text color
+  accent: '#ec3124', // Example accent color
+};
 
 const styles = StyleSheet.create({
     buttonContainer: {
-        borderRadius: 10,
-        overflow: 'hidden',
-        height:80,
-      },
-    gradient: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 15,
-        borderRadius: 10,
-        marginHorizontal:250
-      },
+      backgroundColor: colors.background,
+      borderRadius: 10,
+      padding: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+      margin: 10,
+      elevation: 3, // for Android
+      shadowColor: colors.accent
+    },
     buttonText: {
-        color: 'white',
+        color: colors.accent,
         fontSize: 30,
         fontFamily:'Arista-Pro-Alternate-Bold-trial',
       },
@@ -26,12 +30,7 @@ const styles = StyleSheet.create({
 const LogOutButton = ({title, onPress}) => {
     return(
         <TouchableOpacity onPress={onPress} style = {styles.buttonContainer}>
-            <LinearGradient
-          colors={['#ec3124', '#ec3124', '#ec3124']}
-          style={styles.gradient}
-        >
           <Text style={styles.buttonText}>{title}</Text>
-        </LinearGradient>
         </TouchableOpacity>
     )
 };

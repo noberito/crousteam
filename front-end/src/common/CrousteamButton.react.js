@@ -1,25 +1,27 @@
 import React, {useState} from 'react';
 import { Text, Button, View, StyleSheet, TouchableOpacity } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 
+const colors = {
+  background: '#f6edce', // Example background color
+  primaryText: '#fcb63c', // Example primary text color
+  secondaryText: '#f8871f', // Example secondary text color
+  accent: '#ec3124', // Example accent color
+};
 
 const buttonStyles = StyleSheet.create({
   buttonContainer: {
+    backgroundColor: colors.background,
     borderRadius: 10,
-    overflow: 'hidden',
-    height:'30%',
-    padding:5
-  },
-  gradient: {
-    flex: 1,
-    justifyContent: 'center',
+    padding: 20,
     alignItems: 'center',
-    padding: 15,
-    marginHorizontal:70,
-    borderRadius: 10,
+    justifyContent: 'center',
+    margin: 10,
+    elevation: 3, // for Android
+    shadowColor: colors.secondaryText, 
+    shadowOffset: { width: 0, height: 7 }, 
   },
   buttonText: {
-    color: 'white',
+    color: colors.primaryText,
     fontSize: 30,
     fontFamily:'Arista-Pro-Alternate-Bold-trial',
   },
@@ -28,12 +30,7 @@ const buttonStyles = StyleSheet.create({
 const CrousteamButton = ({ onPress, title }) => {
     return (
       <TouchableOpacity onPress={onPress} style={buttonStyles.buttonContainer}>
-        <LinearGradient
-          colors={['#fcb63c', '#fcb63c', '#fcb63c']}
-          style={buttonStyles.gradient}
-        >
           <Text style={buttonStyles.buttonText}>{title}</Text>
-        </LinearGradient>
       </TouchableOpacity>
     );
 

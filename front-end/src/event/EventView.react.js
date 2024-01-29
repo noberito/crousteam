@@ -1,8 +1,44 @@
-
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import BottomBar from '../friender/BottomBar.react';
-import Line from '../common/Line.react';
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 16,
+    },
+    eventItem: {
+        flexDirection: 'row',
+        marginBottom: 16,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 8,
+        overflow: 'hidden',
+        elevation: 2, // Pour l'ombre sur Android
+    },
+    eventImage: {
+        width: 100,
+        height: 100,
+    },
+    eventInfo: {
+        flex: 1,
+        padding: 12,
+    },
+    eventTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    eventDescription: {
+        color: '#555555',
+    },
+    mainContainer: {
+        flex: 1,
+        padding: 16,
+        justifyContent: "space-between"
+    },
+    footer: {
+        flexBasis: '8%',
+    }
+});
 
 const EventList = [
     { id: '1', title: 'Implant capilaire', description: 'Cette technique marche !'},
@@ -41,42 +77,3 @@ export default function EventView({ navigation, page, setPage }) {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-    },
-    eventItem: {
-        flexDirection: 'row',
-        marginBottom: 16,
-        backgroundColor: '#FFFFFF',
-        borderRadius: 8,
-        overflow: 'hidden',
-        elevation: 2, // Pour l'ombre sur Android
-    },
-    eventImage: {
-        width: 100,
-        height: 100,
-    },
-    eventInfo: {
-        flex: 1,
-        padding: 12,
-    },
-    eventTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    eventDescription: {
-        color: '#555555',
-    },
-    mainContainer: {
-        flex: 1,
-        padding: 16,
-        justifyContent: "space-between"
-    },
-    footer: {
-        flexBasis: 100
-    }
-});
-

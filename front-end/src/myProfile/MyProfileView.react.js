@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
     },
     logoutContainer:{
         justifyContent:'center',
-        marginBottom:"10%",
     },
     footer: {
         flexBasis:"8%",
@@ -33,39 +32,20 @@ const styles = StyleSheet.create({
 
 
 export default function MyProfileView({username, page, setPage, logoutUser}) {
-        if (page== "myprofile"){
-            return (
-                 <View style={styles.mainContainer}>
-                    <View style = {styles.identityContainer}>
-                        <Text> Prout </Text>
-                    </View>
-                    <View style={styles.buttonContainer}>
-                        <CrousteamButton title = "General Settings" onPress= {() => {setPage("generalsettings")}}/>
-                        <CrousteamButton title = "Change Preferences" onPress = {() => {setPage("changepreferences")}}/>
-                    </View>
-                    <View style = {styles.logoutContainer}>
-                        <LogOutButton title = "Log Out" onPress = {logoutUser}/>
-                    </View>
-                    <View style={styles.footer}>
-                        <BottomBar page={page} setPage={setPage}/>
-                    </View>
-                </View>
-                    )}
-        if (page == "generalsettings"){
-            return(
-                <View>
-                    <GeneralSettingsView page={page} setPage={setPage}></GeneralSettingsView>
-                </View>
-                )
-            }
-        if (page == "changepreferences"){
-            return(
-                <View>
-                    <ChangePreferencesView></ChangePreferencesView>
-                    <Button title = "Retour" onPress= {() => {setPage("myprofile")}}></Button>
-                </View>
-                )
-            }
-        
-    
-}
+    return (
+        <View style={styles.mainContainer}>
+            <View style = {styles.identityContainer}>
+                <Text> Prout </Text>
+            </View>
+        <View style={styles.buttonContainer}>
+            <CrousteamButton title = "General Settings" onPress= {() => {setPage("generalsettings")}}/>
+            <CrousteamButton title = "Change Preferences" onPress = {() => {setPage("changepreferences")}}/>
+        </View>
+        <View style = {styles.logoutContainer}>
+            <LogOutButton title = "Log Out" onPress = {logoutUser}/>
+        </View>
+        <View style={styles.footer}>
+            <BottomBar page={page} setPage={setPage}/>
+        </View>
+        </View>
+    )};
