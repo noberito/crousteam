@@ -132,17 +132,9 @@ WHERE pfid IN (SELECT pfid FROM LoginPreferences) AND login <> :login
 GROUP BY login, bio
 ORDER BY 3 DESC;
 
--- name: get_profile_from_preferences!
-SELECT pseudo, firstName, lastName, photoPath
-FROM Preferences
-JOIN UsersPref USING (pfid)
-Join Profile USING(pid)
-where pftype = :pftype
-ORDER BY 1;
-
 -- name: insert_preference_type!
-INSERT INTO Preferences(pfid,pftype)
-VALUES (:pfid, :pftype);
+INSERT INTO Preferences(pftype)
+VALUES (:pftype);
 
 -- name: get_single_preference_type$
 SELECT TRUE FROM Preferences
@@ -152,11 +144,9 @@ WHERE pftype = :pftype;
 DELETE FROM Preferences
 WHERE pftype = :pftype;
 
--- name: get_all_user_preferences!
+-- name: get_all_user_preferences
 SELECT pftype 
 FROM Preferences
-JOIN UsersPref USING (pfid)
-Join Profile USING(lid)
-where pseudo = :pseudo;
-
-
+JOIN UsersPref USING(pfid)
+JOIN Auth USING(lid)
+WHERE login = :login;
