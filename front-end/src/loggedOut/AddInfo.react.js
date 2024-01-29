@@ -39,6 +39,7 @@ export default function CreateAccount({ onSuccess, onCancel }) {
     const [naissance, setNaissance] = useState('');
     const [photopath, setPhotopath] = useState('');
     const [lastName, setLastName] = useState('');
+    const [biography, setBiography] = useState('');
 
     const [isLoading, setIsLoading] = useState(false);
     const [hasFailure, setHasFailure] = useState(false);
@@ -49,7 +50,7 @@ export default function CreateAccount({ onSuccess, onCancel }) {
             baseURL: baseUrl,
             url: '/profile',
             method: 'POST',
-            data: { lid: lastUid, pseudo: pseudo, firstName: firstName, lastName: lastName, naissance: naissance, photoPath: photopath } // TODO   
+            data: { lid: lastUid, firstName: firstName, lastName: lastName, naissance: naissance, photoPath: photopath, biography: biography } // TODO   
         }).then(response => {
             setIsLoading(false)
             if (response.status >= 200 && response.status < 300) {
@@ -81,11 +82,11 @@ export default function CreateAccount({ onSuccess, onCancel }) {
                     Something went wrong while creating the user
                 </Text>
             </View>}
-            <KivTextInput label="Pseudo" value={pseudo} onChangeText={value => setPseudo(value)} />
             <KivTextInput label="First Name" value={firstName} onChangeText={value => setFirstName(value)} />
             <KivTextInput label="Last Name" value={lastName} onChangeText={value => setLastName(value)} />
             <KivTextInput label="Birth date" value={naissance} onChangeText={value => setNaissance(value)} />
             <KivTextInput label="Photo" value={photopath} onChangeText={value => setPhotopath(value)} />
+            <KivTextInput label="Biography" value={biography} onChangeText={value => setBiography(value)} />
 
 
             <View style={styles.buttonRow}>

@@ -49,12 +49,12 @@ export default function Login({ onSuccess, onCancel }) {
     console.log(`Request GET on ${baseUrl}/login`)
 
     axios({
-      baseURL : baseUrl,
-      url : '/login',
-      method : 'GET',
-      headers : {'Authorization' : 'Basic ' + encode(username + ':' + password)}
+      baseURL: baseUrl,
+      url: '/login',
+      method: 'GET',
+      headers: { 'Authorization': 'Basic ' + encode(username + ':' + password) }
       // auth : {username : username, password : password} "Property 'btoa' doesn't exist"
-    }).then(result => { 
+    }).then(result => {
       console.log('OK ! ' + result.data)
       setIsLoading(false)
       if (result.status == 200) {

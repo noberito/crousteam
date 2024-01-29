@@ -35,7 +35,7 @@ export default function Root() {
         <Header username={username} />
         <View style={styles.container}>
           {authToken != null ?
-            <FrienderView authToken={authToken} logoutUser={logoutUser} />
+            <FrienderView authToken={authToken} logoutUser={logoutUser} username={username} />
             : <LoggedOutView onLogUser={onLogUser} />}
         </View>
       </View>
