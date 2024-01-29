@@ -124,3 +124,16 @@ JOIN UsersPref USING (pfid)
 Join Profile USING(pid)
 where pftype = :pftype
 ORDER BY 1;
+
+-- name: insert_preference_type!
+INSERT INTO Preferences(pfid,pftype)
+VALUES (:pfid, :pftype);
+
+-- name: get_single_preference_type$
+SELECT TRUE FROM Preferences
+WHERE pftype = :pftype;
+
+-- name: delete_preference_type!
+DELETE FROM Preferences
+WHERE pftype = :pftype;
+

@@ -303,3 +303,19 @@ def test_preferences(api):
 def test_search_profile_with_preferences(api):
     api.check("GET", "/users-with-preferences/calvin", 200, r"jean-paul", login=ADMIN)
     api.check("GET", "/users-with-preferences/foo", 404, login=ADMIN)
+
+
+def test_insert_preference_type(api):
+    api.check(
+        "POST",
+        "/preference-type/women",
+        200,
+        data={"pfid": 10},
+        login=ADMIN,
+    )
+    api.check(
+        "DELETE",
+        "/preference-type/women",
+        204,
+        login=ADMIN,
+    )

@@ -311,5 +311,24 @@ def get_users_with_same_preferences(pseudo: str):
     return json(res_pseudo), 200
 
 
+@app.post("/preference-type/<pftype>", authorize="ANY")
+def create_preference_type(pfid: int, pftype: str):
+    exists1 = db.get_single_preference_type(pftype=pftype)
+    if exists1:
+        return "already exists", 400
+    # print("inserting")
+    db.insert_preference_type(pfid=pfid, pftype=pftype)
+    return "", 200
+
+
+@app.delete("/preference-type/<pftype>", authorize="ANY")
+def delete_preference_type(pftype: str):
+    to_delete = db.get_single_preference_type(pftype=pftype)
+    if not to_delete:
+        return "no preference to delete", 204
+    db.delete_preference_type(pftype=pftype)
+    return "", 204
+
+
 # SHOULD STAY AS LAST LOC
 log.debug("running…")
