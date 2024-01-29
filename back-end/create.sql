@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS Profile(
   firstName TEXT NOT NULL,
   lastName TEXT NOT NULL,
   pseudo TEXT NOT NULL,
+  bio TEXT DEFAULT 'Hello I m new user',
   naissance DATE DEFAULT NULL,
   photoPath TEXT DEFAULT NULL,
   UNIQUE (pseudo),

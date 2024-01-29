@@ -302,5 +302,14 @@ def delete_preferences(list_pfid: list, pseudo: str):
     return "", 204
 
 
+@app.get("/users-with-preferences/<pseudo>", authorize="ANY")
+def get_users_with_same_preferences(pseudo: str):
+    pseudo_in = db.get_single_pseudo(pseudo=pseudo)
+    if not pseudo_in:
+        return "No pseudo", 404
+    res_pseudo = db.get_pseudo_who_matches_with_preferences(pseudo=pseudo)
+    return json(res_pseudo), 200
+
+
 # SHOULD STAY AS LAST LOC
 log.debug("running…")

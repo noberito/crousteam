@@ -298,3 +298,8 @@ def test_preferences(api):
     api.check(
         "DELETE", "/preferences/calvin", 404, data={"list_pfid": [3]}, login=ADMIN
     )
+
+
+def test_search_profile_with_preferences(api):
+    api.check("GET", "/users-with-preferences/calvin", 200, r"jean-paul", login=ADMIN)
+    api.check("GET", "/users-with-preferences/foo", 404, login=ADMIN)

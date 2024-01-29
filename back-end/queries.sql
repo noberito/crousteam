@@ -108,6 +108,15 @@ DELETE FROM UsersPref
 WHERE lid = (SELECT lid FROM Profile WHERE pseudo = :pseudo)
 AND pfid = :pfid;
 
+-- name: get_pseudo_who_matches_with_preferences
+WITH PseudoPreferences AS (
+    SELECT pfid FROM UsersPref JOIN Profile USING(lid) WHERE pseudo = :pseudo
+)
+SELECT DISTINCT pseudo, bio, COUNT(*) FROM Profile JOIN UsersPref USING(lid)
+WHERE pfid IN (SELECT pfid FROM PseudoPreferences) AND pseudo <> :pseudo
+GROUP BY pseudo, bio
+ORDER BY 3 DESC;
+
 -- name: get_profile_from_preferences!
 SELECT pseudo, firstName, lastName, photoPath
 FROM Preferences
