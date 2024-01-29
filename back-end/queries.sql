@@ -57,6 +57,12 @@ SELECT TRUE FROM Profile WHERE pseudo = :pseudo;
 -- name: delete_info_profile!
 DELETE FROM Profile WHERE pseudo = :pseudo;
 
+-- name: all_info_profile
+SELECT * FROM Profile;
+
+-- name: update_info_profile!
+UPDATE Profile SET (firstName, lastName, bio, naissance, photoPath) = (:firstName, :lastName, :bio, :naissance, :photoPath) WHERE pseudo = :pseudo;
+
 -- name: create_group_of_two$
 INSERT INTO AppGroup(gname)
 VALUES (:gname)

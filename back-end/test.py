@@ -236,8 +236,9 @@ def test_messages(api):
 
 # /Profile -> Post Information
 def test_add_profile(api):
-    api.check("GET", "/profile", 200, data={"pseudo": "calvin"}, login=ADMIN)
-    api.check("GET", "/profile", 404, data={"pseudo": "hector"}, login=ADMIN)
+    api.check("GET", "/profile/calvin", 200, login=ADMIN)
+    api.check("GET", "/profile/hector", 404, login=ADMIN)
+    api.check("GET", "/profile", 200, r"jean-paul", login=ADMIN)
     api.check(
         "POST",
         "/profile",
@@ -261,6 +262,32 @@ def test_add_profile(api):
             "pseudo": "foobla",
             "firstName": "foo",
             "lastName": "bla",
+            "naissance": "1999-01-08",
+            "photoPath": "/this/is/photo/path",
+        },
+        login=ADMIN,
+    )
+    api.check(
+        "PATCH",
+        "/profile/foobla",
+        204,
+        data={
+            "firstName": "foo",
+            "lastName": "bla",
+            "bio": "Je m appelle Foobla",
+            "naissance": "1999-01-08",
+            "photoPath": "/this/is/photo/path",
+        },
+        login=ADMIN,
+    )
+    api.check(
+        "PATCH",
+        "/profile/guignol",
+        404,
+        data={
+            "firstName": "foo",
+            "lastName": "bla",
+            "bio": "Je m appelle Foobla",
             "naissance": "1999-01-08",
             "photoPath": "/this/is/photo/path",
         },

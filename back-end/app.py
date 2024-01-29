@@ -202,6 +202,12 @@ def post_messages(pseudo: str, mtext: str, gid: int):
 
 
 @app.get("/profile", authorize="ANY")
+def get_all_profile():
+    res_tot = db.all_info_profile()
+    return json(res_tot), 200
+
+
+@app.get("/profile/<pseudo>", authorize="ANY")
 def get_single_pseudo(pseudo: str):
     res = db.get_single_pseudo(pseudo=pseudo)
     if res:
@@ -232,6 +238,24 @@ def delete_info_profile(pseudo: str):
     exist = db.get_single_pseudo(pseudo=pseudo)
     if exist:
         db.delete_info_profile(pseudo=pseudo)
+        return "", 204
+    return "pseudo not found", 404
+
+
+@app.patch("/profile/<pseudo>", authorize="ANY")
+def update_info_profile(
+    pseudo: str, firstName: str, lastName: str, bio: str, naissance: str, photoPath: str
+):
+    exist = db.get_single_pseudo(pseudo=pseudo)
+    if exist:
+        db.update_info_profile(
+            pseudo=pseudo,
+            firstName=firstName,
+            lastName=lastName,
+            bio=bio,
+            naissance=naissance,
+            photoPath=photoPath,
+        )
         return "", 204
     return "pseudo not found", 404
 
