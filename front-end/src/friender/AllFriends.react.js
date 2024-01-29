@@ -4,7 +4,7 @@ import axios from 'axios';
 import { baseUrl } from '../common/const';
 import FriendProfile from './FriendProfile';
 
-export default function AllFriends({page, setPage, authToken }) {
+export default function AllFriends({page, setPage, log, setLog, authToken }) {
   const [users, setUsers] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -43,7 +43,7 @@ export default function AllFriends({page, setPage, authToken }) {
     getAllUsersRequest();
   }, [authToken, getAllUsersRequest]);
 
-  const renderItem = ({item}) => <FriendProfile page={page} setPage={setPage} item={item} key={item.lid} />;
+  const renderItem = ({item}) => <FriendProfile setPage={setPage} setLog={setLog} item={item} key={item.lid} />;
 
   return (
     <View>

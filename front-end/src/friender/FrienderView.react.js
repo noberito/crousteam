@@ -8,6 +8,7 @@ import ChatView from '../chat/ChatView.react';
 import EventView from '../event/EventView.react';
 import GeneralSettingsView from '../generalSettings/GeneralSettingsView.react';
 import ChangePreferencesView from '../changePreferences/changePreferencesView.react';
+import ProfileDisplayView from '../profileDisplay/profileDisplayView.react';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -35,11 +36,14 @@ const styles = StyleSheet.create({
 
 export default function FrienderView({ authToken, logoutUser }) {
   const [page, setPage] = useState('friender')
+  const [log, setLog] = useState('null')
 
   if (page == 'friender') {
       return (
       <View style={styles.mainContainer}>
-        <AllFriends page={page} setPage={setPage} authToken={authToken}/>
+        <View style={{flex:0.8}}>
+          <AllFriends setPage={setPage} setLog={setLog} authToken={authToken}/>
+        </View>
         <View style = {styles.footer}>
           <BottomBar page={page} setPage={setPage}/>
         </View>
@@ -59,5 +63,8 @@ export default function FrienderView({ authToken, logoutUser }) {
     }
     if (page == 'generalsettings') {
       return (<GeneralSettingsView page={page} setPage={setPage}></GeneralSettingsView>)
+    }
+    if (page == 'profiledisplay') {
+      return (<ProfileDisplayView page={page} setPage={setPage} log={log} setLog={setLog}></ProfileDisplayView>)
     }
 }

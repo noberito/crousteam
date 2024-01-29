@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import ProfileDisplay from '../profileDisplay/profileDisplayView.react';
 
 // Define the color palette from the uploaded image
 const colors = {
@@ -40,22 +39,12 @@ const styles = StyleSheet.create({
 });
 
 // Usage of UserBio component
-export default function FriendProfile({page, setPage, item, key}) {
-  const [profile, setProfile] = useState("null")
-
-  useEffect(() => {
-    setProfile("null");})
-
-    if (page == 'friender') {
+export default function FriendProfile({setPage, setLog, item, key}) {
       return(
-      <TouchableOpacity onPress={() => {setPage("profileDisplay")}}>
+      <TouchableOpacity onPress={() => {setLog(item.name); setPage('profiledisplay')}}>
       <View style={styles.profile}>
         <Text style={styles.pseudo}>{item.name}</Text>
         <Text style={styles.bio}>{item.isAdmin ? ' - Admin' : null}</Text>
       </View>
       </TouchableOpacity>)
-    }
-    else {
-      return (<ProfileDisplay page={page} setPage={setPage} item = {item}></ProfileDisplay>)
-    } 
-};
+    };
