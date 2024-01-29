@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
  */
 
 
-export default function FrienderView({ authToken, logoutUser }) {
+export default function FrienderView({ authToken, logoutUser, username }) {
   const [page, setPage] = useState('friender')
   const [log, setLog] = useState('null')
 
@@ -42,7 +42,7 @@ export default function FrienderView({ authToken, logoutUser }) {
       return (
       <View style={styles.mainContainer}>
         <View style={{flex:0.8}}>
-          <AllFriends setPage={setPage} setLog={setLog} authToken={authToken}/>
+          <AllFriends username={username} setPage={setPage} setLog={setLog} authToken={authToken}/>
         </View>
         <View style = {styles.footer}>
           <BottomBar page={page} setPage={setPage}/>

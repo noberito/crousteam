@@ -12,12 +12,11 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
         padding: 16,
-        justifyContent: "space-between", // This will ensure that the footer stays at the bottom
+        justifyContent: "space-between"
     },
 
     identityContainer: {
-        // This will take the necessary space but allow other elements to grow
-        // Removed the flex: 3 to allow this container to only take the space of its content
+        
         justifyContent: 'center',
         alignItems: 'center', // Center the content horizontally
     },

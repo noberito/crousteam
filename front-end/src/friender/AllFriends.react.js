@@ -4,7 +4,7 @@ import axios from 'axios';
 import { baseUrl } from '../common/const';
 import FriendProfile from './FriendProfile';
 
-export default function AllFriends({page, setPage, log, setLog, authToken }) {
+export default function AllFriends({username, page, setPage, log, setLog, authToken }) {
   const [users, setUsers] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -16,15 +16,15 @@ export default function AllFriends({page, setPage, log, setLog, authToken }) {
     setRefreshing(true);
     axios({
       baseURL : baseUrl,
-      url : '/users',
+      url : '/profile',
       method : 'GET',
-      headers : { Authorization : 'Bearer ' + authToken}
+      headers : { Authorization : 'Bearer ' + authToken},
     }).then(response => {
       setIsLoading(false);
       setRefreshing(false); // Set refreshing to false when data is loaded
       if (response.status == 200) {
         const parsedData = response.data.map(user => ({
-          name: user[0], isAdmin: user[1]
+          login: user[1], bio: user[3]
         }));
         console.log(parsedData);
         setUsers(parsedData);
@@ -43,7 +43,7 @@ export default function AllFriends({page, setPage, log, setLog, authToken }) {
     getAllUsersRequest();
   }, [authToken, getAllUsersRequest]);
 
-  const renderItem = ({item}) => <FriendProfile setPage={setPage} setLog={setLog} item={item} key={item.lid} />;
+  const renderItem = ({item}) => <FriendProfile setPage={setPage} setLog={setLog} item={item}/>;
 
   return (
     <View>
@@ -56,7 +56,7 @@ export default function AllFriends({page, setPage, log, setLog, authToken }) {
       <FlatList
         data={users}
         renderItem={renderItem}
-        keyExtractor={item => item.name}
+        keyExtractor={item => item.login}
         // Add RefreshControl to FlatList
         refreshControl={
           <RefreshControl

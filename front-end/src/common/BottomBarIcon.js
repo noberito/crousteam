@@ -2,9 +2,7 @@ import React from 'react'
 import { Button, View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 
 const iconStyles = StyleSheet.create({
-    iconContainer:{
-        
-    },
+
     image:{
         height:90,
         width:90

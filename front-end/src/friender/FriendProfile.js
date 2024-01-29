@@ -41,10 +41,10 @@ const styles = StyleSheet.create({
 // Usage of UserBio component
 export default function FriendProfile({setPage, setLog, item, key}) {
       return(
-      <TouchableOpacity onPress={() => {setLog(item.name); setPage('profiledisplay')}}>
+      <TouchableOpacity onPress={() => {setLog(item.login); setPage('profiledisplay')}}>
       <View style={styles.profile}>
-        <Text style={styles.pseudo}>{item.name}</Text>
-        <Text style={styles.bio}>{item.isAdmin ? ' - Admin' : null}</Text>
+        <Text style={styles.pseudo}>{item.login}</Text>
+        <Text style={styles.bio}>{item.bio}</Text>
       </View>
       </TouchableOpacity>)
     };
