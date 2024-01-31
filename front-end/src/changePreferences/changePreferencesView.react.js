@@ -9,7 +9,7 @@ import AppContext from '../common/appcontext';
 import CrousteamButton from '../common/CrousteamButton.react';
 
 export default function ChangePreferencesView({ }) {
-    const [info, setInfo] = useState('');
+    const [info, setInfo] = useState([]);
     const [lid, setLid] = useState();
     const { username, setUsername, setPage } = useContext(AppContext);
 
@@ -17,7 +17,8 @@ export default function ChangePreferencesView({ }) {
     const [firstName, setFirstName] = useState();
     const [lastName, setLastName] = useState();
     const [naissance, setNaissance] = useState();
-    const [photopath, setPhotopath] = useState();
+    const [photoPath, setPhotopath] = useState();
+    const [bio, setBio] = useState();
 
 
     const [isLoading, setIsLoading] = useState(false);
@@ -36,6 +37,11 @@ export default function ChangePreferencesView({ }) {
             console.log('OK ! ' + result.data)
             setIsLoading(false)
             setInfo(result.data)
+            setFirstName(result.data[1])
+            setLastName(result.data[2])
+            setBio(result.data[3])
+            setNaissance(result.data[4])
+            setPhotopath(result.data[5])
             setLid(info['naissance'])
         }).catch(err => {
             console.error(`something went wrong: ${err.message}`)
@@ -49,13 +55,13 @@ export default function ChangePreferencesView({ }) {
     const SubmitInfo = () => {
         setIsLoading(true);
 
-        console.log(`Request GET on ${baseUrl}/all-info`)
+        console.log(`Request GET on ${baseUrl}/profile`)
 
         axios({
             baseURL: baseUrl,
-            url: `/all-info/${username}`,
+            url: `/profile/${username}`,
             method: 'PATCH',
-            data: { login: username, firstName: firstName, lastName: lastName, naissance: naissance, photoPath: photopath },
+            params: { firstName, lastName, bio, naissance, photoPath }
             // auth : {username : username, password : password} "Property 'btoa' doesn't exist"
         }).then(result => {
             console.log('OK ! ' + result.data)
@@ -70,7 +76,7 @@ export default function ChangePreferencesView({ }) {
     }
 
     useEffect(() => {
-        loadInfo();
+        loadInfo()
     }, []);
 
     return (
@@ -79,13 +85,14 @@ export default function ChangePreferencesView({ }) {
             <KivCard>
 
                 <Text> Change Preferences </Text>
-                <KivTextInput label="Login" value={info[1]} onChangeText={value => setPseudo(value)} />
-                <KivTextInput label="First Name" value={info[2]} onChangeText={value => setFirstName(value)} />
-                <KivTextInput label="Last Name" value={info[3]} onChangeText={value => setLastName(value)} />
-                <KivTextInput label="naissance" value={info[4]} onChangeText={value => setNaissance(value)} />
-                <KivTextInput label="photopath" value={info[5]} onChangeText={value => setPhotopath(value)} />
+                <KivTextInput label="Login" value={username} onChangeText={value => setPseudo(value)} />
+                <KivTextInput label="First Name" value={firstName} onChangeText={value => setFirstName(value)} />
+                <KivTextInput label="Last Name" value={lastName} onChangeText={value => setLastName(value)} />
+                <KivTextInput label="naissance" value={naissance} onChangeText={value => setNaissance(value)} />
+                <KivTextInput label="bio" value={bio} onChangeText={value => setBio(value)} />
+                <KivTextInput label="photopath" value={photoPath} onChangeText={value => setPhotopath(value)} />
                 <Button title="Submit changes" disabled={isLoading} onPress={() => { SubmitInfo() }} />
-
+                <Text>{firstName}</Text>
 
 
             </KivCard>
