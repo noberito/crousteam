@@ -10,8 +10,7 @@ const messageStyles = StyleSheet.create({
     backgroundColor: colors.background,
     borderRadius: 10,
     padding: 20,
-    justifyContent:'right',
-    alignItems:'right',
+    alignItems:'flex-end',
     margin: 10,
     elevation: 3, // for Android
     shadowColor: colors.secondaryText, 
@@ -23,25 +22,31 @@ const messageStyles = StyleSheet.create({
     backgroundColor: colors.background,
     borderRadius: 10,
     padding: 20,
-    justifyContent:'left',
-    alignItems:'left',
+    alignItems:'flex-start',
     margin: 10,
     elevation: 3, // for Android
     shadowColor: colors.secondaryText, 
     shadowOffset: { width: 0, height: 7 }, 
   },
   messageText: {
-    color: colors.primaryText,
-    fontSize: 24,
+    color: 'black',
+    justifyContent:'flex-end',
+    fontSize: 20,
+    fontFamily:'Arista-Pro-Alternate-Light-trial',
+  },
+
+  sender:{
     fontFamily:'Arista-Pro-Alternate-Bold-trial',
+    fontSize:30,
+    color:colors.primaryText,
   },
   right:{
-    justifyContent:'flex-start',
+    flexDirection:'right',
     alignItems:'flex-end',
   },
   left:{
-    justifyContent:'flex-end',
-    alignItems:'flex-start',
+    flexDirection:'left',
+    alignItems:'flex-start'
   }
 });
 
@@ -52,14 +57,18 @@ const CrousteamMessage = ({ item}) => {
     console.log(item.sender==username)
     if (item.sender==username) {
     return (
-      <TouchableOpacity style={messageStyles.left}>
-          <Text style={messageStyles.right}>{item.content}</Text>
+      <View style={{justifyContent:'flex-end', flexDirection: 'row'}}>
+      <TouchableOpacity style={messageStyles.messageRightContainer}>
+          <Text style={messageStyles.sender}>{item.sender}</Text>
+          <Text style={messageStyles.messageText}>{item.content}</Text>
       </TouchableOpacity>
+      </View>
     )}
     else {
         return(
-        <TouchableOpacity style={messageStyles.right}>
-          <Text style={messageStyles.left}>{item.content}</Text>
+        <TouchableOpacity style={messageStyles.messageLeftContainer}>
+          <Text style={messageStyles.sender}>{item.sender}</Text>
+          <Text style={messageStyles.messageText}>{item.content}</Text>
       </TouchableOpacity>)
     }
 

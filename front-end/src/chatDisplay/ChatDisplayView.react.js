@@ -28,13 +28,13 @@ export default function ChatDisplayView({log, setLog, event}) {
       url : '/messages',
       method : 'GET',
       headers : { Authorization : 'Bearer ' + authToken},
-      data: {login1:{username}, login2:{log}}
+      params: {login1:username, login2:log}
     }).then(response => {
       setIsLoading(false);
       setRefreshing(false); // Set refreshing to false when data is loaded
       if (response.status == 200) {
         const parsedData = response.data.map(message => ({
-          mid: message[0], content: message[1], sender: message[2], time:message[3]
+          mid: message[0], content: message[1], sender: message[4], time:message[3], a_ecrit: message[2]
         }));
         console.log(parsedData);
         setMessages(parsedData);
@@ -53,34 +53,7 @@ export default function ChatDisplayView({log, setLog, event}) {
     getAllMessagesRequest();
   }, [authToken, getAllMessagesRequest]);
 
-  const messages2 = [
-    {
-      id: "1",
-      content: "Hello, how are you?",
-      sender: "calvin",
-      timestamp: 'prout'
-    },
-    {
-      id: "2",
-      content: "I'm doing well, thanks! And you?",
-      sender: "averell",
-      timestamp: 'prout'
-    },
-    {
-      id: "3",
-      content: "Great to hear. I'm good too.",
-      sender: "calvin",
-      timestamp: 'prout'
-    },
-    {
-      id: "4",
-      content: "ENVIE DE PSQL",
-      sender: "calvin",
-      timestamp: 'prout'
-    }
-  ];
-
-  console.log(messages2)
+  console.log(messages)
   const renderItem = ({item}) => <CrousteamMessage item={item}/>;
 
     return(
@@ -96,7 +69,7 @@ export default function ChatDisplayView({log, setLog, event}) {
       <FlatList
         data={messages}
         renderItem={renderItem}
-        keyExtractor={item => item.id} 
+        keyExtractor={item => item.mid} 
           />
     </View>
         <CrousteamButton onPress={() => {setLog('null'), setPage('listchat')}} title='Retour'></CrousteamButton>
