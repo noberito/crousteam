@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import AppContext from '../common/appcontext';
 
 // Define the color palette from the uploaded image
 const colors = {
@@ -39,7 +40,8 @@ const styles = StyleSheet.create({
 });
 
 // Usage of UserBio component
-export default function FriendProfile({setPage, setLog, item, key}) {
+export default function FriendProfile({setLog, item, key}) {
+      const {setPage} = useContext(AppContext)
       return(
       <TouchableOpacity onPress={() => {setLog(item.login); setPage('profiledisplay')}}>
       <View style={styles.profile}>

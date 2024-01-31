@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Button, View, Text, StyleSheet } from 'react-native';
-import KivTextInput from '../common/KivTextInput.react';
-import KivCard from '../common/KivCard.react';
+import KivTextInput from '../common/CrouisteamTextInput.react';
+import KivCard from '../common/CrousteamCard.react';
 import axios from 'axios';
 import { baseUrl } from '../common/const';
 import AppContext from '../common/appcontext';

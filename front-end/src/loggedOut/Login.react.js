@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Button, View, Text, StyleSheet } from 'react-native';
-import KivTextInput from '../common/KivTextInput.react';
-import KivCard from '../common/KivCard.react';
+import CrousteamTextInput from '../common/CrouisteamTextInput.react';
+import CrousteamCard from '../common/CrousteamCard.react';
+import CrousteamButton from '../common/CrousteamButton.react';
+import colors from '../common/Colors.react';
 
 import axios from 'axios';
 import { baseUrl } from '../common/const';
@@ -16,6 +18,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
+    color: colors.primaryText,
+    fontFamily:'Arista-Pro-Alternate-Bold-trial'
   },
   incorrectWarning: {
     backgroundColor: '#FF8A80',
@@ -24,7 +28,8 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   buttonRow: {
-    flexDirection: 'row'
+    justifyContent:'center',
+    alignItems:'center',
   },
   button: {
     flexGrow: 1,
@@ -72,30 +77,21 @@ export default function Login({ onSuccess, onCancel }) {
   }
 
   return (
-    <KivCard>
-      <View
-        style={styles.titleContainer}>
-        <Text
-          style={styles.title}>
-          Login
-        </Text>
-      </View>
+
+    <CrousteamCard>
       {hasInvalidLogin && <View style={styles.incorrectWarning}>
         <Text
           style={styles.inputLabel}>
           The username or password is incorrect
         </Text>
       </View>}
-      <KivTextInput label="Username" value={username} onChangeText={value => setUsername(value)} />
-      <KivTextInput label="Password" value={password} onChangeText={value => setPassword(value)} />
-      <View style={styles.buttonRow}>
-        <View style={styles.button}>
-          <Button title="< Create Account" disabled={isLoading} onPress={() => { onCancel(); }} />
-        </View>
-        <View style={styles.button}>
-          <Button title="Login" disabled={isLoading} onPress={() => { sendLoginRequest(); }} />
-        </View>
+      
+      <CrousteamTextInput label="Username" value={username} onChangeText={value => setUsername(value)} />
+      <CrousteamTextInput label="Password" value={password} onChangeText={value => setPassword(value)} />
+      <View styles={styles.buttonRow}>
+      <CrousteamButton title="Login" disabled={isLoading} onPress={() => { sendLoginRequest(); }} />
+      <CrousteamButton title="Create Account" disabled={isLoading} onPress={() => { onCancel(); }} />
       </View>
-    </KivCard>
+      </CrousteamCard>
   );
 }

@@ -5,14 +5,15 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Text, Button, View, StyleSheet, } from 'react-native';
 import axios from 'axios';
 import { baseUrl } from '../common/const';
-import KivTextInput from '../common/KivTextInput.react';
-import KivCard from '../common/KivCard.react';
+import KivTextInput from '../common/CrouisteamTextInput.react';
+import KivCard from '../common/CrousteamCard.react';
 import AppContext from '../common/appcontext';
+import CrousteamButton from '../common/CrousteamButton.react';
 
-export default function ChangePreferencesView({ page, setPage }) {
+export default function ChangePreferencesView({ }) {
     const [info, setInfo] = useState('');
     const [lid, setLid] = useState();
-    const { username, setUsername } = useContext(AppContext);
+    const { username, setUsername, setPage } = useContext(AppContext);
 
     const [pseudo, setPseudo] = useState('');
     const [firstName, setFirstName] = useState();
@@ -89,7 +90,7 @@ export default function ChangePreferencesView({ page, setPage }) {
 
 
             </KivCard>
-            <Button title="Retour" onPress={() => { setPage("myprofile") }}></Button>
+            <CrousteamButton title="Retour" onPress={() => { setPage("myprofile") }}></CrousteamButton>
         </View>
 
 

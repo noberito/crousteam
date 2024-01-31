@@ -4,11 +4,13 @@ import colors from './Colors.react';
 
 const buttonStyles = StyleSheet.create({
   buttonContainer: {
+    width:'50%',
+    heigt:'8%',
     backgroundColor: colors.background,
     borderRadius: 10,
     padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent:'center',
+    alignItems:'center',
     margin: 10,
     elevation: 3, // for Android
     shadowColor: colors.secondaryText, 
@@ -16,9 +18,13 @@ const buttonStyles = StyleSheet.create({
   },
   buttonText: {
     color: colors.primaryText,
-    fontSize: 30,
+    fontSize: 24,
     fontFamily:'Arista-Pro-Alternate-Bold-trial',
   },
+  center:{
+    justifyContent:'center',
+    alignItems:'center',
+  }
 });
 
 const CrousteamButton = ({ onPress, title }) => {

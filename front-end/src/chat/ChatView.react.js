@@ -1,8 +1,8 @@
 
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
-
+import AppContext from '../common/appcontext';
 import BottomBar from '../friender/BottomBar.react';
 import Line from '../common/Line.react';
 
@@ -50,8 +50,9 @@ const styles = StyleSheet.create({
     }
 });
 
-export default function ChatView({ page, setPage, navigation }) {
+export default function ChatView({navigation }) {
     const [searchText, setSearchText] = useState('');
+    const {page, setPage} = useContext(AppContext)
 
     const handleChatSelection = (chatId) => {
         // Navigation vers l'écran de chat avec l'ID du chat sélectionné

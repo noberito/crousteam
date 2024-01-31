@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button, View, StyleSheet, } from 'react-native';
 import BottomBar from './BottomBar.react';
 import AllFriends from './AllFriends.react';
@@ -9,6 +9,7 @@ import EventView from '../event/EventView.react';
 import GeneralSettingsView from '../generalSettings/GeneralSettingsView.react';
 import ChangePreferencesView from '../changePreferences/changePreferencesView.react';
 import ProfileDisplayView from '../profileDisplay/profileDisplayView.react';
+import AppContext from '../common/appcontext';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -34,8 +35,8 @@ const styles = StyleSheet.create({
  */
 
 
-export default function FrienderView({ authToken, logoutUser, username }) {
-  const [page, setPage] = useState('friender')
+export default function FrienderView({logoutUser }) {
+  const { username, setUsername, authToken, setAuthToken, page, setPage } = useContext(AppContext)
   const [log, setLog] = useState('null')
 
   if (page == 'friender') {
@@ -50,7 +51,7 @@ export default function FrienderView({ authToken, logoutUser, username }) {
       </View>)
     }
     if (page == 'myprofile') {
-      return (<MyProfileView page={page} setPage={setPage} logoutUser = {logoutUser}></MyProfileView>)
+      return (<MyProfileView logoutUser = {logoutUser}></MyProfileView>)
     } 
     if (page == 'chat') {
       return (<ChatView page={page} setPage={setPage}></ChatView>)
@@ -67,4 +68,5 @@ export default function FrienderView({ authToken, logoutUser, username }) {
     if (page == 'profiledisplay') {
       return (<ProfileDisplayView page={page} setPage={setPage} log={log} setLog={setLog}></ProfileDisplayView>)
     }
+
 }

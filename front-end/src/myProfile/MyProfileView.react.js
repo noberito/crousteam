@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import { Text, Button, View, StyleSheet } from 'react-native';
 import CrousteamButton from '../common/CrousteamButton.react';
 import LogOutButton from '../common/LogoutButton.react';
+import AppContext from '../common/appcontext';
 
 import GeneralSettingsView from '../generalSettings/GeneralSettingsView.react';
 import ChangePreferencesView from '../changePreferences/changePreferencesView.react';
@@ -24,8 +25,12 @@ const styles = StyleSheet.create({
         // This will also take the necessary space but allow other elements to grow
         // Removed the flex: 2 for the same reason as above
         marginTop: 16, // Add some margin at the top for spacing
+        justifyContent:'center',
+        alignItems:'center',
     },
     logoutContainer: {
+        justifyContent:'center',
+        alignItems:'center',
         // This ensures the logout button sticks to the bottom
         // Removed justifyContent: 'center' to align the logout button at the top of its container
     },
@@ -38,7 +43,8 @@ const styles = StyleSheet.create({
 });
 
 
-export default function MyProfileView({username, page, setPage, logoutUser}) {
+export default function MyProfileView({logoutUser}) {
+    const {page, setPage} = useContext(AppContext)
     return (
         <View style={styles.mainContainer}>
             <View style = {styles.identityContainer}>

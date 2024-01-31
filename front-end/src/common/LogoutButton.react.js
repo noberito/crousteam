@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import { Text, Button, View, StyleSheet, TouchableOpacity } from 'react-native';
 import colors from './Colors.react';
 
-
 const styles = StyleSheet.create({
     buttonContainer: {
       backgroundColor: colors.background,
+      width:'50%',
       borderRadius: 10,
       padding: 20,
       alignItems: 'center',
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: colors.accent,
-        fontSize: 30,
+        fontSize: 20,
         fontFamily:'Arista-Pro-Alternate-Bold-trial',
       },
 });

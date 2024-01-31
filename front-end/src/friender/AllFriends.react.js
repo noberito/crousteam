@@ -10,13 +10,13 @@ export default function AllFriends({username, page, setPage, log, setLog, authTo
   const [refreshing, setRefreshing] = useState(false);
   const [hasPermissionError, setPermissionError] = useState(false);
 
-  const getAllUsersRequest = useCallback(() => {
+  const getAllPossibleFriendsRequest = useCallback(() => {
     setIsLoading(true);
     // Set refreshing to true when we are loading data on pull to refresh
     setRefreshing(true);
     axios({
       baseURL : baseUrl,
-      url : '/profile',
+      url : '/users-with-preferences/' + username,
       method : 'GET',
       headers : { Authorization : 'Bearer ' + authToken},
     }).then(response => {
@@ -24,7 +24,7 @@ export default function AllFriends({username, page, setPage, log, setLog, authTo
       setRefreshing(false); // Set refreshing to false when data is loaded
       if (response.status == 200) {
         const parsedData = response.data.map(user => ({
-          login: user[1], bio: user[3]
+          login: user[0], bio: user[1]
         }));
         console.log(parsedData);
         setUsers(parsedData);
@@ -40,8 +40,8 @@ export default function AllFriends({username, page, setPage, log, setLog, authTo
   }, [authToken]);
 
   useEffect(() => {
-    getAllUsersRequest();
-  }, [authToken, getAllUsersRequest]);
+    getAllPossibleFriendsRequest();
+  }, [authToken, getAllPossibleFriendsRequest]);
 
   const renderItem = ({item}) => <FriendProfile setPage={setPage} setLog={setLog} item={item}/>;
 
@@ -61,7 +61,7 @@ export default function AllFriends({username, page, setPage, log, setLog, authTo
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
-            onRefresh={getAllUsersRequest}
+            onRefresh={getAllPossibleFriendsRequest}
             colors={['#FF0000']} // Customize the color of the spinner
           />
         }
