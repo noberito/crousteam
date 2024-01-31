@@ -165,9 +165,7 @@ WHERE login = :login;
 
 -- name: get_all_preferences!
 SELECT pftype 
-FROM Preferences
-JOIN UsersPref USING(pfid)
-JOIN Auth USING(lid);
+FROM Preferences;
 
 -- name: get_single_event^
 SELECT TRUE FROM Event
