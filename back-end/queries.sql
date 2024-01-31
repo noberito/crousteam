@@ -33,7 +33,7 @@ RETURNING lid;
 DELETE FROM Auth WHERE login = :login;
 
 -- name: get_messages
-SELECT mtext, CASE WHEN login = :login THEN 1 ELSE 0 END AS a_ecrit, mtime
+SELECT mid, mtext, CASE WHEN login = :login THEN 1 ELSE 0 END AS a_ecrit, mtime
 FROM Messages
 JOIN AppGroup USING (gid)
 JOIN Auth USING (lid)
