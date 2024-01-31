@@ -428,5 +428,11 @@ def get_preferences_with_certain_user(login: str):
     return json(res_login), 200
 
 
+@app.get("/all-possible-preferences/", authorize="ANY")
+def get_all_preferences():
+    res_login = db.get_all_preferences()
+    return json(res_login), 200
+
+
 # SHOULD STAY AS LAST LOC
 log.debug("running…")

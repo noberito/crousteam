@@ -162,6 +162,13 @@ JOIN UsersPref USING(pfid)
 JOIN Auth USING(lid)
 WHERE login = :login;
 
+
+-- name: get_all_preferences!
+SELECT pftype 
+FROM Preferences
+JOIN UsersPref USING(pfid)
+JOIN Auth USING(lid);
+
 -- name: get_single_event^
 SELECT TRUE FROM Event
 WHERE ename = :ename AND eloc = :eloc AND etime = :etime;

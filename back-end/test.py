@@ -475,3 +475,7 @@ def test_insert_preference_type(api):
 def test_get_all_preferences_for_given_user(api):
     api.check("GET", "/preferences-for-given-user/calvin", 200, login=ADMIN)
     api.check("GET", "/preferences-for-given-user/brandon", 404, login=ADMIN)
+
+
+def test_get_all_preferences(api):
+    api.check("GET", "/all-possible-preferences/", 200, login=ADMIN)
