@@ -478,4 +478,4 @@ def test_get_all_preferences_for_given_user(api):
 
 
 def test_get_all_preferences(api):
-    api.check("GET", "/all-possible-preferences/", 200, login=ADMIN)
+    api.check("GET", "/all-possible-preferences/", 200, r"cowboy", login=ADMIN)

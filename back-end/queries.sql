@@ -163,7 +163,7 @@ JOIN Auth USING(lid)
 WHERE login = :login;
 
 
--- name: get_all_preferences!
+-- name: get_all_preferences
 SELECT pftype 
 FROM Preferences;
 
