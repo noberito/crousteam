@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Button, View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
-import KivTextInput from '../common/CrouisteamTextInput.react';
+import KivTextInput from '../common/CrousteamTextInput.react';
 import KivCard from '../common/CrousteamCard.react';
 import axios from 'axios';
 import { baseUrl } from '../common/const';
@@ -8,6 +8,8 @@ import AppContext from '../common/appcontext';
 
 
 export default function AddPreferences({ onSuccess, onCancel }) {
+
+
     const data = [
         { id: '1', title: 'Sport', image: require('../images/sport.png') },
         { id: '2', title: 'History', image: require('../images/history.png') },
@@ -25,7 +27,7 @@ export default function AddPreferences({ onSuccess, onCancel }) {
 
     const { lastUid, setLastUid, username, password } = useContext(AppContext);
 
-    const [pseudo, setPseudo] = useState('');
+    const [info, setInfo] = useState();
     const [firstName, setFirstName] = useState('');
     const [naissance, setNaissance] = useState('');
     const [photopath, setPhotopath] = useState('');
@@ -34,6 +36,27 @@ export default function AddPreferences({ onSuccess, onCancel }) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [hasFailure, setHasFailure] = useState(false);
+
+    const getPreferences = () => {
+        setIsLoading(true);
+        axios({
+            baseURL: baseUrl,
+            url: '/all-possible-preferences/',
+            method: 'GET',
+        }).then(response => {
+            setIsLoading(false)
+            if (response.status >= 200 && response.status < 300) {
+                setHasFailure(false)
+                setInfo(response.data)
+            } else {
+                setHasFailure(true)
+            }
+        }).catch(err => {
+            console.error(`something went wrong ${err.message}`)
+            setIsLoading(false)
+            setHasFailure(true)
+        })
+    }
 
     const sendUserCreationRequest = () => {
         setIsLoading(true);
@@ -58,6 +81,9 @@ export default function AddPreferences({ onSuccess, onCancel }) {
         })
     }
 
+    useEffect(() => {
+        getPreferences()
+    }, []);
 
 
 
@@ -105,6 +131,7 @@ export default function AddPreferences({ onSuccess, onCancel }) {
 
     return (
         <View>
+            <Text> {info}</Text>
             <KivCard>
                 <View style={styles.titleContainer}>
                     <Text style={styles.title}>Add Information</Text>
