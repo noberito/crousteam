@@ -6,8 +6,9 @@ import AddInfo from './AddInfo.react'
 import colors from '../common/Colors.react';
 import CrousteamButton from '../common/CrousteamButton.react';
 import AppContext from '../common/appcontext';
+import AddPreferences from './AddPreferences';
 
-const TABS = Object.freeze({ LOGIN: 'LOGIN', CREATE_ACCOUNT: 'CREATE_ACCOUNT', INFO: 'INFO' });
+const TABS = Object.freeze({ LOGIN: 'LOGIN', CREATE_ACCOUNT: 'CREATE_ACCOUNT', INFO: 'INFO', PREFERENCES: 'PREFERENCES' });
 
 const styles = StyleSheet.create({
   image: {
@@ -38,8 +39,9 @@ export default function LoggedOutView({ onLogUser }) {
       <Image source={require('./ic_launcher_round.png')}
         style={styles.image}></Image>
       {tab == TABS.LOGIN ? <Login onSuccess={onLogUser} onCancel={() => setTab(TABS.CREATE_ACCOUNT)} />
-        : tab == TABS.INFO ? <AddInfo onSuccess={() => setTab(TABS.LOGIN)} onCancel={() => setTab(TABS.LOGIN)} />
-          : <CreateAccount onSuccess={() => setTab(TABS.INFO)} onCancel={() => setTab(TABS.LOGIN)} />}
+        : tab == TABS.INFO ? <AddInfo onSuccess={() => setTab(TABS.PREFERENCES)} onCancel={() => setTab(TABS.LOGIN)} />
+          : tab == TABS.PREFERENCES ? <AddPreferences onSuccess={() => setTab(TABS.LOGIN)} onCancel={() => setTab(TABS.LOGIN)} />
+            : <CreateAccount onSuccess={() => setTab(TABS.INFO)} onCancel={() => setTab(TABS.LOGIN)} />}
     </View>
   );
 }
