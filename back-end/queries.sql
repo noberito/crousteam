@@ -37,7 +37,7 @@ SELECT mtext, CASE WHEN login = :login THEN 1 ELSE 0 END AS a_ecrit, mtime
 FROM Messages
 JOIN AppGroup USING (gid)
 JOIN Auth USING (lid)
-WHERE gname = :gname
+WHERE gid = :gid
 ORDER BY mtime DESC;
 
 -- name: post_messages
@@ -47,13 +47,24 @@ VALUES (:lid, :mtext, :gid);
 -- name: get_all_conversations
 WITH Last_message_each_conversations AS (
     SELECT lid, mtext, MAX(mtime) AS max_mtime, gid FROM Messages GROUP BY 4, 2, 1 ORDER BY 3 DESC
+), Group_without_messages AS (
+    SELECT DISTINCT ag.gid, gname, creationDate FROM AppGroup AS ag
+    JOIN UsersInGroup AS uig ON ag.gid=uig.gid
+    LEFT JOIN Messages AS m ON ag.gid=m.gid
+    WHERE m.gid IS NULL
 )
-SELECT DISTINCT gname FROM AppGroup AS ag
+SELECT gname FROM AppGroup AS ag
 JOIN UsersInGroup AS uig ON uig.gid = ag.gid
 JOIN Last_message_each_conversations AS lmec ON lmec.gid = ag.gid
 JOIN Auth AS a ON uig.lid = a.lid
+WHERE login = :login
+UNION
+SELECT gname FROM Group_without_messages AS gwm
+JOIN UsersInGroup AS uig ON gwm.gid=uig.gid
+JOIN Auth AS a ON uig.lid=a.lid
 WHERE login = :login;
 -- ORDER BY max_mtime DESC;
+-- need group without messages on
 
 -- name: get_lid_from_login$
 SELECT lid FROM Auth WHERE login = :login;
@@ -78,7 +89,7 @@ WHERE lid = (SELECT lid FROM Auth WHERE login = :login);
 
 -- name: create_group_of_two$
 INSERT INTO AppGroup(gname)
-VALUES (:gname)
+VALUES ('')
 RETURNING gid;
 
 -- name: is_people_already_in_the_same_group$
@@ -89,6 +100,15 @@ SELECT DISTINCT TRUE
  WHERE isGroupChat = FALSE
    AND g1.lid = :lid1
    AND g2.lid = :lid2;
+
+-- name: is_people_already_in_the_same_group_with_login$
+SELECT DISTINCT gid
+ FROM UsersInGroup AS g1 
+ JOIN UsersInGroup AS g2 ON g1.gid = g2.gid
+ JOIN AppGroup AS g ON g1.gid = g.gid
+ WHERE isGroupChat = FALSE
+   AND g1.lid = (SELECT lid FROM Auth WHERE login = :login1)
+   AND g2.lid = (SELECT lid FROM Auth WHERE login = :login2);
 
 -- name: add_people_into_group!
 INSERT INTO UsersInGroup(gid, lid)

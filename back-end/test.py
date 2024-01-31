@@ -304,9 +304,10 @@ def test_messages(api):
         "/messages",
         200,
         r"petit",
-        data={"login": "calvin", "gname": "copaing"},
+        data={"login1": "calvin", "login2": "hobbes"},
         login=ADMIN,
     )
+    api.check("GET", "/messages", 201, data={"login1": "calvin", "login2": "jean-paul"})
     api.check(
         "POST",
         "/messages",
