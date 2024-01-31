@@ -417,6 +417,9 @@ def test_add_event(api):
         login=ADMIN,
     )
     eid = res.json
+    api.check("POST", "/event/calvin", 201, data={"eid": eid}, login=ADMIN)
+    api.check("POST", "/event/calvin", 404, data={"eid": eid}, login=ADMIN)
+    api.check("POST", "/event/brandon", 404, data={"eid": eid}, login=ADMIN)
     api.check("DELETE", "/event", 204, data={"eid": eid}, login=ADMIN)
     api.check("DELETE", "/event", 404, data={"eid": eid}, login=ADMIN)
 
@@ -452,16 +455,18 @@ def test_insert_preference_type(api):
         "POST",
         "/preference-type/women",
         200,
-        data={"pfid": 10},
         login=ADMIN,
     )
+    api.check("POST", "/preference-type/women", 404, login=ADMIN)
     api.check(
         "DELETE",
         "/preference-type/women",
         204,
         login=ADMIN,
     )
+    api.check("DELETE", "/preference-type/women", 404, login=ADMIN)
 
 
 def test_get_all_preferences_for_given_user(api):
     api.check("GET", "/preferences-for-given-user/calvin", 200, login=ADMIN)
+    api.check("GET", "/preferences-for-given-user/brandon", 404, login=ADMIN)

@@ -326,6 +326,21 @@ def delete_event(eid: int):
     return "", 204
 
 
+@app.post("/event/<login>", authorize="ANY")
+def insert_people_into_the_event_group_chat(eid: int, login: str):
+    people_exist = db.get_single_profile(login=login)
+    group_exist = db.get_single_event_with_eid(eid=eid)
+    if not group_exist or not people_exist:
+        return "group or login does not exist", 404
+    gid = db.get_group_of_event(eid=eid)
+    lid = db.get_lid_from_login(login=login)
+    login_already_in_this_group = db.get_if_people_into_group(gid=gid, lid=lid)
+    if login_already_in_this_group:
+        return "already in this group", 404
+    db.add_people_into_group(gid=gid, lid=lid)
+    return "", 201
+
+
 @app.get("/first-last-name/<login>", authorize="ANY")
 def get_first_last_name(login: str):
     res = db.get_first_last_name(login=login)
@@ -378,11 +393,11 @@ def get_users_with_same_preferences(login: str):
 
 
 @app.post("/preference-type/<pftype>", authorize="ANY")
-def create_preference_type(pfid: int, pftype: str):
+def create_preference_type(pftype: str):
     exists1 = db.get_single_preference_type(pftype=pftype)
     if exists1:
-        return "already exists", 400
-    db.insert_preference_type(pfid=pfid, pftype=pftype)
+        return "already exists", 404
+    db.insert_preference_type(pftype=pftype)
     return "", 200
 
 
@@ -394,13 +409,14 @@ def delete_preference_type(pftype: str):
     db.delete_preference_type(pftype=pftype)
     return "", 204
 
-@app.get("/preferences-for-given-user/<pseudo>", authorize="ANY")
-def get_preferences_with_certain_user(pseudo: str):
-    pseudo_in = db.get_single_pseudo(pseudo=pseudo)
-    if not pseudo_in:
-        return "No pseudo", 404
-    res_pseudo = db.get_all_user_preferences(pseudo=pseudo)
-    return json(res_pseudo), 200
+
+@app.get("/preferences-for-given-user/<login>", authorize="ANY")
+def get_preferences_with_certain_user(login: str):
+    login_in = db.get_single_profile(login=login)
+    if not login_in:
+        return "no login", 404
+    res_login = db.get_all_user_preferences(login=login)
+    return json(res_login), 200
 
 
 # SHOULD STAY AS LAST LOC

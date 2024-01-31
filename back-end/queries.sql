@@ -44,7 +44,7 @@ ORDER BY mtime DESC;
 INSERT INTO Messages(lid, mtext, gid)
 VALUES (:lid, :mtext, :gid);
 
--- name: get_lid_from_login^
+-- name: get_lid_from_login$
 SELECT lid FROM Auth WHERE login = :login;
 
 -- name: post_info_register!
@@ -132,17 +132,9 @@ WHERE pfid IN (SELECT pfid FROM LoginPreferences) AND login <> :login
 GROUP BY login, bio
 ORDER BY 3 DESC;
 
--- name: get_profile_from_preferences!
-SELECT pseudo, firstName, lastName, photoPath
-FROM Preferences
-JOIN UsersPref USING (pfid)
-Join Profile USING(pid)
-where pftype = :pftype
-ORDER BY 1;
-
 -- name: insert_preference_type!
-INSERT INTO Preferences(pfid,pftype)
-VALUES (:pfid, :pftype);
+INSERT INTO Preferences(pftype)
+VALUES (:pftype);
 
 -- name: get_single_preference_type$
 SELECT TRUE FROM Preferences
@@ -180,3 +172,9 @@ RETURNING eid;
 -- name: delete_event!
 DELETE FROM Event
 WHERE eid = :eid;
+
+-- name: get_group_of_event$
+SELECT gid FROM Event WHERE eid = :eid;
+
+-- name: get_if_people_into_group^
+SELECT TRUE FROM UsersInGroup WHERE gid = :gid AND lid = :lid;
