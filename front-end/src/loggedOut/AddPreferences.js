@@ -19,11 +19,12 @@ export default function AddPreferences({ onSuccess, onCancel }) {
 
     const renderItem = ({ item }) => (
         <TouchableOpacity onPress={() => handleEventPress(item.id)}>
-            <View style={styles.itemContainer}>
+            <View style={[styles.itemContainer, selectedImage === item.id && styles.selectedItem]}>
                 <Image source={item.image} style={styles.itemImage} />
                 <Text style={styles.itemTitle}>{item.title}</Text>
             </View>
-        </TouchableOpacity>)
+        </TouchableOpacity>
+    );
 
     const { lastUid, setLastUid, username, password } = useContext(AppContext);
 
@@ -37,6 +38,13 @@ export default function AddPreferences({ onSuccess, onCancel }) {
     const [isLoading, setIsLoading] = useState(false);
     const [hasFailure, setHasFailure] = useState(false);
 
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const handleEventPress = (imageId) => {
+        setSelectedImage(imageId);
+        // Tu peux faire d'autres actions en fonction de l'image cliquée
+    };
+
     const getPreferences = () => {
         setIsLoading(true);
         axios({
@@ -48,6 +56,7 @@ export default function AddPreferences({ onSuccess, onCancel }) {
             if (response.status >= 200 && response.status < 300) {
                 setHasFailure(false)
                 setInfo(response.data)
+                console.log(response.data)
             } else {
                 setHasFailure(true)
             }
@@ -116,6 +125,10 @@ export default function AddPreferences({ onSuccess, onCancel }) {
             justifyContent: 'center',
             alignItems: 'center',
         },
+        selectedItem: {
+            borderColor: 'green', // Couleur de la bordure lorsqu'il est sélectionné
+            borderWidth: 2, // Largeur de la bordure lorsqu'il est sélectionné
+        },
         itemImage: {
             width: '100%',
             height: 150,
@@ -143,7 +156,7 @@ export default function AddPreferences({ onSuccess, onCancel }) {
                 <FlatList
                     data={data}
                     numColumns={2}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item) => item.id.toString()}
                     renderItem={renderItem}
                 />
 
