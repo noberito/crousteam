@@ -10,7 +10,7 @@ const messageStyles = StyleSheet.create({
     backgroundColor: colors.background,
     borderRadius: 10,
     padding: 20,
-    justifyContent:'center',
+    justifyContent:'right',
     alignItems:'right',
     margin: 10,
     elevation: 3, // for Android
@@ -23,8 +23,8 @@ const messageStyles = StyleSheet.create({
     backgroundColor: colors.background,
     borderRadius: 10,
     padding: 20,
-    justifyContent:'center',
-    alignItems:'right',
+    justifyContent:'left',
+    alignItems:'left',
     margin: 10,
     elevation: 3, // for Android
     shadowColor: colors.secondaryText, 
@@ -36,29 +36,30 @@ const messageStyles = StyleSheet.create({
     fontFamily:'Arista-Pro-Alternate-Bold-trial',
   },
   right:{
-    justifyContent:'center',
-    alignItems:'right',
+    justifyContent:'flex-start',
+    alignItems:'flex-end',
   },
   left:{
-    justifyContent:'center',
-    alignItems:'left',
+    justifyContent:'flex-end',
+    alignItems:'flex-start',
   }
 });
 
-const CrousteamMessage = ({ content, sender, time }) => {
+const CrousteamMessage = ({ item}) => {
 
     const {username} = useContext(AppContext)
-
-    if (sender==username) {
+    console.log(username)
+    console.log(item.sender==username)
+    if (item.sender==username) {
     return (
-      <TouchableOpacity style={messageStyles.messageRightContainer}>
-          <Text style={messagetyles.messageText}>{content}</Text>
+      <TouchableOpacity style={messageStyles.left}>
+          <Text style={messageStyles.right}>{item.content}</Text>
       </TouchableOpacity>
     )}
     else {
         return(
-        <TouchableOpacity style={messageStyles.messageLeftContainer}>
-          <Text style={messageStyles.messageText}>{content}</Text>
+        <TouchableOpacity style={messageStyles.right}>
+          <Text style={messageStyles.left}>{item.content}</Text>
       </TouchableOpacity>)
     }
 

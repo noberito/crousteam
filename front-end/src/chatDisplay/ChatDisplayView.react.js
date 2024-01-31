@@ -25,9 +25,10 @@ export default function ChatDisplayView({log, setLog, event}) {
     setRefreshing(true);
     axios({
       baseURL : baseUrl,
-      url : '/users-with-preferences/' + username,
+      url : '/messages',
       method : 'GET',
       headers : { Authorization : 'Bearer ' + authToken},
+      data: {login1:{username}, login2:{log}}
     }).then(response => {
       setIsLoading(false);
       setRefreshing(false); // Set refreshing to false when data is loaded
@@ -52,6 +53,34 @@ export default function ChatDisplayView({log, setLog, event}) {
     getAllMessagesRequest();
   }, [authToken, getAllMessagesRequest]);
 
+  const messages2 = [
+    {
+      id: "1",
+      content: "Hello, how are you?",
+      sender: "calvin",
+      timestamp: 'prout'
+    },
+    {
+      id: "2",
+      content: "I'm doing well, thanks! And you?",
+      sender: "averell",
+      timestamp: 'prout'
+    },
+    {
+      id: "3",
+      content: "Great to hear. I'm good too.",
+      sender: "calvin",
+      timestamp: 'prout'
+    },
+    {
+      id: "4",
+      content: "ENVIE DE PSQL",
+      sender: "calvin",
+      timestamp: 'prout'
+    }
+  ];
+
+  console.log(messages2)
   const renderItem = ({item}) => <CrousteamMessage item={item}/>;
 
     return(
@@ -67,7 +96,7 @@ export default function ChatDisplayView({log, setLog, event}) {
       <FlatList
         data={messages}
         renderItem={renderItem}
-        keyExtractor={item => item.login} // Customize the color of the spinner
+        keyExtractor={item => item.id} 
           />
     </View>
         <CrousteamButton onPress={() => {setLog('null'), setPage('listchat')}} title='Retour'></CrousteamButton>
