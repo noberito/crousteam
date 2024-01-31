@@ -10,21 +10,15 @@ import AppContext from '../common/appcontext';
 export default function AddPreferences({ onSuccess, onCancel }) {
 
 
-    const data = [
-        { id: '1', title: 'Sport', image: require('../images/sport.png') },
-        { id: '2', title: 'History', image: require('../images/history.png') },
-        { id: '3', title: 'Politics', image: require('../images/elections.jpg') },
-        // Ajoute d'autres éléments selon tes besoins
-    ];
 
     const renderItem = ({ item }) => (
-        <TouchableOpacity onPress={() => handleEventPress(item.id)}>
-            <View style={[styles.itemContainer, selectedImage === item.id && styles.selectedItem]}>
-                <Image source={item.image} style={styles.itemImage} />
-                <Text style={styles.itemTitle}>{item.title}</Text>
+        <TouchableOpacity onPress={() => handlePress(item)}>
+            <View style={styles.preferenceItem}>
+                <Text style={styles.preferenceText}>{item}</Text>
             </View>
         </TouchableOpacity>
     );
+    ;
 
     const { lastUid, setLastUid, username, password } = useContext(AppContext);
 
@@ -40,8 +34,9 @@ export default function AddPreferences({ onSuccess, onCancel }) {
 
     const [selectedImage, setSelectedImage] = useState(null);
 
-    const handleEventPress = (imageId) => {
-        setSelectedImage(imageId);
+    const handlePress = (preference) => {
+        setSelectedImage(preference);
+        console.log(`La préférence "${preference}" a été sélectionnée.`);
         // Tu peux faire d'autres actions en fonction de l'image cliquée
     };
 
@@ -128,6 +123,7 @@ export default function AddPreferences({ onSuccess, onCancel }) {
         selectedItem: {
             borderColor: 'green', // Couleur de la bordure lorsqu'il est sélectionné
             borderWidth: 2, // Largeur de la bordure lorsqu'il est sélectionné
+            color: 'green', // Couleur du texte lorsqu'il est sélectionné
         },
         itemImage: {
             width: '100%',
@@ -154,10 +150,11 @@ export default function AddPreferences({ onSuccess, onCancel }) {
                 </View>}
 
                 <FlatList
-                    data={data}
+                    data={info}
                     numColumns={2}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item, index) => index.toString()}
                     renderItem={renderItem}
+
                 />
 
                 <View style={styles.buttonRow}>
