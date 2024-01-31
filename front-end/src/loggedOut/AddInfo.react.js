@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Button, View, Text, StyleSheet } from 'react-native';
-import KivTextInput from '../common/CrouisteamTextInput.react';
-import KivCard from '../common/CrousteamCard.react';
+import CrousteamTextInput from '../common/CrousteamTextInput.react';
+import CrousteamCard from '../common/CrousteamCard.react';
 import axios from 'axios';
 import { baseUrl } from '../common/const';
 import AppContext from '../common/appcontext';
@@ -68,7 +68,7 @@ export default function CreateAccount({ onSuccess, onCancel }) {
     }
 
     return (
-        <KivCard>
+        <CrousteamCard>
             <View
                 style={styles.titleContainer}>
                 <Text
@@ -82,11 +82,11 @@ export default function CreateAccount({ onSuccess, onCancel }) {
                     Something went wrong while creating the user
                 </Text>
             </View>}
-            <KivTextInput label="First Name" value={firstName} onChangeText={value => setFirstName(value)} />
-            <KivTextInput label="Last Name" value={lastName} onChangeText={value => setLastName(value)} />
-            <KivTextInput label="Birth date" value={naissance} onChangeText={value => setNaissance(value)} />
-            <KivTextInput label="Photo" value={photopath} onChangeText={value => setPhotopath(value)} />
-            <KivTextInput label="Biography" value={biography} onChangeText={value => setBiography(value)} />
+            <CrousteamTextInput label="First Name" value={firstName} onChangeText={value => setFirstName(value)} />
+            <CrousteamTextInput label="Last Name" value={lastName} onChangeText={value => setLastName(value)} />
+            <CrousteamTextInput style={{fontFamily:'sans-serif'}}label="Birth date" value={naissance} onChangeText={value => setNaissance(value)} />
+            <CrousteamTextInput label="Photo" value={photopath} onChangeText={value => setPhotopath(value)} />
+            <CrousteamTextInput label="Biography" value={biography} onChangeText={value => setBiography(value)} />
 
 
             <View style={styles.buttonRow}>
@@ -97,6 +97,6 @@ export default function CreateAccount({ onSuccess, onCancel }) {
                     <Button title="Create Account" disabled={isLoading} onPress={() => { sendUserCreationRequest(); }} />
                 </View>
             </View>
-        </KivCard>
+        </CrousteamCard>
     );
 }

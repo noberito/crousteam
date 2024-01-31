@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, View, Text, StyleSheet } from 'react-native';
-import CrousteamTextInput from '../common/CrouisteamTextInput.react';
+import CrousteamTextInput from '../common/CrousteamTextInput.react';
 import CrousteamCard from '../common/CrousteamCard.react';
 import CrousteamButton from '../common/CrousteamButton.react';
 import colors from '../common/Colors.react';
@@ -30,10 +30,6 @@ const styles = StyleSheet.create({
   buttonRow: {
     justifyContent:'center',
     alignItems:'center',
-  },
-  button: {
-    flexGrow: 1,
-    padding: 2
   },
 });
 
@@ -79,6 +75,7 @@ export default function Login({ onSuccess, onCancel }) {
   return (
 
     <CrousteamCard>
+
       {hasInvalidLogin && <View style={styles.incorrectWarning}>
         <Text
           style={styles.inputLabel}>
@@ -88,10 +85,12 @@ export default function Login({ onSuccess, onCancel }) {
       
       <CrousteamTextInput label="Username" value={username} onChangeText={value => setUsername(value)} />
       <CrousteamTextInput label="Password" value={password} onChangeText={value => setPassword(value)} />
-      <View styles={styles.buttonRow}>
+
+      <View style={styles.buttonRow}>
       <CrousteamButton title="Login" disabled={isLoading} onPress={() => { sendLoginRequest(); }} />
       <CrousteamButton title="Create Account" disabled={isLoading} onPress={() => { onCancel(); }} />
       </View>
-      </CrousteamCard>
+
+    </CrousteamCard>
   );
 }

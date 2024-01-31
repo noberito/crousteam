@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Text, Button, View, StyleSheet, } from 'react-native';
 import axios from 'axios';
 import { baseUrl } from '../common/const';
-import KivTextInput from '../common/CrouisteamTextInput.react';
+import KivTextInput from '../common/CrousteamTextInput.react';
 import KivCard from '../common/CrousteamCard.react';
 import AppContext from '../common/appcontext';
 import CrousteamButton from '../common/CrousteamButton.react';

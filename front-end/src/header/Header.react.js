@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 });
 
 export default function Header({ username }) {
-    const text = username == null ? <Text>Logged out</Text>
+    const text = username == null ? <Text style={styles.textstyle}>Logged out</Text>
         : <Text style={styles.textstyle}>Logged in as {username}</Text>;
     return (<View style={styles.header}>{text}</View>);
 }

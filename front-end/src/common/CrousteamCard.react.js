@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function KivCard({ children }) {
+export default function CrousteamCard({ children }) {
   return (<View style={styles.container}>
     {children}
   </View>);

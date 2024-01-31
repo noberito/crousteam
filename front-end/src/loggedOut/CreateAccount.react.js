@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { Button, View, Text, StyleSheet } from 'react-native';
-import KivTextInput from '../common/CrouisteamTextInput.react';
-import KivCard from '../common/CrousteamCard.react';
+import CrousteamTextInput from '../common/CrousteamTextInput.react';
+import CrousteamCard from '../common/CrousteamCard.react';
 import AppContext from '../common/appcontext';
 
 import axios from 'axios';
 import { baseUrl } from '../common/const';
+import CrousteamButton from '../common/CrousteamButton.react';
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -23,7 +24,8 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   buttonRow: {
-    flexDirection: 'row'
+    justifyContent:'center',
+    alignItems:'center'
   },
   button: {
     flexGrow: 1,
@@ -45,7 +47,7 @@ export default function CreateAccount({ onSuccess, onCancel }) {
   }
 
   return (
-    <KivCard>
+    <CrousteamCard>
       <View
         style={styles.titleContainer}>
         <Text
@@ -59,16 +61,12 @@ export default function CreateAccount({ onSuccess, onCancel }) {
           Something went wrong while creating the user
         </Text>
       </View>}
-      <KivTextInput label="Username" value={username} onChangeText={value => setUsername(value)} />
-      <KivTextInput label="Password" value={password} onChangeText={value => setPassword(value)} />
+      <CrousteamTextInput label="Username" value={username} onChangeText={value => setUsername(value)} />
+      <CrousteamTextInput label="Password" value={password} onChangeText={value => setPassword(value)} />
       <View style={styles.buttonRow}>
-        <View style={styles.button}>
-          <Button title="< Login" disabled={isLoading} onPress={() => { onCancel(); }} />
-        </View>
-        <View style={styles.button}>
-          <Button title="Continue" disabled={isLoading} onPress={() => { sendUserCreationRequest(); }} />
-        </View>
+          <CrousteamButton title="Continue" disabled={isLoading} onPress={() => { sendUserCreationRequest(); }} />
+          <CrousteamButton title="Login" disabled={isLoading} onPress={() => { onCancel(); }} /> 
       </View>
-    </KivCard>
+    </CrousteamCard>
   );
 }
