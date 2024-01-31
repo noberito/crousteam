@@ -44,6 +44,17 @@ ORDER BY mtime DESC;
 INSERT INTO Messages(lid, mtext, gid)
 VALUES (:lid, :mtext, :gid);
 
+-- name: get_all_conversations
+WITH Last_message_each_conversations AS (
+    SELECT lid, mtext, MAX(mtime) AS max_mtime, gid FROM Messages GROUP BY 4, 2, 1 ORDER BY 3 DESC
+)
+SELECT DISTINCT gname FROM AppGroup AS ag
+JOIN UsersInGroup AS uig ON uig.gid = ag.gid
+JOIN Last_message_each_conversations AS lmec ON lmec.gid = ag.gid
+JOIN Auth AS a ON uig.lid = a.lid
+WHERE login = :login;
+-- ORDER BY max_mtime DESC;
+
 -- name: get_lid_from_login$
 SELECT lid FROM Auth WHERE login = :login;
 

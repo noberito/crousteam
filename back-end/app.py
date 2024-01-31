@@ -204,7 +204,7 @@ if app.config.get("APP_TEST", False):
 # ADD NEW CODE HERE
 
 
-@app.get("/messages", authorize="ANY")
+@app.get("/messages", authorize="ANY")  # gname -> gid
 def get_messages(login: str, gname: str):
     res = db.get_messages(login=login, gname=gname)
     return json(res), 200
@@ -215,6 +215,15 @@ def post_messages(login: str, mtext: str, gid: int):
     lid = db.get_lid_from_login(login=login)
     db.post_messages(lid=lid, mtext=mtext, gid=gid)
     return "", 201
+
+
+@app.get("/all-conversations/<login>", authorize="ANY")
+def get_all_conversations(login: str):
+    exist = db.get_single_profile(login=login)
+    if not exist:
+        return "login incorrect", 404
+    res = db.get_all_conversations(login=login)
+    return json(res), 200
 
 
 @app.get("/profile", authorize="ANY")

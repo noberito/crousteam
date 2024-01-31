@@ -316,6 +316,11 @@ def test_messages(api):
     )
 
 
+def test_conversations(api):
+    api.check("GET", "/all-conversations/calvin", 200, r"copaing", login=ADMIN)
+    api.check("GET", "/all-conversations/brandon", 404, login=ADMIN)
+
+
 # /Profile -> Post Information
 def test_add_profile(api):
     api.check("GET", "/profile/calvin", 200, login=ADMIN)
