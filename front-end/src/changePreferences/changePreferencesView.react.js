@@ -1,6 +1,4 @@
 
-
-
 import React, { useState, useEffect, useContext } from 'react';
 import { Text, Button, View, StyleSheet, } from 'react-native';
 import axios from 'axios';

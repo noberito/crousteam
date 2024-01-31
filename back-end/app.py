@@ -343,12 +343,12 @@ def get_users_with_same_preferences(login: str):
 
 
 @app.post("/preference-type/<pftype>", authorize="ANY")
-def create_preference_type(pftype: str):
+def create_preference_type(pfid: int, pftype: str):
     exists1 = db.get_single_preference_type(pftype=pftype)
     if exists1:
-        return "already exists", 404
-    db.insert_preference_type(pftype=pftype)
-    return "", 201
+        return "already exists", 400
+    db.insert_preference_type(pfid=pfid, pftype=pftype)
+    return "", 200
 
 
 @app.delete("/preference-type/<pftype>", authorize="ANY")
@@ -359,15 +359,13 @@ def delete_preference_type(pftype: str):
     db.delete_preference_type(pftype=pftype)
     return "", 204
 
-
-@app.get("/preferences-for-given-user/<login>", authorize="ANY")
-def get_preferences_with_certain_user(login: str):
-    is_login_in = db.get_single_profile(login=login)
-    if not is_login_in:
-        return "no such login", 404
-    res_login = db.get_all_user_preferences(login=login)
-    res_login = [x[0] for x in res_login]
-    return json(res_login), 200
+@app.get("/preferences-for-given-user/<pseudo>", authorize="ANY")
+def get_preferences_with_certain_user(pseudo: str):
+    pseudo_in = db.get_single_pseudo(pseudo=pseudo)
+    if not pseudo_in:
+        return "No pseudo", 404
+    res_pseudo = db.get_all_user_preferences(pseudo=pseudo)
+    return json(res_pseudo), 200
 
 
 # SHOULD STAY AS LAST LOC
