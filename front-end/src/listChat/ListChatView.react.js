@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     }
 });
 
-export default function ChatView({navigation }) {
+export default function ListChatView({navigation }) {
     const [searchText, setSearchText] = useState('');
     const {page, setPage} = useContext(AppContext)
 

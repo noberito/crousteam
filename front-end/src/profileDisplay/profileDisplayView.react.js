@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, Button } from "react-native"
 import { baseUrl } from '../common/const';
 import axios from 'axios';
+import CrousteamButton from '../common/CrousteamButton.react';
+import AppContext from '../common/appcontext';
 
-export default function ProfileDisplayView({ log, setLog, setPage, }) {
+export default function ProfileDisplayView({ log, setLog,}) {
 
-    const [isLoading, setIsLoading] = useState(false);
+    const {setPage}= useContext(AppContext)
+    const [, setIsLoading] = useState(false);
     const [info, setInfo] = useState('');
     const [lid, setLid] = useState();
 
@@ -41,6 +44,7 @@ export default function ProfileDisplayView({ log, setLog, setPage, }) {
             <Text>{info[2]}</Text>
             <Text>{info[3]}</Text>
             <Text>{info[4]}</Text>
+            <CrousteamButton title="Chat" onPress={() => {setPage("chatdisplay")}}/>
             <Button title="Retour" onPress={() => { setLog('null'); setPage("friender") }}></Button>
         </View>
     )
