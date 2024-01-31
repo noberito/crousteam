@@ -46,25 +46,24 @@ VALUES (:lid, :mtext, :gid);
 
 -- name: get_all_conversations
 WITH Last_message_each_conversations AS (
-    SELECT lid, mtext, MAX(mtime) AS max_mtime, gid FROM Messages GROUP BY 4, 2, 1 ORDER BY 3 DESC
+    SELECT MAX(mtime) AS max_mtime, gid FROM Messages GROUP BY 2 ORDER BY 1 DESC
 ), Group_without_messages AS (
     SELECT DISTINCT ag.gid, gname, creationDate FROM AppGroup AS ag
     JOIN UsersInGroup AS uig ON ag.gid=uig.gid
     LEFT JOIN Messages AS m ON ag.gid=m.gid
     WHERE m.gid IS NULL
 )
-SELECT gname FROM AppGroup AS ag
+SELECT gname, max_mtime FROM AppGroup AS ag
 JOIN UsersInGroup AS uig ON uig.gid = ag.gid
 JOIN Last_message_each_conversations AS lmec ON lmec.gid = ag.gid
 JOIN Auth AS a ON uig.lid = a.lid
 WHERE login = :login
 UNION
-SELECT gname FROM Group_without_messages AS gwm
+SELECT gname, creationDate FROM Group_without_messages AS gwm
 JOIN UsersInGroup AS uig ON gwm.gid=uig.gid
 JOIN Auth AS a ON uig.lid=a.lid
-WHERE login = :login;
--- ORDER BY max_mtime DESC;
--- need group without messages on
+WHERE login = :login
+ORDER BY 2 DESC;
 
 -- name: get_lid_from_login$
 SELECT lid FROM Auth WHERE login = :login;
