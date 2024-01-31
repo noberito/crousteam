@@ -5,6 +5,7 @@ import CreateAccount from './CreateAccount.react';
 import AddInfo from './AddInfo.react'
 import colors from '../common/Colors.react';
 import CrousteamButton from '../common/CrousteamButton.react';
+import AppContext from '../common/appcontext';
 
 const TABS = Object.freeze({ LOGIN: 'LOGIN', CREATE_ACCOUNT: 'CREATE_ACCOUNT', INFO: 'INFO' });
 

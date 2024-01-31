@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 
 export default function CreateAccount({ onSuccess, onCancel }) {
 
-    const { lastUid, setLastUid, username, setUsername } = useContext(AppContext);
+    const { lastUid, setLastUid, username, password } = useContext(AppContext);
 
     const [pseudo, setPseudo] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -48,9 +48,9 @@ export default function CreateAccount({ onSuccess, onCancel }) {
         setIsLoading(true);
         axios({
             baseURL: baseUrl,
-            url: `/profile/${username}`,
+            url: '/register',
             method: 'POST',
-            data: { lid: lastUid, firstName: firstName, lastName: lastName, naissance: naissance, photoPath: photopath, bio: biography } // TODO   
+            data: { login: username, password: password, firstName: firstName, lastName: lastName, naissance: naissance, photoPath: photopath, bio: biography } // TODO   
         }).then(response => {
             setIsLoading(false)
             if (response.status >= 200 && response.status < 300) {

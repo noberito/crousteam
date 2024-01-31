@@ -32,35 +32,16 @@ const styles = StyleSheet.create({
 });
 
 export default function CreateAccount({ onSuccess, onCancel }) {
-  const [username, setUsername] = useState('newUser');
-  const [password, setPassword] = useState('bien');
+
   const [isLoading, setIsLoading] = useState(false);
   const [hasFailure, setHasFailure] = useState(false);
 
-  const { setLastUid } = useContext(AppContext);
+  const { setUsername, setPassword, username, password } = useContext(AppContext);
 
   const sendUserCreationRequest = () => { // get the lid from the server after sending post
-    setIsLoading(true);
-    axios({
-      baseURL: baseUrl,
-      url: '/register',
-      method: 'POST',
-      data: { login: username, password: password }
-    }).then(response => {
-      setIsLoading(false)
-      if (response.status >= 200 && response.status < 300) {
-        setHasFailure(false)
-        setLastUid(response.data)
-        onSuccess()
-
-      } else {
-        setHasFailure(true)
-      }
-    }).catch(err => {
-      console.error(`something went wrong ${err.message}`)
-      setIsLoading(false)
-      setHasFailure(true)
-    })
+    setUsername(username);
+    setPassword(password);
+    onSuccess()
   }
 
   return (

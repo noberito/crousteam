@@ -17,10 +17,11 @@ const styles = StyleSheet.create({
 });
 
 export default function Root() {
-  const [username, setUsername] = useState();
+  const [username, setUsername] = useState('newUser');
   const [authToken, setAuthToken] = useState();
   const [lastUid, setLastUid] = useState();
   const [page, setPage] = useState('friender')
+  const [password, setPassword] = useState('bien');
 
   const onLogUser = (username, authToken) => {
     setUsername(username);
@@ -33,7 +34,7 @@ export default function Root() {
   }
 
   return (
-    <AppContext.Provider value={{ username, setUsername, authToken, setAuthToken, lastUid, setLastUid, page, setPage }}>
+    <AppContext.Provider value={{ username, setUsername, authToken, setAuthToken, lastUid, setLastUid, page, setPage, password, setPassword }}>
       <View>
         <Header username={username} />
         <View style={styles.container}>
