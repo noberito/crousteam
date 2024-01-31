@@ -1,7 +1,7 @@
 *.pid
 *.log
 *.wsgi
-*.csv
+test_users.csv
 version.py
 .postgres
 assets/index.html
