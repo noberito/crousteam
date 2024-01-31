@@ -13,7 +13,7 @@ export default function ChangePreferencesView({ }) {
     const [lid, setLid] = useState();
     const { username, setUsername, setPage } = useContext(AppContext);
 
-    const [pseudo, setPseudo] = useState('');
+    const [login, setLogin] = useState('');
     const [firstName, setFirstName] = useState();
     const [lastName, setLastName] = useState();
     const [naissance, setNaissance] = useState();
@@ -53,8 +53,9 @@ export default function ChangePreferencesView({ }) {
 
         axios({
             baseURL: baseUrl,
-            url: '/all-info/delanoberite',
+            url: `/all-info/${username}`,
             method: 'PATCH',
+            data: { login: username, firstName: firstName, lastName: lastName, naissance: naissance, photoPath: photopath },
             // auth : {username : username, password : password} "Property 'btoa' doesn't exist"
         }).then(result => {
             console.log('OK ! ' + result.data)
@@ -78,7 +79,7 @@ export default function ChangePreferencesView({ }) {
             <KivCard>
 
                 <Text> Change Preferences </Text>
-                <KivTextInput label="Pseudo" value={info[1]} onChangeText={value => setPseudo(value)} />
+                <KivTextInput label="Login" value={info[1]} onChangeText={value => setPseudo(value)} />
                 <KivTextInput label="First Name" value={info[2]} onChangeText={value => setFirstName(value)} />
                 <KivTextInput label="Last Name" value={info[3]} onChangeText={value => setLastName(value)} />
                 <KivTextInput label="naissance" value={info[4]} onChangeText={value => setNaissance(value)} />
