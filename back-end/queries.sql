@@ -155,8 +155,28 @@ WHERE pftype = :pftype;
 -- name: get_all_user_preferences!
 SELECT pftype 
 FROM Preferences
-JOIN UsersPref USING (pfid)
-Join Profile USING(lid)
-where pseudo = :pseudo;
+JOIN UsersPref USING(pfid)
+JOIN Auth USING(lid)
+WHERE login = :login;
 
+-- name: get_single_event^
+SELECT TRUE FROM Event
+WHERE ename = :ename AND eloc = :eloc AND etime = :etime;
 
+-- name: get_single_event_with_eid^
+SELECT TRUE FROM Event
+WHERE eid = :eid;
+
+-- name: create_group_chat_link_to_the_event$
+INSERT INTO AppGroup(gname, isGroupChat)
+VALUES (:ename, TRUE)
+RETURNING gid;
+
+-- name: add_event$
+INSERT INTO Event (ename, eloc, etime, tid, gid)
+VALUES (:ename, :eloc, :etime, :tid, :gid)
+RETURNING eid;
+
+-- name: delete_event!
+DELETE FROM Event
+WHERE eid = :eid;

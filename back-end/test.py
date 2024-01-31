@@ -153,30 +153,112 @@ def test_register(api):
         "POST",
         "/register",
         400,
-        data={"login": "this is a bad login", "password": pswd},
+        data={
+            "login": "this is a bad login",
+            "password": pswd,
+            "bio": "bio au pif",
+            "firstName": "foo",
+            "lastName": "bla",
+            "naissance": "1999-01-08",
+            "photoPath": "/this/is/photo/path",
+        },
         login=None,
     )
     # login too short
     api.check(
-        "POST", "/register", 400, json={"login": "x", "password": pswd}, login=None
+        "POST",
+        "/register",
+        400,
+        json={
+            "login": "x",
+            "password": pswd,
+            "bio": "bio au pif",
+            "firstName": "foo",
+            "lastName": "bla",
+            "naissance": "1999-01-08",
+            "photoPath": "/this/is/photo/path",
+        },
+        login=None,
     )
     # login already exists
     api.check(
-        "POST", "/register", 409, data={"login": "calvin", "password": "p"}, login=None
+        "POST",
+        "/register",
+        409,
+        data={
+            "login": "calvin",
+            "password": "p",
+            "bio": "bio au pif",
+            "firstName": "foo",
+            "lastName": "bla",
+            "naissance": "1999-01-08",
+            "photoPath": "/this/is/photo/path",
+        },
+        login=None,
     )
     # missing "login" parameter
-    api.check("POST", "/register", 400, json={"password": pswd}, login=None)
+    api.check(
+        "POST",
+        "/register",
+        400,
+        json={
+            "password": pswd,
+            "bio": "bio au pif",
+            "firstName": "foo",
+            "lastName": "bla",
+            "naissance": "1999-01-08",
+            "photoPath": "/this/is/photo/path",
+        },
+        login=None,
+    )
     # missing "password" parameter
-    api.check("POST", "/register", 400, data={"login": user}, login=None)
+    api.check(
+        "POST",
+        "/register",
+        400,
+        data={
+            "login": user,
+            "bio": "bio au pif",
+            "firstName": "foo",
+            "lastName": "bla",
+            "naissance": "1999-01-08",
+            "photoPath": "/this/is/photo/path",
+        },
+        login=None,
+    )
     # password is too short
     api.check(
-        "POST", "/register", 400, json={"login": "hello", "password": ""}, login=None
+        "POST",
+        "/register",
+        400,
+        json={
+            "login": "hello",
+            "password": "",
+            "bio": "bio au pif",
+            "firstName": "foo",
+            "lastName": "bla",
+            "naissance": "1999-01-08",
+            "photoPath": "/this/is/photo/path",
+        },
+        login=None,
     )
     # password is too simple
     # api.check("POST", "/register", 400, json={"login": "hello", "password": "world!"}, login=None)
     # at last one which is expected to work!
     api.check(
-        "POST", "/register", 201, json={"login": user, "password": pswd}, login=None
+        "POST",
+        "/register",
+        201,
+        json={
+            "login": user,
+            "password": pswd,
+            "bio": "bio au pif",
+            "firstName": "foo",
+            "lastName": "bla",
+            "naissance": "1999-01-08",
+            "photoPath": "/this/is/photo/path",
+        },
+        login=None,
     )
     user_token = api.check("GET", "/login", 200, r"^([^:]+:){3}[^:]+$", login=user).json
     api.setToken(user, user_token)
@@ -308,6 +390,38 @@ def test_add_group_chat_of_2(api):
     api.check("DELETE", "/group-chat-2", 404, data={"gid": 30}, login=ADMIN)
 
 
+# event : creation, suppression, add of people
+def test_add_event(api):
+    res = api.check(
+        "POST",
+        "/event",
+        201,
+        data={
+            "ename": "PSG-MU au Parc",
+            "eloc": "Paris",
+            "etime": "2024-02-25",
+            "tid": 1,
+        },
+        login=ADMIN,
+    )
+    api.check(
+        "POST",
+        "/event",
+        404,
+        data={
+            "ename": "PSG-MU au Parc",
+            "eloc": "Paris",
+            "etime": "2024-02-25",
+            "tid": 1,
+        },
+        login=ADMIN,
+    )
+    eid = res.json
+    api.check("DELETE", "/event", 204, data={"eid": eid}, login=ADMIN)
+    api.check("DELETE", "/event", 404, data={"eid": eid}, login=ADMIN)
+
+
+# profile : get_info
 def test_get_info_profile(api):
     api.check("GET", "/first-last-name/calvin", 200, r"dadson", login=ADMIN)
     api.check("GET", "/first-last-name/brandon", 404, login=ADMIN)
@@ -316,6 +430,7 @@ def test_get_info_profile(api):
     api.check("GET", "/all-info", 404, login=ADMIN)
 
 
+# preferences :
 def test_preferences(api):
     api.check("POST", "/preferences/calvin", 404, data={"list_pfid": [1]}, login=ADMIN)
     api.check("POST", "/preferences/calvin", 201, data={"list_pfid": [5]}, login=ADMIN)

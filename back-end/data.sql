@@ -9,7 +9,7 @@ INSERT INTO Auth (login, password) VALUES
 ('lucky', 'luke_psw'), ('jolly', 'jumper_psw'),
 ('joe', 'dalton_psw'), ('averell', 'dalton_psw'),
 ('jack', 'dalton_psw'), ('william', 'dalton_psw'),
-('ma', 'dalton_psw');
+('ma', 'dalton_psw'), ('nermine', 'mimito');
 
 INSERT INTO Profile(lid, firstName, lastName) VALUES
 (1, 'calvin', 'dadson'), (2, 'hobbes', 'tiger'),
@@ -18,19 +18,20 @@ INSERT INTO Profile(lid, firstName, lastName) VALUES
 (7, 'lucky', 'luke'), (8, 'jolly', 'jumper'),
 (9, 'joe', 'dalton'), (10, 'averell', 'dalton'),
 (11, 'jack', 'dalton'), (12, 'william', 'dalton'),
-(13, 'ma', 'dalton');
+(13, 'ma', 'dalton'), (14, 'nermine', 'horry');
 
 INSERT INTO AppGroup(gname, isGroupChat) VALUES
 ('copaing', FALSE), ('famille dalton', TRUE),
 ('justiciers', FALSE), ('les philosophes', TRUE),
-('dalton -> prison', TRUE);
+('dalton -> prison', TRUE), ('les legendes', FALSE);
 
 INSERT INTO UsersInGroup(gid, lid) VALUES
 (1, 1), (1, 2),
 (2, 9), (2, 10), (2, 11), (2, 12), (2, 13),
 (3, 7), (3, 8),
 (4, 3), (4, 4), (4, 5),
-(5, 7), (5, 9), (5, 10), (5, 11), (5, 12);
+(5, 7), (5, 9), (5, 10), (5, 11), (5, 12),
+(6, 14), (6, 7);
 
 INSERT INTO Messages(lid, mtext, mtime, gid) VALUES
 (1, 'Je suis grand', '1999-01-08 04:05:06', 1),
@@ -69,3 +70,5 @@ INSERT INTO UsersPref(lid, pfid) VALUES
 (11, 1), (11, 6),
 (12, 1), (12, 6),
 (13, 1);
+
+INSERT INTO EventType(tname) VALUES ('match de football');

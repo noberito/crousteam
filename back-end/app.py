@@ -130,7 +130,15 @@ def get_who_am_i(user: fsa.CurrentUser):
 
 # POST /register (login, password)
 @app.post("/register", authorize="ANY")
-def post_register(login: str, password: str):
+def post_register(
+    login: str,
+    password: str,
+    firstName: str,
+    lastName: str,
+    bio: str,
+    naissance: str,
+    photoPath: str,
+):
     # check constraints on "login" (these tests are redundant with CHECK)
     if len(login) < 3:
         return "login must be at least 3 chars", 400
@@ -141,10 +149,18 @@ def post_register(login: str, password: str):
         return f"user {login} already registered", 409
     # log.debug(f"user registration: {login}")
     # NOTE passwords have constraints, see configuration
-    aid = db.insert_auth(
+    lid = db.insert_auth(
         login=login, password=app.hash_password(password), is_admin=False
     )
-    return json(aid), 201
+    db.post_info_register(
+        lid=int(lid),
+        firstName=firstName,
+        lastName=lastName,
+        bio=bio,
+        naissance=naissance,
+        photoPath=photoPath,
+    )
+    return json(lid), 201
 
 
 # GET /login
@@ -288,6 +304,25 @@ def delete_group_chat(gid: int):
     if not to_delete:
         return "no group to delete", 404
     db.delete_group_chat(gid=gid)
+    return "", 204
+
+
+@app.post("/event", authorize="ANY")
+def create_event(ename: str, eloc: str, etime: str, tid: int):
+    exist_already = db.get_single_event(ename=ename, eloc=eloc, etime=etime)
+    if exist_already:
+        return "the same event already exist", 404
+    gid = db.create_group_chat_link_to_the_event(ename=ename)
+    eid = db.add_event(ename=ename, eloc=eloc, etime=etime, tid=tid, gid=int(gid))
+    return json(eid), 201
+
+
+@app.delete("/event", authorize="ANY")
+def delete_event(eid: int):
+    exist_already = db.get_single_event_with_eid(eid=eid)
+    if not exist_already:
+        return "no event to delete", 404
+    db.delete_event(eid=eid)
     return "", 204
 
 

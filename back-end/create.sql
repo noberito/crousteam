@@ -75,11 +75,19 @@ CREATE TABLE IF NOT EXISTS Event(
   eid SERIAL8 PRIMARY KEY,
   ename TEXT NOT NULL,
   eloc TEXT NOT NULL,
-  etime TIMESTAMP NOT NULL,
+  etime DATE NOT NULL,
   tid INTEGER NOT NULL,
   gid INTEGER NOT NULL,
   UNIQUE (ename, eloc, etime),
-  UNIQUE (gid)
+  UNIQUE (gid),
+  CONSTRAINT fk_group
+    FOREIGN KEY (gid)
+    REFERENCES AppGroup (gid)
+    ON DELETE CASCADE,
+  CONSTRAINT fk_event_type
+    FOREIGN KEY (tid)
+    REFERENCES EventType (tid)
+    ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS UsersInEvent(
