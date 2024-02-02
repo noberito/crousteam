@@ -5,6 +5,7 @@ import CrousteamTextInput from '../common/CrousteamTextInput.react';
 import AppContext from '../common/appcontext';
 import axios from 'axios';
 import { baseUrl } from '../common/const';
+import { counterEvent } from 'react-native/Libraries/Performance/Systrace';
 
 const styles = StyleSheet.create({
   postButton:{
@@ -46,7 +47,7 @@ const MessageInput= ({gid, username}) => {
     const [postError, setPostError] = useState(false);
     const [content, setContent] = useState(defaultContent)
 
-    const postMessage = useCallback((gid, username, content) => {
+    const postMessage = useCallback(() => {
         setIsPosting(true);
         axios({
             baseURL: baseUrl, // Assurez-vous que baseUrl est défini quelque part dans votre code
@@ -62,6 +63,7 @@ const MessageInput= ({gid, username}) => {
             setIsPosting(false);
             if (response.status === 200 || response.status === 201) {
         // Message posté avec succès
+                console.log(username, content, gid)
                 console.log('Message posted successfully');
         // Vous pouvez ici actualiser la liste des messages ou gérer la réponse comme souhaité
             } else {
@@ -73,13 +75,13 @@ const MessageInput= ({gid, username}) => {
             setIsPosting(false);
              setPostError(true);
             });
-        }, [authToken]); // Ajoutez d'autres dépendances si nécessaire
+        }, ); // Ajoutez d'autres dépendances si nécessaire
 
     return(
         <View style={{flexDirection:'row'}}>
         <TextInput style={styles.message} onChangeText={(text) => setContent(text)} placeholder="Enter a chat">
         </TextInput>
-        <TouchableOpacity style={styles.postButton} onPress={() => {postMessage({gid, username, content}), setContent('')}}  >
+        <TouchableOpacity style={styles.postButton} onPress={() => {console.log(username, content, gid), postMessage()}}  >
             <Text style={styles.iconPost}>{'>'}</Text>
         </TouchableOpacity>
     </View>

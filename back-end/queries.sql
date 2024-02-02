@@ -40,7 +40,7 @@ JOIN Auth USING (lid)
 WHERE gid = :gid
 ORDER BY mtime DESC;
 
--- name: post_messages
+-- name: post_messages!
 INSERT INTO Messages(lid, mtext, gid)
 VALUES (:lid, :mtext, :gid);
 

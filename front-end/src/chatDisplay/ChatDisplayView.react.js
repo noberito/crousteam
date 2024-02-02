@@ -32,9 +32,7 @@ export default function ChatDisplayView({log, setLog, event}) {
         setIsLoading(false); // Set refreshing to false when data is loaded
         if (response.status == 200) {
           const parsedData1 = response.data
-          console.log(parsedData1)
           setGid(parsedData1.gid);
-          console.log(gid);
           setPermissionError(false);
         } else if(response.status == 403) {
           setPermissionError(true);
@@ -70,17 +68,23 @@ export default function ChatDisplayView({log, setLog, event}) {
       console.error(`Something 1 went wrong ${err.message}`);
       setIsLoading(false);
     });
-  }, [authToken]);
+  }, [gid]);
 
   useEffect(() => {
-    console.log(gid)
-    getGid();}, [authToken, getAllMessagesRequest]
+    getGid();
+  }, [authToken]
   );
 
-  useEffect(() => {
-    console.log(gid);
-    getAllMessagesRequest()}, [authToken, getAllMessagesRequest]
-  );
+  useEffect(() =>{
+    if (gid != -1){
+      console.log('je suis passé par ici')
+      getAllMessagesRequest()
+      const intervalId = setInterval(getAllMessagesRequest, 5000); // Then call it every 5 seconds
+
+      // Clean up the interval on component unmount
+      return () => clearInterval(intervalId);}}
+    , [gid, getAllMessagesRequest]);
+
   const renderItem = ({item}) => <CrousteamMessage item={item}/>;
 
     return(
