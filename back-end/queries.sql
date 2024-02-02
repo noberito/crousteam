@@ -138,18 +138,21 @@ WHERE login = :login;
 
 -- name: preference_already^
 SELECT TRUE FROM UsersPref AS u
-JOIN Auth AS a
-ON u.lid = a.lid
-WHERE login = :login AND pfid = :pfid;
+JOIN Auth AS a ON u.lid = a.lid
+JOIN Preferences AS p ON u.pfid = p.pfid
+WHERE (login = :login AND p.pftype = :pftype);
 
 -- name: insert_preference!
 INSERT INTO UsersPref (lid, pfid) 
-VALUES ((SELECT lid FROM Auth WHERE login = :login), :pfid);
+VALUES (
+    (SELECT lid FROM Auth WHERE login = :login),
+    (SELECT pfid FROM Preferences WHERE pftype = :pftype)
+);
 
 -- name: delete_preference!
 DELETE FROM UsersPref
 WHERE lid = (SELECT lid FROM Auth WHERE login = :login)
-AND pfid = :pfid;
+AND pfid = (SELECT pfid FROM Preferences WHERE pftype = :pftype);
 
 -- name: get_login_who_matches_with_preferences
 WITH LoginPreferences AS (

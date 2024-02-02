@@ -31,7 +31,7 @@ logging.basicConfig(level=logging.INFO)
 
 # start and configure flask service
 import FlaskSimpleAuth as fsa
-from FlaskSimpleAuth import jsonify as json  # type: ignore
+from FlaskSimpleAuth import jsonify as json, JsonData  # type: ignore
 
 app = fsa.Flask(os.environ["APP_NAME"])
 app.config.from_envvar("APP_CONFIG")
@@ -386,27 +386,36 @@ def get_all_info(login: str):
         return "login not found", 404
     return json(res), 200
 
+class StrList(list):
+    def __init__(self, l):
+        if not isinstance(l, list):
+            raise ValueError("expecting a list...")
+        for i in l:
+            if not isinstance(i, str):
+                raise ValueError("expecting a list of strings")
+        super().__init__(l)
 
 @app.post("/preferences/<login>", authorize="ANY")
-def post_preferences(list_pfid: list, login: str):
+def post_preferences(list_pftype: StrList, login: str):
     s = 0
-    for pfid in list_pfid:
-        already = db.preference_already(login=login, pfid=pfid)
+    for pftype in list_pftype:
+        app.logger.info(pftype)
+        already = db.preference_already(login=login, pftype=pftype)
         if not already:
-            db.insert_preference(login=login, pfid=pfid)
+            db.insert_preference(login=login, pftype=pftype)
             s += 1
-    if s == 0:
-        return "Nothing to insert", 404
+    # if s == 0:
+    #     return "Nothing to insert", 404
     return "", 201
 
 
 @app.delete("/preferences/<login>", authorize="ANY")
-def delete_preferences(list_pfid: list, login: str):
+def delete_preferences(list_pftype: list, login: str):
     s = 0
-    for pfid in list_pfid:
-        already = db.preference_already(login=login, pfid=pfid)
+    for pftype in list_pftype:
+        already = db.preference_already(login=login, pftype=pftype)
         if already:
-            db.delete_preference(login=login, pfid=pfid)
+            db.delete_preference(login=login, pftype=pftype)
             s += 1
     if s == 0:
         return "Nothing to delete", 404

@@ -443,13 +443,15 @@ def test_get_info_profile(api):
 
 # preferences :
 def test_preferences(api):
-    api.check("POST", "/preferences/calvin", 404, data={"list_pfid": [1]}, login=ADMIN)
-    api.check("POST", "/preferences/calvin", 201, data={"list_pfid": [5]}, login=ADMIN)
+    api.check("POST", "/preferences/calvin", 400, json={"list_pftype": 123}, login=ADMIN)
+    api.check("POST", "/preferences/calvin", 400, json={"list_pftype": ["ok", True]}, login=ADMIN)
+    api.check("POST", "/preferences/calvin", 201, json={"list_pftype": ["philantropique","blagueur du dimanche"]}, login=ADMIN)
+    api.check("POST", "/preferences/calvin", 201, json={"list_pftype": ["cowboy"]}, login=ADMIN)
     api.check(
-        "DELETE", "/preferences/calvin", 204, data={"list_pfid": [5]}, login=ADMIN
+        "DELETE", "/preferences/calvin", 204, json={"list_pftype": ["philantropique"]}, login=ADMIN
     )
     api.check(
-        "DELETE", "/preferences/calvin", 404, data={"list_pfid": [3]}, login=ADMIN
+        "DELETE", "/preferences/calvin", 404, json={"list_pftype": ["non existent"]}, login=ADMIN
     )
 
 
