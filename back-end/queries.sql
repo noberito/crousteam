@@ -33,7 +33,7 @@ RETURNING lid;
 DELETE FROM Auth WHERE login = :login;
 
 -- name: get_messages
-SELECT mid, mtext, CASE WHEN login = :login THEN 1 ELSE 0 END AS a_ecrit, mtime, login
+SELECT mid, mtext, CASE WHEN login = :login THEN 1 ELSE 0 END AS a_ecrit, mtime, login, gid
 FROM Messages
 JOIN AppGroup USING (gid)
 JOIN Auth USING (lid)
@@ -101,13 +101,13 @@ SELECT DISTINCT TRUE
    AND g2.lid = :lid2;
 
 -- name: is_people_already_in_the_same_group_with_login$
-SELECT DISTINCT gid
+SELECT g1.gid
  FROM UsersInGroup AS g1 
  JOIN UsersInGroup AS g2 ON g1.gid = g2.gid
  JOIN AppGroup AS g ON g1.gid = g.gid
  WHERE isGroupChat = FALSE
-   AND g1.lid = (SELECT lid FROM Auth WHERE login = :login1)
-   AND g2.lid = (SELECT lid FROM Auth WHERE login = :login2);
+   AND g1.lid = :lid1
+   AND g2.lid = :lid2;
 
 -- name: add_people_into_group!
 INSERT INTO UsersInGroup(gid, lid)

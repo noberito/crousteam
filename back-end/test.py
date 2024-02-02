@@ -312,6 +312,7 @@ def test_messages(api):
         "POST",
         "/messages",
         201,
+        r"gid",
         data={"login": "calvin", "mtext": "Je poste un message", "gid": 1},
         login=ADMIN,
     )
