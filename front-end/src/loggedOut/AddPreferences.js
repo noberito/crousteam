@@ -9,36 +9,65 @@ import AppContext from '../common/appcontext';
 
 export default function AddPreferences({ onSuccess, onCancel }) {
 
+    const [preferences, setPreferences] = useState([]);
+    const [selectedPreferences, setSelectedPreferences] = useState([]);
 
 
-    const renderItem = ({ item }) => (
-        <TouchableOpacity onPress={() => handlePress(item)}>
-            <View style={styles.preferenceItem}>
-                <Text style={styles.preferenceText}>{item}</Text>
-            </View>
+
+    const renderPreferenceItem = ({ item }) => (
+        <TouchableOpacity
+            style={[styles.preferenceItem, { backgroundColor: selectedPreferences.includes(item) ? '#4CAF50' : '#e0e0e0' }]}
+            onPress={() => handlePreferenceClick(item)}
+        >
+            <Text style={styles.preferenceText}>{item}</Text>
         </TouchableOpacity>
     );
-    ;
+
+    const renderRow = ({ item }) => (
+        <FlatList
+            data={item}
+            keyExtractor={(subItem, index) => index.toString()}
+            renderItem={renderPreferenceItem}
+            horizontal
+        />
+    );
+
+    const handlePreferenceClick = (preference) => {
+        // Si la préférence cliquée est déjà dans la liste des préférences sélectionnées, retire-la
+        // Sinon, ajoute-la à la liste
+        console.log(`La préférence "${preference}" a été sélectionnée.`);
+        setSelectedPreferences((prevSelected) => {
+            if (prevSelected.includes(preference)) {
+                return prevSelected.filter((item) => item !== preference);
+            } else {
+                return [...prevSelected, preference];
+            }
+        });
+    };
+
+
+
+
+
+
+    const chunkArray = (array, size) => {
+        const chunkedArray = [];
+        for (let i = 0; i < array.length; i += size) {
+            chunkedArray.push(array.slice(i, i + size));
+        }
+        return chunkedArray;
+    };
+
+    const preferencesRows = chunkArray(preferences, 3);
 
     const { lastUid, setLastUid, username, password } = useContext(AppContext);
 
-    const [info, setInfo] = useState();
-    const [firstName, setFirstName] = useState('');
-    const [naissance, setNaissance] = useState('');
-    const [photopath, setPhotopath] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [biography, setBiography] = useState('');
 
     const [isLoading, setIsLoading] = useState(false);
     const [hasFailure, setHasFailure] = useState(false);
 
-    const [selectedImage, setSelectedImage] = useState(null);
 
-    const handlePress = (preference) => {
-        setSelectedImage(preference);
-        console.log(`La préférence "${preference}" a été sélectionnée.`);
-        // Tu peux faire d'autres actions en fonction de l'image cliquée
-    };
+
 
     const getPreferences = () => {
         setIsLoading(true);
@@ -50,7 +79,7 @@ export default function AddPreferences({ onSuccess, onCancel }) {
             setIsLoading(false)
             if (response.status >= 200 && response.status < 300) {
                 setHasFailure(false)
-                setInfo(response.data)
+                setPreferences(response.data)
                 console.log(response.data)
             } else {
                 setHasFailure(true)
@@ -136,11 +165,25 @@ export default function AddPreferences({ onSuccess, onCancel }) {
             fontWeight: 'bold',
             textAlign: 'center',
         },
+        preferenceItem: {
+            flex: 1,
+            margin: 8,
+            borderRadius: 8,
+            overflow: 'hidden',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: 80,
+        },
+        preferenceText: {
+            fontSize: 16,
+            fontWeight: 'bold',
+            textAlign: 'center',
+        },
     });
 
     return (
         <View>
-            <Text> {info}</Text>
+
             <KivCard>
                 <View style={styles.titleContainer}>
                     <Text style={styles.title}>Add Information</Text>
@@ -150,11 +193,9 @@ export default function AddPreferences({ onSuccess, onCancel }) {
                 </View>}
 
                 <FlatList
-                    data={info}
-                    numColumns={2}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={renderItem}
-
+                    data={preferencesRows}
+                    keyExtractor={(row, index) => index.toString()}
+                    renderItem={renderRow}
                 />
 
                 <View style={styles.buttonRow}>
