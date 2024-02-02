@@ -6,7 +6,7 @@ import AppContext from '../common/appcontext';
 const messageStyles = StyleSheet.create({
   messageRightContainer: {
     width:'50%',
-    heigt:'8%',
+    height:'auto',
     backgroundColor: colors.background,
     borderRadius: 10,
     padding: 20,
@@ -18,7 +18,7 @@ const messageStyles = StyleSheet.create({
   },
   messageLeftContainer: {
     width:'50%',
-    heigt:'8%',
+    height:'auto',
     backgroundColor: colors.background,
     borderRadius: 10,
     padding: 20,
@@ -40,14 +40,6 @@ const messageStyles = StyleSheet.create({
     fontSize:30,
     color:colors.primaryText,
   },
-  right:{
-    flexDirection:'right',
-    alignItems:'flex-end',
-  },
-  left:{
-    flexDirection:'left',
-    alignItems:'flex-start'
-  }
 });
 
 const CrousteamMessage = ({ item}) => {

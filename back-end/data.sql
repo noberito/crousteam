@@ -37,7 +37,7 @@ INSERT INTO UsersInGroup(gid, lid) VALUES
 
 INSERT INTO Messages(lid, mtext, mtime, gid) VALUES
 (1, 'Je suis grand', '1999-01-08 04:05:06', 1),
-(2, 'Je suis petit', '2002-03-08 02:09:16', 1),
+(2, 'Je suis petit et jaime beaucoup la crousteam', '2002-03-08 02:09:16', 1),
 (1, 'Je suis moyen', '2001-01-07 04:05:06', 1),
 (9, 'Rapplique Averell', '2023-10-27 08:20:25', 2),
 (10, 'J arriveeee', '2023-10-27 08:20:30', 2),

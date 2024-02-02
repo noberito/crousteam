@@ -3,7 +3,7 @@ import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, 
 import axios from 'axios';
 import { baseUrl } from '../common/const';
 import AppContext from '../common/appcontext';
-import CrousteamButton from '../common/CrousteamButton.react';
+import ReturnButton from '../common/ReturnButton.react';
 import CrousteamMessage from './Message.react';
 
 styles = StyleSheet.create({
@@ -28,7 +28,7 @@ export default function ChatDisplayView({log, setLog, event}) {
       url : '/messages',
       method : 'GET',
       headers : { Authorization : 'Bearer ' + authToken},
-      params: {login1:username, login2:log}
+      params: {login1:username, login2:'averell'}
     }).then(response => {
       setIsLoading(false);
       setRefreshing(false); // Set refreshing to false when data is loaded
@@ -58,6 +58,7 @@ export default function ChatDisplayView({log, setLog, event}) {
 
     return(
     <View>
+        <ReturnButton onPress={() => {setLog('null'), setPage('listchat')}}></ReturnButton>
         <Text style={styles.textstyle}> C'est un chat entre {username} et {log} </Text>
         <View>
       {hasPermissionError && <View style={styles.incorrectWarning}>
@@ -69,9 +70,10 @@ export default function ChatDisplayView({log, setLog, event}) {
       <FlatList
         data={messages}
         renderItem={renderItem}
+        inverted
         keyExtractor={item => item.mid} 
           />
     </View>
-        <CrousteamButton onPress={() => {setLog('null'), setPage('listchat')}} title='Retour'></CrousteamButton>
+        
     </View>)
 }
