@@ -91,18 +91,20 @@ export default function AddPreferences({ onSuccess, onCancel }) {
         })
     }
 
-    const sendUserCreationRequest = () => {
+    const SendPreferences = () => {
         setIsLoading(true);
         axios({
             baseURL: baseUrl,
-            url: '/register',
+            url: '/user-preferences/',
             method: 'POST',
-            data: { login: username, password: password, firstName: firstName, lastName: lastName, naissance: naissance, photoPath: photopath, bio: biography } // TODO   
+            data: {
+                login: username,
+                preferences: selectedPreferences
+            }
         }).then(response => {
             setIsLoading(false)
             if (response.status >= 200 && response.status < 300) {
                 setHasFailure(false)
-                setLastUid()
                 onSuccess()
             } else {
                 setHasFailure(true)
@@ -203,10 +205,11 @@ export default function AddPreferences({ onSuccess, onCancel }) {
                         <Button title="< Login" disabled={isLoading} onPress={() => { onCancel(); }} />
                     </View>
                     <View style={styles.button}>
-                        <Button title="Continue" disabled={isLoading} onPress={() => { sendUserCreationRequest(); }} />
+                        <Button title="Continue" disabled={isLoading} onPress={() => { sendPreferences(); }} />
                     </View>
                 </View>
             </KivCard>
+            <CrousteamButton onPress={() => { setPage("myprofile") }} title="Retour"></CrousteamButton>
         </View>
     );
 
