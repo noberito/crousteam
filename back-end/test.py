@@ -306,7 +306,9 @@ def test_messages(api):
         r"petit",
         login=ADMIN,
     )
-    api.check("GET", "/group-gid", 200, data={"login1": "calvin", "login2": "hobbes"})
+    api.check(
+        "GET", "/group-gid", 200, r"1", data={"login1": "calvin", "login2": "hobbes"}
+    )
     api.check(
         "GET", "/group-gid", 201, data={"login1": "calvin", "login2": "jean-paul"}
     )
@@ -426,6 +428,8 @@ def test_add_event(api):
     )
     eid = res.json
     api.check("POST", "/event/calvin", 201, data={"eid": eid}, login=ADMIN)
+    api.check("POST", "/event/hobbes", 201, data={"eid": eid}, login=ADMIN)
+    api.check("POST", "/event/jack", 201, data={"eid": eid}, login=ADMIN)
     api.check("POST", "/event/calvin", 404, data={"eid": eid}, login=ADMIN)
     api.check("POST", "/event/brandon", 404, data={"eid": eid}, login=ADMIN)
     api.check("DELETE", "/event", 204, data={"eid": eid}, login=ADMIN)

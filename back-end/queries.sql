@@ -53,17 +53,22 @@ WITH Last_message_each_conversations AS (
     LEFT JOIN Messages AS m ON ag.gid=m.gid
     WHERE m.gid IS NULL
 )
-SELECT gname, max_mtime FROM AppGroup AS ag
+SELECT CASE WHEN COALESCE(gname, '') = '' THEN a2.login ELSE gname END AS name_chat, max_mtime FROM AppGroup AS ag
 JOIN UsersInGroup AS uig ON uig.gid = ag.gid
 JOIN Last_message_each_conversations AS lmec ON lmec.gid = ag.gid
 JOIN Auth AS a ON uig.lid = a.lid
-WHERE login = :login
+JOIN UsersInGroup AS uig2 ON uig.gid=uig2.gid AND uig.lid != uig2.lid
+LEFT JOIN Auth AS a2 ON uig2.lid=a2.lid AND a2.login != :login
+WHERE a.login = :login
 UNION
-SELECT gname, creationDate FROM Group_without_messages AS gwm
+SELECT CASE WHEN COALESCE(gwm.gname, '') = '' THEN a2.login ELSE gname END AS name_chat, creationDate FROM Group_without_messages AS gwm
 JOIN UsersInGroup AS uig ON gwm.gid=uig.gid
 JOIN Auth AS a ON uig.lid=a.lid
-WHERE login = :login
+JOIN UsersInGroup AS uig2 ON uig.gid=uig2.gid AND uig.lid != uig2.lid
+LEFT JOIN Auth AS a2 ON uig2.lid=a2.lid AND a2.login != :login
+WHERE a.login = :login
 ORDER BY 2 DESC;
+-- CASE WHEN gname="" THEN (SELECT login FROM Auth JOIN UsersInGroup USING(lid) WHERE login <> :login) ELSE gname END AS gname
 
 -- name: get_lid_from_login$
 SELECT lid FROM Auth WHERE login = :login;
