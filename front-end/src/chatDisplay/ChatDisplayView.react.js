@@ -5,6 +5,7 @@ import { baseUrl } from '../common/const';
 import AppContext from '../common/appcontext';
 import ReturnButton from '../common/ReturnButton.react';
 import CrousteamMessage from './Message.react';
+import MessageInput from './MessageInput.react';
 
 styles = StyleSheet.create({
     textstyle:{
@@ -16,22 +17,43 @@ export default function ChatDisplayView({log, setLog, event}) {
     const {username, setPage, authToken} = useContext(AppContext)
     const [messages, setMessages] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [refreshing, setRefreshing] = useState(false);
+    const [gid, setGid] = useState(-1)
     const [hasPermissionError, setPermissionError] = useState(false);
+
+    const getGid = useCallback(() => {
+      axios({
+        baseURL : baseUrl,
+        url : '/gid',
+        method : 'GET',
+        headers : { Authorization : 'Bearer ' + authToken},
+        params: {login1:username, login2:log}
+      }).then(response => {
+        setIsLoading(false); // Set refreshing to false when data is loaded
+        if (response.status == 200) {
+          const gid = response.data
+          console.log(gid);
+          setGid(gid);
+          setPermissionError(false);
+        } else if(response.status == 403) {
+          setPermissionError(true);
+        }
+      }).catch(err => {
+        console.error(`Something went wrong ${err.message}`);
+        setIsLoading(false);
+      });
+    }, [authToken]);
 
     const getAllMessagesRequest = useCallback(() => {
     setIsLoading(true);
     // Set refreshing to true when we are loading data on pull to refresh
-    setRefreshing(true);
     axios({
       baseURL : baseUrl,
       url : '/messages',
       method : 'GET',
       headers : { Authorization : 'Bearer ' + authToken},
-      params: {login1:username, login2:'averell'}
+      params: {login:username, gid:gid}
     }).then(response => {
-      setIsLoading(false);
-      setRefreshing(false); // Set refreshing to false when data is loaded
+      setIsLoading(false); // Set refreshing to false when data is loaded
       if (response.status == 200) {
         const parsedData = response.data.map(message => ({
           mid: message[0], content: message[1], sender: message[4], time:message[3], a_ecrit: message[2]
@@ -45,11 +67,11 @@ export default function ChatDisplayView({log, setLog, event}) {
     }).catch(err => {
       console.error(`Something went wrong ${err.message}`);
       setIsLoading(false);
-      setRefreshing(false); 
     });
   }, [authToken]);
 
   useEffect(() => {
+    getGid();
     getAllMessagesRequest();
   }, [authToken, getAllMessagesRequest]);
 
@@ -59,6 +81,7 @@ export default function ChatDisplayView({log, setLog, event}) {
     return(
     <View>
         <ReturnButton onPress={() => {setLog('null'), setPage('listchat')}}></ReturnButton>
+        
         <Text style={styles.textstyle}> C'est un chat entre {username} et {log} </Text>
         <View>
       {hasPermissionError && <View style={styles.incorrectWarning}>
@@ -73,6 +96,7 @@ export default function ChatDisplayView({log, setLog, event}) {
         inverted
         keyExtractor={item => item.mid} 
           />
+      <MessageInput gid={gid} username={username}></MessageInput>
     </View>
         
     </View>)
