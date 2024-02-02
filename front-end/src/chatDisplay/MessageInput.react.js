@@ -79,12 +79,12 @@ const MessageInput= ({gid, username}) => {
 
     return(
         <View style={{flexDirection:'row'}}>
-        <TextInput style={styles.message} onChangeText={(text) => setContent(text)} placeholder="Enter a chat">
+        <TextInput style={styles.message} value={content} onChangeText={(text) => setContent(text)} placeholder="Enter a chat">
         </TextInput>
-        <TouchableOpacity style={styles.postButton} onPress={() => {console.log(username, content, gid), postMessage()}}  >
+        <TouchableOpacity style={styles.postButton} onPress={() => {console.log(username, content, gid), postMessage(), setContent('')}}  >
             <Text style={styles.iconPost}>{'>'}</Text>
         </TouchableOpacity>
-    </View>
+        </View>
 )};
 
 export default MessageInput;

@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
  */
 
 
-export default function FrienderView({logoutUser }) {
+export default function FrienderView({logoutUser}) {
   const { username, setUsername, authToken, setAuthToken, page, setPage } = useContext(AppContext)
   const [log, setLog] = useState('null')
 

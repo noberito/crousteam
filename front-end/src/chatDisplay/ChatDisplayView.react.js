@@ -83,15 +83,13 @@ export default function ChatDisplayView({log, setLog, event}) {
 
       // Clean up the interval on component unmount
       return () => clearInterval(intervalId);}}
-    , [gid, getAllMessagesRequest]);
+    , [getAllMessagesRequest]);
 
   const renderItem = ({item}) => <CrousteamMessage item={item}/>;
 
     return(
     <View>
         <ReturnButton onPress={() => {setLog('null'), setPage('listchat')}}></ReturnButton>
-        
-        <Text style={styles.textstyle}> C'est un chat entre {username} et {log} </Text>
         <View>
       {hasPermissionError && <View style={styles.incorrectWarning}>
         <Text style={styles.inputLabel}>
@@ -99,13 +97,16 @@ export default function ChatDisplayView({log, setLog, event}) {
         </Text>
       </View>}
       {isLoading && <ActivityIndicator size='large' animating={true} color='#FF0000' />}
+      <View style={{height:'80%'}}>
       <FlatList
         data={messages}
         renderItem={renderItem}
         inverted
         keyExtractor={item => item.mid} 
           />
+        </View>
       <MessageInput gid={gid} username={username}></MessageInput>
+      
     </View>
         
     </View>)

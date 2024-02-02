@@ -5,8 +5,8 @@ import colors from './Colors.react';
 
 const styles = StyleSheet.create({
     button:{
-        width:'30%',
-        height:'30%',
+        width:'10%',
+        height:'10%',
     },
     text:{
         fontFamily:'Arista-Pro-Alternate-Light-trial',
