@@ -40,6 +40,9 @@ JOIN Auth USING (lid)
 WHERE gid = :gid
 ORDER BY mtime DESC;
 
+-- name: is_gid_valid^
+SELECT TRUE FROM AppGroup WHERE gid = :gid;
+
 -- name: post_messages!
 INSERT INTO Messages(lid, mtext, gid)
 VALUES (:lid, :mtext, :gid);
@@ -68,7 +71,6 @@ JOIN UsersInGroup AS uig2 ON uig.gid=uig2.gid AND uig.lid != uig2.lid
 LEFT JOIN Auth AS a2 ON uig2.lid=a2.lid AND a2.login != :login
 WHERE a.login = :login
 ORDER BY 2 DESC;
--- CASE WHEN gname="" THEN (SELECT login FROM Auth JOIN UsersInGroup USING(lid) WHERE login <> :login) ELSE gname END AS gname
 
 -- name: get_lid_from_login$
 SELECT lid FROM Auth WHERE login = :login;
@@ -221,3 +223,6 @@ SELECT gid FROM Event WHERE eid = :eid;
 
 -- name: get_if_people_into_group^
 SELECT TRUE FROM UsersInGroup WHERE gid = :gid AND lid = :lid;
+
+-- name: test
+SELECT * FROM Auth;

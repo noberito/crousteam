@@ -3,14 +3,6 @@
 --
 \copy Auth(login, password, isAdmin) from './test_users.csv' (format csv)
 
-INSERT INTO Auth (login, password) VALUES
-('jean-paul', 'farte_psw'), ('pedro', 'spinouza_psw'),
-('issa', 'delouze_psw'), ('foo', 'bla_psw'),
-('lucky', 'luke_psw'), ('jolly', 'jumper_psw'),
-('joe', 'dalton_psw'), ('averell', 'dalton_psw'),
-('jack', 'dalton_psw'), ('william', 'dalton_psw'),
-('ma', 'dalton_psw'), ('nermine', 'mimito');
-
 INSERT INTO Profile(lid, firstName, lastName) VALUES
 (1, 'calvin', 'dadson'), (2, 'hobbes', 'tiger'),
 (3, 'jean-paul', 'farte'), (4, 'pedro', 'spinouza'),

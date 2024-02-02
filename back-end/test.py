@@ -306,6 +306,7 @@ def test_messages(api):
         r"petit",
         login=ADMIN,
     )
+    api.check("GET", "/messages/gid:4000", 404, login=ADMIN)
     api.check(
         "GET", "/group-gid", 200, r"1", data={"login1": "calvin", "login2": "hobbes"}
     )
@@ -407,6 +408,7 @@ def test_add_event(api):
         "/event",
         201,
         data={
+            "login": "calvin",
             "ename": "PSG-MU au Parc",
             "eloc": "Paris",
             "etime": "2024-02-25",
@@ -419,6 +421,7 @@ def test_add_event(api):
         "/event",
         404,
         data={
+            "login": "calvin",
             "ename": "PSG-MU au Parc",
             "eloc": "Paris",
             "etime": "2024-02-25",
@@ -427,8 +430,8 @@ def test_add_event(api):
         login=ADMIN,
     )
     eid = res.json
-    api.check("POST", "/event/calvin", 201, data={"eid": eid}, login=ADMIN)
-    api.check("POST", "/event/hobbes", 201, data={"eid": eid}, login=ADMIN)
+    api.check("POST", "/event/ma", 201, data={"eid": eid}, login=ADMIN)
+    api.check("POST", "/event/averell", 201, data={"eid": eid}, login=ADMIN)
     api.check("POST", "/event/jack", 201, data={"eid": eid}, login=ADMIN)
     api.check("POST", "/event/calvin", 404, data={"eid": eid}, login=ADMIN)
     api.check("POST", "/event/brandon", 404, data={"eid": eid}, login=ADMIN)
@@ -447,15 +450,43 @@ def test_get_info_profile(api):
 
 # preferences :
 def test_preferences(api):
-    api.check("POST", "/preferences/calvin", 400, json={"list_pftype": 123}, login=ADMIN)
-    api.check("POST", "/preferences/calvin", 400, json={"list_pftype": ["ok", True]}, login=ADMIN)
-    api.check("POST", "/preferences/calvin", 201, json={"list_pftype": ["philantropique","blagueur du dimanche"]}, login=ADMIN)
-    api.check("POST", "/preferences/calvin", 201, json={"list_pftype": ["cowboy"]}, login=ADMIN)
     api.check(
-        "DELETE", "/preferences/calvin", 204, json={"list_pftype": ["philantropique"]}, login=ADMIN
+        "POST", "/preferences/calvin", 400, json={"list_pftype": 123}, login=ADMIN
     )
     api.check(
-        "DELETE", "/preferences/calvin", 404, json={"list_pftype": ["non existent"]}, login=ADMIN
+        "POST",
+        "/preferences/calvin",
+        400,
+        json={"list_pftype": ["ok", True]},
+        login=ADMIN,
+    )
+    api.check(
+        "POST",
+        "/preferences/calvin",
+        201,
+        json={"list_pftype": ["philantropique", "blagueur du dimanche"]},
+        login=ADMIN,
+    )
+    api.check(
+        "POST",
+        "/preferences/calvin",
+        201,
+        json={"list_pftype": ["cowboy"]},
+        login=ADMIN,
+    )
+    api.check(
+        "DELETE",
+        "/preferences/calvin",
+        204,
+        json={"list_pftype": ["philantropique"]},
+        login=ADMIN,
+    )
+    api.check(
+        "DELETE",
+        "/preferences/calvin",
+        404,
+        json={"list_pftype": ["non existent"]},
+        login=ADMIN,
     )
 
 

@@ -166,7 +166,7 @@ def post_register(
 # GET /login
 #
 # NOTE axios accepts `auth` to send a basic auth
-@app.get("/login", authorize="ALL", auth="basic")
+@app.get("/login", authorize="ANY", auth="basic")
 def get_login(user: fsa.CurrentUser):
     return json(app.create_token(user)), 200
 
@@ -204,18 +204,13 @@ if app.config.get("APP_TEST", False):
 # ADD NEW CODE HERE
 
 
-@app.get("/messages/gid:<gid>", authorize="ANY")  # gname -> gid
+@app.get("/messages/gid:<gid>", authorize="ANY")
 def get_messages(gid: int):
-    # lid1 = db.get_lid_from_login(login=login1)
-    # lid2 = db.get_lid_from_login(login=login2)
-    # gid = db.is_people_already_in_the_same_group_with_login(lid1=lid1, lid2=lid2)
-    if gid:
+    gid_valid = db.is_gid_valid(gid=gid)
+    if gid_valid:
         res = db.get_messages(gid=int(gid))
         return json(res), 200
-    # gid = db.create_group_of_two()
-    # db.add_people_into_group(gid=gid, lid=lid1)
-    # db.add_people_into_group(gid=gid, lid=lid2)
-    # return json({"gid": gid}), 201
+    return "no group with this id", 404
 
 
 @app.get("/group-gid", authorize="ANY")
@@ -338,12 +333,18 @@ def delete_group_chat(gid: int):
 
 
 @app.post("/event", authorize="ANY")
-def create_event(ename: str, eloc: str, etime: str, tid: int):
+def create_event(login: str, ename: str, eloc: str, etime: str, tid: int):
     exist_already = db.get_single_event(ename=ename, eloc=eloc, etime=etime)
     if exist_already:
         return "the same event already exist", 404
     gid = db.create_group_chat_link_to_the_event(ename=ename)
     eid = db.add_event(ename=ename, eloc=eloc, etime=etime, tid=tid, gid=int(gid))
+    lid = db.get_lid_from_login(login=login)
+    if lid != 1:
+        db.add_people_into_group(gid=gid, lid=1)
+    else:
+        db.add_people_into_group(gid=gid, lid=2)
+    db.add_people_into_group(gid=gid, lid=lid)
     return json(eid), 201
 
 
@@ -386,14 +387,16 @@ def get_all_info(login: str):
         return "login not found", 404
     return json(res), 200
 
+
 class StrList(list):
-    def __init__(self, l):
-        if not isinstance(l, list):
+    def __init__(self, li):
+        if not isinstance(li, list):
             raise ValueError("expecting a list...")
-        for i in l:
+        for i in li:
             if not isinstance(i, str):
                 raise ValueError("expecting a list of strings")
-        super().__init__(l)
+        super().__init__(li)
+
 
 @app.post("/preferences/<login>", authorize="ANY")
 def post_preferences(list_pftype: StrList, login: str):
