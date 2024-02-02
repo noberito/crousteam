@@ -13,35 +13,12 @@ styles = StyleSheet.create({
     }
 })
 
-export default function ChatDisplayView({log, setLog, event}) {
+export default function ChatDisplayView({gid, setGid}) {
     const {username, setPage, authToken} = useContext(AppContext)
     const [messages, setMessages] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
-    const [gid, setGid] = useState(-1)
     const [hasPermissionError, setPermissionError] = useState(false);
 
-    const getGid = useCallback(() => {
-      setIsLoading(true)
-      axios({
-        baseURL : baseUrl,
-        url : '/group-gid',
-        method : 'GET',
-        headers : { Authorization : 'Bearer ' + authToken},
-        params: {login1:username, login2:log}
-      }).then(response => {
-        setIsLoading(false); // Set refreshing to false when data is loaded
-        if (response.status == 200) {
-          const parsedData1 = response.data
-          setGid(parsedData1.gid);
-          setPermissionError(false);
-        } else if(response.status == 403) {
-          setPermissionError(true);
-        }
-      }).catch(err => {
-        console.error(`Something went wrong ${err.message}`);
-        setIsLoading(false);
-      });
-    }, [authToken]);
 
     const getAllMessagesRequest = useCallback(() => {
     setIsLoading(true);
@@ -70,11 +47,6 @@ export default function ChatDisplayView({log, setLog, event}) {
     });
   }, [gid]);
 
-  useEffect(() => {
-    getGid();
-  }, [authToken]
-  );
-
   useEffect(() =>{
     if (gid != -1){
       console.log('je suis passé par ici')
@@ -89,7 +61,7 @@ export default function ChatDisplayView({log, setLog, event}) {
 
     return(
     <View>
-        <ReturnButton onPress={() => {setLog('null'), setPage('listchat')}}></ReturnButton>
+        <ReturnButton onPress={() => {setGid(-1), setPage('listchat')}}></ReturnButton>
         <View>
       {hasPermissionError && <View style={styles.incorrectWarning}>
         <Text style={styles.inputLabel}>

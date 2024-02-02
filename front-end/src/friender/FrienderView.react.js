@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
 export default function FrienderView({logoutUser}) {
   const { username, setUsername, authToken, setAuthToken, page, setPage } = useContext(AppContext)
   const [log, setLog] = useState('null')
+  const [gid, setGid] = useState(-1)
 
   if (page == 'friender') {
 
@@ -70,10 +71,10 @@ export default function FrienderView({logoutUser}) {
       return (<GeneralSettingsView page={page} setPage={setPage}></GeneralSettingsView>)
     }
     if (page == 'profiledisplay') {
-      return (<ProfileDisplayView page={page} setPage={setPage} log={log} setLog={setLog}></ProfileDisplayView>)
+      return (<ProfileDisplayView page={page} setPage={setPage} gid={gid} setGid={setGid} log={log} setLog={setLog}></ProfileDisplayView>)
     }
     if (page == 'chatdisplay'){
-      return (<ChatDisplayView log={log} setLog={setLog}></ChatDisplayView>)
+      return (<ChatDisplayView gid={gid} setGid={setGid} log={log} setLog={setLog}></ChatDisplayView>)
     }
 
 }
