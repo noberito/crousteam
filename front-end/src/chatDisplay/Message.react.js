@@ -45,8 +45,6 @@ const messageStyles = StyleSheet.create({
 const CrousteamMessage = ({ item}) => {
 
     const {username} = useContext(AppContext)
-    console.log(username)
-    console.log(item.sender==username)
     if (item.sender==username) {
     return (
       <View style={{justifyContent:'flex-end', flexDirection: 'row'}}>

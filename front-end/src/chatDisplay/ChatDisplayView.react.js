@@ -21,18 +21,20 @@ export default function ChatDisplayView({log, setLog, event}) {
     const [hasPermissionError, setPermissionError] = useState(false);
 
     const getGid = useCallback(() => {
+      setIsLoading(true)
       axios({
         baseURL : baseUrl,
-        url : '/gid',
+        url : '/group-gid',
         method : 'GET',
         headers : { Authorization : 'Bearer ' + authToken},
         params: {login1:username, login2:log}
       }).then(response => {
         setIsLoading(false); // Set refreshing to false when data is loaded
         if (response.status == 200) {
-          const gid = response.data
+          const parsedData1 = response.data
+          console.log(parsedData1)
+          setGid(parsedData1.gid);
           console.log(gid);
-          setGid(gid);
           setPermissionError(false);
         } else if(response.status == 403) {
           setPermissionError(true);
@@ -46,36 +48,39 @@ export default function ChatDisplayView({log, setLog, event}) {
     const getAllMessagesRequest = useCallback(() => {
     setIsLoading(true);
     // Set refreshing to true when we are loading data on pull to refresh
-    axios({
+     axios({
       baseURL : baseUrl,
-      url : '/messages',
+      url : '/messages/gid:' + gid,
       method : 'GET',
       headers : { Authorization : 'Bearer ' + authToken},
-      params: {login:username, gid:gid}
+      
     }).then(response => {
       setIsLoading(false); // Set refreshing to false when data is loaded
       if (response.status == 200) {
-        const parsedData = response.data.map(message => ({
-          mid: message[0], content: message[1], sender: message[4], time:message[3], a_ecrit: message[2]
+        const parsedData2 = response.data.map(message => ({
+          mid: message[0], content: message[1], sender: message[3], time:message[2]
         }));
-        console.log(parsedData);
-        setMessages(parsedData);
+
+        setMessages(parsedData2);
         setPermissionError(false);
       } else if(response.status == 403) {
         setPermissionError(true);
       }
     }).catch(err => {
-      console.error(`Something went wrong ${err.message}`);
+      console.error(`Something 1 went wrong ${err.message}`);
       setIsLoading(false);
     });
   }, [authToken]);
 
   useEffect(() => {
-    getGid();
-    getAllMessagesRequest();
-  }, [authToken, getAllMessagesRequest]);
+    console.log(gid)
+    getGid();}, [authToken, getAllMessagesRequest]
+  );
 
-  console.log(messages)
+  useEffect(() => {
+    console.log(gid);
+    getAllMessagesRequest()}, [authToken, getAllMessagesRequest]
+  );
   const renderItem = ({item}) => <CrousteamMessage item={item}/>;
 
     return(
