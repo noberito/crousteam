@@ -204,14 +204,27 @@ if app.config.get("APP_TEST", False):
 # ADD NEW CODE HERE
 
 
-@app.get("/messages", authorize="ANY")  # gname -> gid
-def get_messages(login1: str, login2: str):
+@app.get("/messages/gid:<gid>", authorize="ANY")  # gname -> gid
+def get_messages(gid: int):
+    # lid1 = db.get_lid_from_login(login=login1)
+    # lid2 = db.get_lid_from_login(login=login2)
+    # gid = db.is_people_already_in_the_same_group_with_login(lid1=lid1, lid2=lid2)
+    if gid:
+        res = db.get_messages(gid=int(gid))
+        return json(res), 200
+    # gid = db.create_group_of_two()
+    # db.add_people_into_group(gid=gid, lid=lid1)
+    # db.add_people_into_group(gid=gid, lid=lid2)
+    # return json({"gid": gid}), 201
+
+
+@app.get("/group-gid", authorize="ANY")
+def get_group_gid(login1: str, login2: str):
     lid1 = db.get_lid_from_login(login=login1)
     lid2 = db.get_lid_from_login(login=login2)
     gid = db.is_people_already_in_the_same_group_with_login(lid1=lid1, lid2=lid2)
     if gid:
-        res = db.get_messages(login=login1, gid=int(gid))
-        return json(res), 200
+        return json({"gid": gid}), 200
     gid = db.create_group_of_two()
     db.add_people_into_group(gid=gid, lid=lid1)
     db.add_people_into_group(gid=gid, lid=lid2)

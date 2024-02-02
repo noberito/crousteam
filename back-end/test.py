@@ -301,18 +301,19 @@ def test_redir(api):
 def test_messages(api):
     api.check(
         "GET",
-        "/messages",
+        "/messages/gid:1",
         200,
         r"petit",
-        data={"login1": "calvin", "login2": "hobbes"},
         login=ADMIN,
     )
-    api.check("GET", "/messages", 201, data={"login1": "calvin", "login2": "jean-paul"})
+    api.check("GET", "/group-gid", 200, data={"login1": "calvin", "login2": "hobbes"})
+    api.check(
+        "GET", "/group-gid", 201, data={"login1": "calvin", "login2": "jean-paul"}
+    )
     api.check(
         "POST",
         "/messages",
         201,
-        r"gid",
         data={"login": "calvin", "mtext": "Je poste un message", "gid": 1},
         login=ADMIN,
     )
