@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Button, View, StyleSheet, } from 'react-native';
+import { Button, View, StyleSheet, Image } from 'react-native';
 import BottomBar from './BottomBar.react';
 import AllFriends from './AllFriends.react';
 
@@ -25,6 +25,13 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexBasis: '8%',
+  },
+  logo:{
+  },
+  header:{
+    justifyContent:'center',
+    alignItems:'center',
+    height:'5%'
   }
 });
 
@@ -47,7 +54,10 @@ export default function FrienderView({logoutUser}) {
       return (
 
       <View style={styles.mainContainer}>
-        <View style={{flex:0.8}}>
+        <View style={styles.header}>
+          <Image style = {styles.logo} source={require('../../android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png')}></Image>
+        </View>
+        <View style={{height:'78%'}}>
           <AllFriends username={username}  setLog={setLog} authToken={authToken}/>
         </View>
         <View style = {styles.footer}>

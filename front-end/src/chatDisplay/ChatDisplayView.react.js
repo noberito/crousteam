@@ -8,6 +8,15 @@ import CrousteamMessage from './Message.react';
 import MessageInput from './MessageInput.react';
 
 styles = StyleSheet.create({
+    header:{
+      height:'10%'
+    },
+    footer:{
+      height:'10%',
+    },
+    chat:{
+      height:'80%'
+    },
     textstyle:{
         fontFamily:'Arista-Pro-Alternate-Bold-trial'
     }
@@ -61,25 +70,25 @@ export default function ChatDisplayView({gid, setGid}) {
 
     return(
     <View>
-        <ReturnButton onPress={() => {setGid(-1), setPage('listchat')}}></ReturnButton>
-        <View>
-      {hasPermissionError && <View style={styles.incorrectWarning}>
-        <Text style={styles.inputLabel}>
-          Access Forbidden
-        </Text>
-      </View>}
-      {isLoading && <ActivityIndicator size='large' animating={true} color='#FF0000' />}
-      <View style={{height:'80%'}}>
-      <FlatList
-        data={messages}
-        renderItem={renderItem}
-        inverted
-        keyExtractor={item => item.mid} 
-          />
+        <View style={styles.header}>
+          <ReturnButton onPress={() => {setGid(-1), setPage('listchat')}}></ReturnButton>
+          {hasPermissionError && 
+          <View style={styles.incorrectWarning}>
+            <Text style={styles.inputLabel}>
+            Access Forbidden
+           </Text>
+          </View>}
         </View>
+      { /*/ isLoading && <ActivityIndicator size='large' animating={true} color='#FF0000' /> /*/}
+        <View style={styles.chat}>
+          <FlatList
+           data={messages}
+            renderItem={renderItem}
+            inverted
+            keyExtractor={item => item.mid} />
+        </View>
+      <View style={styles.footer}>
       <MessageInput gid={gid} username={username}></MessageInput>
-      
-    </View>
-        
+      </View>
     </View>)
 }
