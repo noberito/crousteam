@@ -230,10 +230,7 @@ def get_group_gid(login1: str, login2: str):
     gid = db.is_people_already_in_the_same_group_with_login(lid1=lid1, lid2=lid2)
     if gid:
         return json({"gid": gid}), 200
-    gid = db.create_group_of_two()
-    db.add_people_into_group(gid=gid, lid=lid1)
-    db.add_people_into_group(gid=gid, lid=lid2)
-    return json({"gid": gid}), 201
+    return "", 404
 
 
 @app.post("/messages", authorize="ANY")
@@ -319,7 +316,9 @@ def update_info_profile(
 
 
 @app.post("/group-chat-2", authorize="ANY")
-def create_chat_between_2_users(lid1: int, lid2: int):
+def create_chat_between_2_users(login1: str, login2: str):
+    lid1 = db.get_lid_from_login(login=login1)
+    lid2 = db.get_lid_from_login(login=login2)
     exists2 = db.get_single_lid(lid=lid2)
     exists1 = db.get_single_lid(lid=lid1)
     if not exists1 or not exists2:
@@ -343,11 +342,11 @@ def delete_group_chat(gid: int):
 
 
 @app.get("/events", authorize="ANY")
-def get_event_with_preferences(preferences_list: StrList = None):
-    if preferences_list is None:
+def get_event_with_preferences(preferences_list: StrList | None = None):
+    if not preferences_list:
         res = db.get_all_events()
-        return json(res), 200
-    res = db.get_all_events_with_preferences(preferences_list=preferences_list)
+    else:
+        res = db.get_all_events_with_preferences(preferences_list=preferences_list)
     return json(res), 200
 
 

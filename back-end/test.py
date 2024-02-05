@@ -311,7 +311,7 @@ def test_messages(api):
         "GET", "/group-gid", 200, r"1", data={"login1": "calvin", "login2": "hobbes"}
     )
     api.check(
-        "GET", "/group-gid", 201, data={"login1": "calvin", "login2": "jean-paul"}
+        "GET", "/group-gid", 404, data={"login1": "calvin", "login2": "jean-paul"}
     )
     api.check(
         "POST",
@@ -392,10 +392,26 @@ def test_add_profile(api):
 
 def test_add_group_chat_of_2(api):
     res = api.check(
-        "POST", "/group-chat-2", 201, data={"lid1": 3, "lid2": 4}, login=ADMIN
+        "POST",
+        "/group-chat-2",
+        201,
+        data={"login1": "jean-paul", "login2": "pedro"},
+        login=ADMIN,
     )
-    api.check("POST", "/group-chat-2", 404, data={"lid1": 3, "lid2": 4000}, login=ADMIN)
-    api.check("POST", "/group-chat-2", 404, data={"lid1": 1, "lid2": 2}, login=ADMIN)
+    api.check(
+        "POST",
+        "/group-chat-2",
+        404,
+        data={"login1": "jean-paul", "login2": "brandon"},
+        login=ADMIN,
+    )
+    api.check(
+        "POST",
+        "/group-chat-2",
+        404,
+        data={"login1": "calvin", "login2": "hobbes"},
+        login=ADMIN,
+    )
     gid = res.json
     api.check("DELETE", "/group-chat-2", 204, data={"gid": gid}, login=ADMIN)
     api.check("DELETE", "/group-chat-2", 404, data={"gid": 30}, login=ADMIN)
