@@ -528,7 +528,7 @@ def test_preferences(api):
         "DELETE",
         "/preferences/calvin",
         404,
-        json={"list_pftype": ["non existent"]},
+        json={"list_pftype": ["non existant"]},
         login=ADMIN,
     )
 

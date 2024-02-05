@@ -189,7 +189,7 @@ NotInSamePrivateGroupChat AS (
     SELECT Auth.lid
     FROM Auth
     WHERE Auth.lid <> (SELECT lid FROM UserLid)
-      AND Auth.lid NOT IN (
+      AND Auth.lid IN (
           SELECT DISTINCT U1.lid
           FROM UsersInGroup U1
           JOIN UsersInGroup U2 ON U1.gid = U2.gid AND U1.lid <> U2.lid
@@ -219,8 +219,6 @@ WHERE pftype = :pftype;
 -- name: delete_preference_type!
 DELETE FROM Preferences
 WHERE pftype = :pftype;
-
-
 
 -- name: get_all_user_preferences!
 SELECT pftype

@@ -73,8 +73,6 @@ INSERT INTO UsersPref(lid, pfid) VALUES
 (12, 1), (12, 6),
 (13, 1);
 
--- INSERT INTO EventType(tname) VALUES ('autre'), ('match de football');
-
 INSERT INTO Event(ename, eloc, etime, edescr, gid) VALUES
 ('Big Crous', 'RU PR', '2024-02-06', 'Notre raison d être', 8),
 ('Real-PSG', 'Bernabeu', '2024-02-14', 'Match champions league', 9),

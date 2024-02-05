@@ -343,7 +343,7 @@ def delete_group_chat(gid: int):
 
 
 @app.get("/events", authorize="ANY")
-def get_event_with_preferences(preferences_list: StrList | None = None):
+def get_event_with_preferences(preferences_list: StrList = None):
     if not preferences_list:
         res = db.get_all_events()
     else:
@@ -505,3 +505,5 @@ def get_all_preferences():
 
 # SHOULD STAY AS LAST LOC
 log.debug("running…")
+
+# A FAIRE : CLEAN LE FICHIER, IMPLEMENT CREATE EVENT ON THE FRONT, AUTHORIZATION, PHOTOS, RAJOUTER DES TESTS POUR DES ERREURS POTENTIELS
