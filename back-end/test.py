@@ -513,6 +513,34 @@ def test_insert_preference_type(api):
     api.check("DELETE", "/preference-type/women", 404, login=ADMIN)
 
 
+# preferences test for update:
+def test_update_preferences(api):
+    api.check(
+        "PATCH", "/preferences/calvin", 400, json={"list_pftype": 123}, login=ADMIN
+    )
+    api.check(
+        "PATCH",
+        "/preferences/calvin",
+        400,
+        json={"list_pftype": ["ok", True]},
+        login=ADMIN,
+    )
+    api.check(
+        "PATCH",
+        "/preferences/calvin",
+        204,
+        json={"list_pftype": ["philantropique", "blagueur du dimanche"]},
+        login=ADMIN,
+    )
+    api.check(
+        "PATCH",
+        "/preferences/calvin",
+        204,
+        json={"list_pftype": ["cowboy"]},
+        login=ADMIN,
+    )
+
+
 def test_get_all_preferences_for_given_user(api):
     api.check("GET", "/preferences-for-given-user/calvin", 200, login=ADMIN)
     api.check("GET", "/preferences-for-given-user/brandon", 404, login=ADMIN)

@@ -161,6 +161,11 @@ DELETE FROM UsersPref
 WHERE lid = (SELECT lid FROM Auth WHERE login = :login)
 AND pfid = (SELECT pfid FROM Preferences WHERE pftype = :pftype);
 
+-- name: delete_preferences_for_user!
+DELETE FROM UsersPref
+WHERE lid = (SELECT lid FROM Auth WHERE login = :login);
+
+
 -- name: get_login_who_matches_with_preferences
 WITH LoginPreferences AS (
     SELECT pfid FROM UsersPref JOIN Auth USING(lid) WHERE login = :login
@@ -183,6 +188,8 @@ WHERE pftype = :pftype;
 -- name: delete_preference_type!
 DELETE FROM Preferences
 WHERE pftype = :pftype;
+
+
 
 -- name: get_all_user_preferences!
 SELECT pftype 

@@ -426,7 +426,7 @@ def post_preferences(list_pftype: StrList, login: str):
 
 
 @app.delete("/preferences/<login>", authorize="ANY")
-def delete_preferences(list_pftype: list, login: str):
+def delete_preferences(list_pftype: StrList, login: str):
     s = 0
     for pftype in list_pftype:
         already = db.preference_already(login=login, pftype=pftype)
@@ -435,6 +435,16 @@ def delete_preferences(list_pftype: list, login: str):
             s += 1
     if s == 0:
         return "Nothing to delete", 404
+    return "", 204
+
+
+@app.patch("/preferences/<login>", authorize="ANY")
+def update_info_profile_preferences(list_pftype: StrList, login: str):
+    s = 0
+    db.delete_preferences_for_user(login=login)
+    for pftype in list_pftype:
+        db.insert_preference(login=login, pftype=pftype)
+        s += 1
     return "", 204
 
 
