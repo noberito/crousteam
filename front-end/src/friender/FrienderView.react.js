@@ -5,7 +5,7 @@ import AllFriends from './AllFriends.react';
 
 import MyProfileView from '../myProfile/MyProfileView.react';
 import ListChatView from '../listChat/ListChatView.react';
-import EventView from '../event/EventView.react';
+import ListEventView from '../listEvent/ListEventView.react';
 import GeneralSettingsView from '../generalSettings/GeneralSettingsView.react';
 import ChangePreferencesView from '../changePreferences/changePreferencesView.react';
 import ProfileDisplayView from '../profileDisplay/profileDisplayView.react';
@@ -71,8 +71,8 @@ export default function FrienderView({logoutUser}) {
     if (page == 'listchat') {
       return (<ListChatView page={page} setPage={setPage}></ListChatView>)
     }
-    if (page == 'event') {
-      return (<EventView page={page} setPage={setPage}></EventView>)
+    if (page == 'listevent') {
+      return (<ListEventView page={page} setPage={setPage}></ListEventView>)
     }
     if (page == 'changepreferences') {
       return (<ChangePreferencesView page={page} setPage={setPage}></ChangePreferencesView>)

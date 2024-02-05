@@ -25,7 +25,7 @@ export default function BottomBar ({page, setPage}) {
         <BottomBarIcon title = "My Profile" style={{marginRight: '10px' }} imagePath = {require("../images/myprofile.png")} onPress = {() => {setPage('myprofile')}}/>
         <BottomBarIcon title = "Friender" style={{ marginRight: '10px' }} imagePath = {require('../images/myprofile.png')} onPress = {() => {setPage('friender')}}/>
         <BottomBarIcon title = "Chat" style={{ marginRight: '10px' }} imagePath = {require('../images/chat.png')} onPress = {() => {setPage('listchat')}}/>
-        <BottomBarIcon title = "Event" style={{ marginRight: '10px' }} imagePath = {require('../images/event.png')} onPress = {() => {setPage('event')}}/>
+        <BottomBarIcon title = "Event" style={{ marginRight: '10px' }} imagePath = {require('../images/event.png')} onPress = {() => {setPage('listevent')}}/>
       </View>
       </View>)
   };
