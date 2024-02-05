@@ -443,16 +443,28 @@ def test_add_event(api):
         },
         login=ADMIN,
     )
+    api.check(
+        "POST",
+        "/event",
+        201,
+        data={
+            "login": "hobbes",
+            "ename": "PSG-City au Parc",
+            "eloc": "Paris",
+            "etime": "2024-04-25",
+        },
+        login=ADMIN,
+    )
     eid = res.json
     api.check("GET", "/events", 200, r"PSG-MU au Parc", login=ADMIN)
-    # api.check(
-    #     "GET",
-    #     "/events",
-    #     200,
-    #     r"Soiree collante",
-    #     json={"preferences_list": ["cowboy", "amateur de cinema"]},
-    #     login=ADMIN,
-    # )
+    api.check(
+        "GET",
+        "/events",
+        200,
+        r"Soiree collante",
+        json={"preferences_list": ["cowboy", "amateur de cinema"]},
+        login=ADMIN,
+    )
     api.check("GET", "/event-gid", 200, r"8", data={"eid": 1}, login=ADMIN)
     api.check("POST", "/event/ma", 201, data={"eid": eid}, login=ADMIN)
     api.check("POST", "/event/averell", 201, data={"eid": eid}, login=ADMIN)
@@ -495,6 +507,13 @@ def test_preferences(api):
         "POST",
         "/preferences/calvin",
         201,
+        json={"list_pftype": ["cowboy"]},
+        login=ADMIN,
+    )
+    api.check(
+        "POST",
+        "/preferences/calvin",
+        404,
         json={"list_pftype": ["cowboy"]},
         login=ADMIN,
     )

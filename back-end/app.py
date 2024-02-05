@@ -25,6 +25,7 @@ import sys
 import datetime
 import logging
 from importlib.metadata import version as pkg_version
+from json import dumps as json_dumps
 
 # initial logging configuration
 logging.basicConfig(level=logging.INFO)
@@ -346,7 +347,9 @@ def get_event_with_preferences(preferences_list: StrList | None = None):
     if not preferences_list:
         res = db.get_all_events()
     else:
-        res = db.get_all_events_with_preferences(preferences_list=preferences_list)
+        res = db.get_all_events_with_preferences(
+            preferences_list=json_dumps(preferences_list)
+        )
     return json(res), 200
 
 

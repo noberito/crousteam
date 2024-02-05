@@ -250,7 +250,6 @@ JOIN EventPreferences USING(eid)
 JOIN Preferences USING(pfid)
 WHERE ('"'||pftype||'"')::JSONB <@ :preferences_list::JSONB AND etime >= CURRENT_DATE
 ORDER BY etime;
--- WHERE pftype IN (:preferences_list)::TEXT[] AND etime >= CURRENT_DATE
 
 -- name: get_gid_from_eid^
 SELECT gid FROM Event WHERE eid = :eid;
