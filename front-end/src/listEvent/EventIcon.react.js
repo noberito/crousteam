@@ -6,7 +6,7 @@ import AppContext from '../common/appcontext';
 const styles = StyleSheet.create({
     mainContainer:{
         width:'50%',
-        height:100,
+        height:'auto',
         backgroundColor: colors.background,
         borderRadius: 10,
         padding: 20,
@@ -31,21 +31,21 @@ const styles = StyleSheet.create({
         fontSize:10,
         color:colors.secondaryText
     },
-    date:{
+    loc:{
         fontSize:'Arista-Pro-Alternate-Bold-trial',
-        color:'black'
+        color:'black',
     }
 })
 
-export default function EventIcon({item, log, setLog}){
+export default function EventIcon({item, setEid}){
 
     const {page, setPage} = useContext(AppContext)
 
     return(
-        <View style={styles.mainContainer}>
-        <TouchableOpacity onPress={() => {setLog(item.title); setPage("eventdisplay")}}>
+        <TouchableOpacity style={styles.mainContainer} onPress={() => {setEid(item.eid); setPage("eventdisplay")}}>
+            <Image source={require('../loggedOut/ic_launcher_round.png')}></Image>
             <Text style={styles.eventtitle}> {item.title} </Text>
+            <Text style={styles.description}> {item.description} </Text>
         </TouchableOpacity>
-        </View>
     )
 };

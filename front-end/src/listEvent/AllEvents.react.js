@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 
 
 
-export default function AllEvents({log, setLog}){
+export default function AllEvents({eid, setEid, log, setLog}){
 
     const {page, setPage, authToken} = useContext(AppContext)  
 
@@ -53,12 +53,12 @@ export default function AllEvents({log, setLog}){
   }, [authToken, getAllEvents]);
     
     
-    const renderEventItem = ({item}) => {return(<EventIcon item={item} log={log} setLog={setLog}></EventIcon>)}
+    const renderEventItem = ({item}) => {return(<EventIcon item={item} setEid={setEid}></EventIcon>)}
 
     return(
             <FlatList
                 data={events}
-                keyExtractor={(item) => item.id}
+                keyExtractor={(item) => item.eid}
                 renderItem={renderEventItem}
                 numColumns={2}
             />

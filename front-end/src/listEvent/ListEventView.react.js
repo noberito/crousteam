@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 
 
 
-export default function ListEventView({ log, setLog, gid, setGid}) {
+export default function ListEventView({ eid, setEid, gid, setGid}) {
     const {page, setPage} = useContext(AppContext)
 
     return (
@@ -35,7 +35,7 @@ export default function ListEventView({ log, setLog, gid, setGid}) {
                 <Image source={require('../loggedOut/ic_launcher_round.png')}></Image>
             </View>
             <View style={{height:'78%'}}>
-                <AllEvents log={log} setLog={setLog}/>
+                <AllEvents eid={eid} setEid={setEid}/>
             </View>
             <View style={styles.footer}>
                 <BottomBar page={page} setPage={setPage} />
