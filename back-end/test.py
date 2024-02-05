@@ -430,7 +430,7 @@ def test_add_event(api):
         login=ADMIN,
     )
     eid = res.json
-    api.check("GET", "/event", 200, r"PSG-MU au Parc", login=ADMIN)
+    api.check("GET", "/events", 200, r"PSG-MU au Parc", login=ADMIN)
     api.check("POST", "/event/ma", 201, data={"eid": eid}, login=ADMIN)
     api.check("POST", "/event/averell", 201, data={"eid": eid}, login=ADMIN)
     api.check("POST", "/event/jack", 201, data={"eid": eid}, login=ADMIN)

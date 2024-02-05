@@ -342,15 +342,17 @@ def delete_group_chat(gid: int):
     return "", 204
 
 
-@app.get("/event", authorize="ANY")
+@app.get("/events", authorize="ANY")
 def get_event():
     res = db.get_all_events()
     return json(res), 200
 
 
-@app.get("/event/login/<path:preferences>", authorize="ANY")
-def get_event_with_preferences(login: str, preferences: StrList):
-    preferences_list = preferences.split("/")
+# @app.get("/events/login/<path:preferences>", authorize="ANY")
+# def get_event_with_preferences(login: str, preferences: list):
+#     preferences_list = preferences.split("/")
+#     res = db.get_all_events_with_preferences(login=login, preferences=preferences_list)
+#     return json(res), 200
 
 
 @app.post("/event", authorize="ANY")
