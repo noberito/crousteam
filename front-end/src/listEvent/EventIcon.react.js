@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     },
     description:{
         fontFamily:'Arista-Pro-Alternate-Bold-trial',
-        fontSize:10,
+        fontSize:20,
         color:colors.secondaryText
     },
     loc:{

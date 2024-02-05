@@ -1,5 +1,5 @@
 import React, { useContext, useState, useCallback, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import EventIcon from './EventIcon.react';
 import AppContext from '../common/appcontext';
 import axios from 'axios';
@@ -56,10 +56,13 @@ export default function AllEvents({eid, setEid, log, setLog}){
     const renderEventItem = ({item}) => {return(<EventIcon item={item} setEid={setEid}></EventIcon>)}
 
     return(
+        <View>
+        {isLoading && <ActivityIndicator size='large' animating={true} color='#FF0000' />}
             <FlatList
                 data={events}
                 keyExtractor={(item) => item.eid}
                 renderItem={renderEventItem}
                 numColumns={2}
             />
+        </View>
 )};

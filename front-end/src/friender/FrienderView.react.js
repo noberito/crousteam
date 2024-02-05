@@ -71,7 +71,7 @@ export default function FrienderView({logoutUser}) {
       return (<MyProfileView logoutUser = {logoutUser}></MyProfileView>)
     } 
     if (page == 'listchat') {
-      return (<ListChatView ></ListChatView>)
+      return (<ListChatView gid={gid} setGid={setGid} ></ListChatView>)
     }
     if (page == 'changepreferences') {
       return (<ChangePreferencesView></ChangePreferencesView>)
