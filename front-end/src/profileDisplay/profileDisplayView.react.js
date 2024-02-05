@@ -33,13 +33,12 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog,}) {
             setPermissionError(true);
           }
         }).catch(err => {
-          console.error(`Something went wrong ${err.message}`);
+          console.error(`Something went wrong when getting the gid ${err.message}`);
           setIsLoading(false);
         });
-      }, [authToken]);
+      }, [postGid]);
 
       
-
     const postGid = useCallback(() => {
         setIsPosting(true);
         axios({
@@ -55,14 +54,19 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog,}) {
             setIsPosting(false);
             if (response.status === 200 || response.status === 201) {
         // Message posté avec succès
-                console.log('Group posted successfully');
+              console.log(response.data)
+              setGid(response.data)
+              console.log('Group posted successfully');
         // Vous pouvez ici actualiser la liste des messages ou gérer la réponse comme souhaité
-            } else {
+            } 
+            
+            else {
         // Gérer d'autres codes de statut selon votre API
                 setPostError(true);
             }
-        }).catch(err => {
-            console.error(`Something went wrong while posting the message: ${err.message}`);
+
+        }).catch(err =>{
+            console.error(`Something went wrong while posting the group: ${err.message}`);
             setIsPosting(false);
              setPostError(true);
             });
@@ -84,7 +88,7 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog,}) {
             setInfo(result.data)
             setLid(info['naissance'])
         }).catch(err => {
-            console.error(`something went wrong: ${err.message}`)
+            console.error(`something went wrong here: ${err.message}`)
             alert(`something went wrong: ${err.message}`)
             setIsLoading(false)
         })
@@ -92,19 +96,21 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog,}) {
 
     useEffect(() => {
         loadInfo();
-    }, []);
+        getGid();
+    }, [authToken]);
 
-    const onPressChat = () => {
-      getGid();
-      console.log(gid)
-      if (gid=="") {
-        postGid(username, log),
-        console.log(gid),
-        getGid()
-      };
-      setPage("chatdisplay");
+    const BoutonChat = () => {
+      if (gid==""){
+        return(
+        <CrousteamButton title = "Ajout ami" onPress={() => {postGid()}}/>
+        )
+      }
+      else {
+        return(
+        <CrousteamButton title="Chat" onPress={() => {setPage("chatdisplay")}}/>
+        )
+      }
     }
-
 
     return (
         <View style={{ flex: 1 }}>
@@ -112,7 +118,9 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog,}) {
             <Text>{info[2]}</Text>
             <Text>{info[3]}</Text>
             <Text>{info[4]}</Text>
-            <CrousteamButton title="Chat" onPress={onPressChat}/>
+            
+            <BoutonChat/>
+            
             <Button title="Retour" onPress={() => { setLog('null'); setPage("friender") }}></Button>
         </View>
     )

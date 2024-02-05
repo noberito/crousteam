@@ -229,9 +229,11 @@ def get_group_gid(login1: str, login2: str):
     lid1 = db.get_lid_from_login(login=login1)
     lid2 = db.get_lid_from_login(login=login2)
     gid = db.is_people_already_in_the_same_group_with_login(lid1=lid1, lid2=lid2)
-    if gid:
+    if gid:  
         return json({"gid": gid}), 200
-    return "", 404
+    else:
+        return json({"gid" : ""}), 200
+    
 
 
 @app.post("/messages", authorize="ANY")

@@ -44,21 +44,22 @@ export default function ChatDisplayView({gid, setGid}) {
         const parsedData2 = response.data.map(message => ({
           mid: message[0], content: message[1], sender: message[3], time:message[2]
         }));
-
+        console.log(gid)
         setMessages(parsedData2);
         setPermissionError(false);
       } else if(response.status == 403) {
         setPermissionError(true);
       }
     }).catch(err => {
-      console.error(`Something 1 went wrong ${err.message}`);
+      console.error(`Something went wrong when getting all messages ${err.message}`);
       setIsLoading(false);
     });
   }, [gid]);
 
   useEffect(() =>{
     if (gid != -1){
-      console.log('je suis passé par ici')
+      console.log('Je demande tous les messages')
+      console.log(gid)
       getAllMessagesRequest()
       const intervalId = setInterval(getAllMessagesRequest, 5000); // Then call it every 5 seconds
 
