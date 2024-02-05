@@ -11,6 +11,7 @@ import ChangePreferencesView from '../changePreferences/changePreferencesView.re
 import ProfileDisplayView from '../profileDisplay/profileDisplayView.react';
 import AppContext from '../common/appcontext';
 import ChatDisplayView from '../chatDisplay/ChatDisplayView.react';
+import EventDisplayView from '../eventDisplay/EventDisplayView.react';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -61,7 +62,7 @@ export default function FrienderView({logoutUser}) {
           <AllFriends username={username}  setLog={setLog} authToken={authToken}/>
         </View>
         <View style = {styles.footer}>
-          <BottomBar page={page} setPage={setPage}/>
+          <BottomBar/>
         </View>
       </View>)
     }
@@ -69,22 +70,25 @@ export default function FrienderView({logoutUser}) {
       return (<MyProfileView logoutUser = {logoutUser}></MyProfileView>)
     } 
     if (page == 'listchat') {
-      return (<ListChatView page={page} setPage={setPage}></ListChatView>)
-    }
-    if (page == 'listevent') {
-      return (<ListEventView page={page} setPage={setPage}></ListEventView>)
+      return (<ListChatView ></ListChatView>)
     }
     if (page == 'changepreferences') {
-      return (<ChangePreferencesView page={page} setPage={setPage}></ChangePreferencesView>)
+      return (<ChangePreferencesView></ChangePreferencesView>)
     }
     if (page == 'generalsettings') {
-      return (<GeneralSettingsView page={page} setPage={setPage}></GeneralSettingsView>)
+      return (<GeneralSettingsView></GeneralSettingsView>)
     }
     if (page == 'profiledisplay') {
-      return (<ProfileDisplayView page={page} setPage={setPage} gid={gid} setGid={setGid} log={log} setLog={setLog}></ProfileDisplayView>)
+      return (<ProfileDisplayView gid={gid} setGid={setGid} log={log} setLog={setLog}></ProfileDisplayView>)
     }
     if (page == 'chatdisplay'){
       return (<ChatDisplayView gid={gid} setGid={setGid} log={log} setLog={setLog}></ChatDisplayView>)
+    }
+    if (page == 'listevent') {
+      return (<ListEventView gid={gid} setGid={setGid} log={log} setLog={setLog}></ListEventView>)
+    }
+    if (page == 'eventdisplay'){
+      return(<EventDisplayView gid={gid} setGid={setGid} log={log} setLog={setLog}></EventDisplayView>)
     }
 
 }

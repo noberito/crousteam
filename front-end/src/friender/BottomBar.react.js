@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { Button, View, StyleSheet, Image } from 'react-native';
 import BottomBarIcon from '../common/BottomBarIcon';
 import Line from '../common/Line.react';
+import AppContext from '../common/appcontext';
 
 const styles = StyleSheet.create({
   bottomBar: {
@@ -17,7 +18,9 @@ const styles = StyleSheet.create({
 
 
 
-export default function BottomBar ({page, setPage}) {
+export default function BottomBar ({}) {
+
+    const {page, setPage} = useContext(AppContext)
     return (
       <View style={{bottom:"40%"}}>
         <Line/>

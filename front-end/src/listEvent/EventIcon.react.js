@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useCallback, useContext } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import colors from '../common/Colors.react';
+import AppContext from '../common/appcontext';
 
 const styles = StyleSheet.create({
     mainContainer:{
         width:'50%',
-        heigt:'8%',
+        height:100,
         backgroundColor: colors.background,
         borderRadius: 10,
         padding: 20,
@@ -36,10 +37,15 @@ const styles = StyleSheet.create({
     }
 })
 
-export default function EventIcon({item}){
+export default function EventIcon({item, log, setLog}){
+
+    const {page, setPage} = useContext(AppContext)
+
     return(
-        <TouchableOpacity>
+        <View style={styles.mainContainer}>
+        <TouchableOpacity onPress={() => {setLog(item.title); setPage("eventdisplay")}}>
             <Text style={styles.eventtitle}> {item.title} </Text>
         </TouchableOpacity>
+        </View>
     )
 };
