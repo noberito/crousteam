@@ -78,17 +78,25 @@ CREATE TABLE IF NOT EXISTS Event(
   eloc TEXT NOT NULL,
   etime DATE NOT NULL,
   edescr TEXT DEFAULT NULL,
-  tid INTEGER NOT NULL,
   gid INTEGER NOT NULL,
   UNIQUE (ename, eloc, etime),
   UNIQUE (gid),
   CONSTRAINT fk_group
     FOREIGN KEY (gid)
     REFERENCES AppGroup (gid)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS EventPreferences(
+  eid INTEGER NOT NULL,
+  pfid INTEGER NOT NULL,
+  CONSTRAINT fk_event
+    FOREIGN KEY (eid)
+    REFERENCES Event (eid)
     ON DELETE CASCADE,
-  CONSTRAINT fk_event_type
-    FOREIGN KEY (tid)
-    REFERENCES EventType (tid)
+  CONSTRAINT fk_preferences
+    FOREIGN KEY (pfid)
+    REFERENCES Preferences (pfid)
     ON DELETE CASCADE
 );
 

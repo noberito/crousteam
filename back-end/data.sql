@@ -73,9 +73,14 @@ INSERT INTO UsersPref(lid, pfid) VALUES
 (12, 1), (12, 6),
 (13, 1);
 
-INSERT INTO EventType(tname) VALUES ('autre'), ('match de football');
+-- INSERT INTO EventType(tname) VALUES ('autre'), ('match de football');
 
-INSERT INTO Event(ename, eloc, etime, edescr, tid, gid) VALUES
-('Big Crous', 'RU PR', '2024-02-06', 'Notre raison d être', 1, 8),
-('Real-PSG', 'Bernabeu', '2024-02-14', 'Match champions league', 2, 9),
-('Soiree en FAO', 'Meuh', '2024-02-26', 'Soiree collante', 1, 10);
+INSERT INTO Event(ename, eloc, etime, edescr, gid) VALUES
+('Big Crous', 'RU PR', '2024-02-06', 'Notre raison d être', 8),
+('Real-PSG', 'Bernabeu', '2024-02-14', 'Match champions league', 9),
+('Soiree en FAO', 'Meuh', '2024-02-26', 'Soiree collante', 10);
+
+INSERT INTO EventPreferences(eid, pfid) VALUES
+(1, 1), (1, 6),
+(2, 3),
+(3, 7);

@@ -147,7 +147,7 @@ WHERE login = :login;
 SELECT TRUE FROM UsersPref AS u
 JOIN Auth AS a ON u.lid = a.lid
 JOIN Preferences AS p ON u.pfid = p.pfid
-WHERE (login = :login AND p.pftype = :pftype);
+WHERE (login = :login AND pftype = :pftype);
 
 -- name: insert_preference!
 INSERT INTO UsersPref (lid, pfid) 
@@ -179,7 +179,7 @@ ORDER BY 3 DESC;
 
 -- name: insert_preference_type!
 INSERT INTO Preferences(pftype)
-VALUES (:pftype);
+VALUES(:pftype);
 
 -- name: get_single_preference_type$
 SELECT TRUE FROM Preferences
@@ -192,15 +192,14 @@ WHERE pftype = :pftype;
 
 
 -- name: get_all_user_preferences!
-SELECT pftype 
+SELECT pftype
 FROM Preferences
 JOIN UsersPref USING(pfid)
 JOIN Auth USING(lid)
 WHERE login = :login;
 
-
 -- name: get_all_preferences
-SELECT pftype 
+SELECT pftype
 FROM Preferences;
 
 -- name: get_single_event^
@@ -214,14 +213,24 @@ SELECT * FROM Event;
 SELECT TRUE FROM Event
 WHERE eid = :eid;
 
+-- name: get_all_events_with_preferences
+SELECT ename, eloc, etime, edescr, gid FROM Event
+JOIN EventPreferences USING(eid)
+JOIN Preferences USING(pfid)
+WHERE ('"'||pftype||'"')::JSONB <@ :preferences_list::JSONB AND etime >= CURRENT_DATE
+ORDER BY etime;
+
+-- name: get_gid_from_eid^
+SELECT gid FROM Event WHERE eid = :eid;
+
 -- name: create_group_chat_link_to_the_event$
 INSERT INTO AppGroup(gname, isGroupChat)
 VALUES (:ename, TRUE)
 RETURNING gid;
 
 -- name: add_event$
-INSERT INTO Event (ename, eloc, etime, tid, gid)
-VALUES (:ename, :eloc, :etime, :tid, :gid)
+INSERT INTO Event (ename, eloc, etime, gid)
+VALUES (:ename, :eloc, :etime, :gid)
 RETURNING eid;
 
 -- name: delete_event!

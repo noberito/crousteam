@@ -343,25 +343,27 @@ def delete_group_chat(gid: int):
 
 
 @app.get("/events", authorize="ANY")
-def get_event():
-    res = db.get_all_events()
+def get_event_with_preferences(preferences_list: StrList = None):
+    if preferences_list is None:
+        res = db.get_all_events()
+        return json(res), 200
+    res = db.get_all_events_with_preferences(preferences_list=preferences_list)
     return json(res), 200
 
 
-# @app.get("/events/login/<path:preferences>", authorize="ANY")
-# def get_event_with_preferences(login: str, preferences: list):
-#     preferences_list = preferences.split("/")
-#     res = db.get_all_events_with_preferences(login=login, preferences=preferences_list)
-#     return json(res), 200
+@app.get("/event-gid", authorize="ANY")
+def get_gid_from_eid(eid: int):
+    gid = db.get_gid_from_eid(eid=eid)
+    return json(gid), 200
 
 
 @app.post("/event", authorize="ANY")
-def create_event(login: str, ename: str, eloc: str, etime: str, tid: int):
+def create_event(login: str, ename: str, eloc: str, etime: str):
     exist_already = db.get_single_event(ename=ename, eloc=eloc, etime=etime)
     if exist_already:
         return "the same event already exist", 404
     gid = db.create_group_chat_link_to_the_event(ename=ename)
-    eid = db.add_event(ename=ename, eloc=eloc, etime=etime, tid=tid, gid=int(gid))
+    eid = db.add_event(ename=ename, eloc=eloc, etime=etime, gid=int(gid))
     lid = db.get_lid_from_login(login=login)
     if lid != 1:
         db.add_people_into_group(gid=gid, lid=1)
