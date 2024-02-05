@@ -177,6 +177,37 @@ WHERE pfid IN (SELECT pfid FROM LoginPreferences) AND login <> :login
 GROUP BY login, bio
 ORDER BY 3 DESC;
 
+
+-- name: get_login_who_matches_with_preferences_no_group_chat
+WITH LoginPreferences AS (
+    SELECT pfid FROM UsersPref JOIN Auth USING(lid) WHERE login = :login
+),
+UserLid AS (
+    SELECT lid FROM Auth WHERE login = :login
+),
+NotInSamePrivateGroupChat AS (
+    SELECT Auth.lid
+    FROM Auth
+    WHERE Auth.lid <> (SELECT lid FROM UserLid)
+      AND Auth.lid NOT IN (
+          SELECT DISTINCT U1.lid
+          FROM UsersInGroup U1
+          JOIN UsersInGroup U2 ON U1.gid = U2.gid AND U1.lid <> U2.lid
+          JOIN AppGroup G ON U1.gid = G.gid
+          WHERE G.isGroupChat = false AND U2.lid = (SELECT lid FROM UserLid)
+      )
+)
+SELECT DISTINCT Auth.login, Profile.bio, COUNT(*) 
+FROM Auth 
+JOIN UsersPref USING(lid)
+JOIN Profile USING(lid)
+WHERE pfid IN (SELECT pfid FROM LoginPreferences) 
+  AND login <> :login
+  AND Auth.lid NOT IN (SELECT lid FROM NotInSamePrivateGroupChat)
+GROUP BY Auth.login, Profile.bio
+ORDER BY 3 DESC;
+
+
 -- name: insert_preference_type!
 INSERT INTO Preferences(pftype)
 VALUES(:pftype);
