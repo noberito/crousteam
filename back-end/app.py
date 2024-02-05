@@ -56,6 +56,16 @@ import auth
 auth.init_app(app)
 
 
+class StrList(list):
+    def __init__(self, li):
+        if not isinstance(li, list):
+            raise ValueError("expecting a list...")
+        for i in li:
+            if not isinstance(i, str):
+                raise ValueError("expecting a list of strings")
+        super().__init__(li)
+
+
 #
 # General information about running app.
 #
@@ -332,6 +342,17 @@ def delete_group_chat(gid: int):
     return "", 204
 
 
+@app.get("/event", authorize="ANY")
+def get_event():
+    res = db.get_all_events()
+    return json(res), 200
+
+
+@app.get("/event/login/<path:preferences>", authorize="ANY")
+def get_event_with_preferences(login: str, preferences: StrList):
+    preferences_list = preferences.split("/")
+
+
 @app.post("/event", authorize="ANY")
 def create_event(login: str, ename: str, eloc: str, etime: str, tid: int):
     exist_already = db.get_single_event(ename=ename, eloc=eloc, etime=etime)
@@ -386,16 +407,6 @@ def get_all_info(login: str):
     if not res:
         return "login not found", 404
     return json(res), 200
-
-
-class StrList(list):
-    def __init__(self, li):
-        if not isinstance(li, list):
-            raise ValueError("expecting a list...")
-        for i in li:
-            if not isinstance(i, str):
-                raise ValueError("expecting a list of strings")
-        super().__init__(li)
 
 
 @app.post("/preferences/<login>", authorize="ANY")

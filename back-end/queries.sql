@@ -200,6 +200,9 @@ FROM Preferences;
 SELECT TRUE FROM Event
 WHERE ename = :ename AND eloc = :eloc AND etime = :etime;
 
+-- name: get_all_events
+SELECT * FROM Event;
+
 -- name: get_single_event_with_eid^
 SELECT TRUE FROM Event
 WHERE eid = :eid;
