@@ -56,7 +56,7 @@ WITH Last_message_each_conversations AS (
     LEFT JOIN Messages AS m ON ag.gid=m.gid
     WHERE m.gid IS NULL
 )
-SELECT CASE WHEN COALESCE(gname, '') = '' THEN a2.login ELSE gname END AS name_chat, max_mtime FROM AppGroup AS ag
+SELECT CASE WHEN COALESCE(gname, '') = '' THEN a2.login ELSE gname END AS name_chat, max_mtime, ag.gid FROM AppGroup AS ag
 JOIN UsersInGroup AS uig ON uig.gid = ag.gid
 JOIN Last_message_each_conversations AS lmec ON lmec.gid = ag.gid
 JOIN Auth AS a ON uig.lid = a.lid
@@ -64,7 +64,7 @@ JOIN UsersInGroup AS uig2 ON uig.gid=uig2.gid AND uig.lid != uig2.lid
 LEFT JOIN Auth AS a2 ON uig2.lid=a2.lid AND a2.login != :login
 WHERE a.login = :login
 UNION
-SELECT CASE WHEN COALESCE(gwm.gname, '') = '' THEN a2.login ELSE gname END AS name_chat, creationDate FROM Group_without_messages AS gwm
+SELECT CASE WHEN COALESCE(gwm.gname, '') = '' THEN a2.login ELSE gname END AS name_chat, creationDate, gwm.gid FROM Group_without_messages AS gwm
 JOIN UsersInGroup AS uig ON gwm.gid=uig.gid
 JOIN Auth AS a ON uig.lid=a.lid
 JOIN UsersInGroup AS uig2 ON uig.gid=uig2.gid AND uig.lid != uig2.lid
@@ -219,6 +219,7 @@ JOIN EventPreferences USING(eid)
 JOIN Preferences USING(pfid)
 WHERE ('"'||pftype||'"')::JSONB <@ :preferences_list::JSONB AND etime >= CURRENT_DATE
 ORDER BY etime;
+-- WHERE pftype IN (:preferences_list)::TEXT[] AND etime >= CURRENT_DATE
 
 -- name: get_gid_from_eid^
 SELECT gid FROM Event WHERE eid = :eid;

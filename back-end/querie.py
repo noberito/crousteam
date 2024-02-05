@@ -12,7 +12,7 @@ def datetime_converter(o):
 db = anodb.DB("postgres", "dbname=crousteam", "queries.sql")
 login = "calvin"
 list_pftype = ["amateur de cinema", "philantropique", "cowboy"]
-res_login = db.get_all_events_with_preferences(preferences_list=json.dumps(list_pftype))
+res_login = db.get_all_conversations(login="jean-paul")
 # res_login = db.test()
 if res_login:
     res_login = json.dumps(list(res_login), default=datetime_converter)

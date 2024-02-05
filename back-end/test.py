@@ -437,6 +437,7 @@ def test_add_event(api):
     #     json={"preferences_list": ["cowboy", "amateur de cinema"]},
     #     login=ADMIN,
     # )
+    api.check("GET", "/event-gid", 200, r"8", data={"eid": 1}, login=ADMIN)
     api.check("POST", "/event/ma", 201, data={"eid": eid}, login=ADMIN)
     api.check("POST", "/event/averell", 201, data={"eid": eid}, login=ADMIN)
     api.check("POST", "/event/jack", 201, data={"eid": eid}, login=ADMIN)

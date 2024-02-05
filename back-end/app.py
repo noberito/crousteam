@@ -422,8 +422,8 @@ def post_preferences(list_pftype: StrList, login: str):
         if not already:
             db.insert_preference(login=login, pftype=pftype)
             s += 1
-    # if s == 0:
-    #     return "Nothing to insert", 404
+    if s == 0:
+        return "Nothing to insert", 404
     return "", 201
 
 
