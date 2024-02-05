@@ -95,7 +95,7 @@ export default function ListChatView({gid, setGid}) {
     }, [authToken, getAllChats]);
 
     const renderChatItem = ({ item }) => (
-        <TouchableOpacity onPress={() => {setGid(gid), setPage('chatdisplay')}}>
+        <TouchableOpacity onPress={() => {setGid(item.gid), setPage('chatdisplay')}}>
 
             <View style={styles.chatItem}>
                 <Text style={styles.contactName}>{item.name}</Text>
