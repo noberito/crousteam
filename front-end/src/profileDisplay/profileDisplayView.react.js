@@ -12,6 +12,8 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog,}) {
     const [info, setInfo] = useState('');
     const [lid, setLid] = useState();
     const [hasPermissionError, setPermissionError] = useState(false);
+    const [isPosting, setIsPosting] = useState(false);
+    const [postError, setPostError] = useState(false);
 
     const getGid = useCallback(() => {
         setIsLoading(true)
@@ -35,6 +37,36 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog,}) {
           setIsLoading(false);
         });
       }, [authToken]);
+
+      
+
+    const postGid = useCallback(() => {
+        setIsPosting(true);
+        axios({
+            baseURL: baseUrl, // Assurez-vous que baseUrl est défini quelque part dans votre code
+            url: '/group-chat-2', // Modifiez ceci par l'URL appropriée pour poster un message
+            method: 'POST',
+            headers: { Authorization: 'Bearer ' + authToken },
+            data: {
+                login1: username, // Supposé que 'username' est l'utilisateur actuel, sinon ajustez selon le contexte
+                login2: log, // Ajustez le nom de cette propriété selon votre API
+            }
+        }).then(response => {
+            setIsPosting(false);
+            if (response.status === 200 || response.status === 201) {
+        // Message posté avec succès
+                console.log('Group posted successfully');
+        // Vous pouvez ici actualiser la liste des messages ou gérer la réponse comme souhaité
+            } else {
+        // Gérer d'autres codes de statut selon votre API
+                setPostError(true);
+            }
+        }).catch(err => {
+            console.error(`Something went wrong while posting the message: ${err.message}`);
+            setIsPosting(false);
+             setPostError(true);
+            });
+        }, ); // Ajoutez d'autres dépendances si nécessaire
 
     const loadInfo = () => {
         setIsLoading(true);
@@ -61,13 +93,26 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog,}) {
     useEffect(() => {
         loadInfo();
     }, []);
+
+    const onPressChat = () => {
+      getGid();
+      console.log(gid)
+      if (gid=="") {
+        postGid(username, log),
+        console.log(gid),
+        getGid()
+      };
+      setPage("chatdisplay");
+    }
+
+
     return (
         <View style={{ flex: 1 }}>
             <Text>{info[1]}</Text>
             <Text>{info[2]}</Text>
             <Text>{info[3]}</Text>
             <Text>{info[4]}</Text>
-            <CrousteamButton title="Chat" onPress={() => {getGid(), setPage("chatdisplay")}}/>
+            <CrousteamButton title="Chat" onPress={onPressChat}/>
             <Button title="Retour" onPress={() => { setLog('null'); setPage("friender") }}></Button>
         </View>
     )
