@@ -18,7 +18,7 @@
 # - APP_LOGGING_LEVEL: level of logging
 # - APP_TEST: enable /users routes for testing
 #
-
+import uuid
 import os
 import re
 import sys
@@ -567,6 +567,39 @@ def get_event_info(gid: int):
 def get_event_info_creator(login: fsa.CurrentUser):
     res = db.get_event_user_create(login=login)
     return json(res), 200
+
+
+def generate_filename(filename):
+    _, extension = os.path.splitext(filename)
+    unique_filename = str(uuid.uuid4()) + extension
+    return unique_filename
+
+
+UPLOAD_FOLDER = "uploads"
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+
+# attention, cette route devrait être protégée !
+@app.post("/upload", authorize="ANY")
+def post_upload(hello: fsa.FileStorage):
+    # usually: hello.save(some-clever-path)
+    unique_filename = generate_filename(hello.filename)
+    # Save the file to the upload folder
+    hello.save(unique_filename)
+    hello_data = hello.stream.read()
+    return f"received '{hello.filename}' ({hello.content_type}): {hello_data}", 201
+
+
+@app.get("/get_image_path/<filename>")
+def get_image_path(filename):
+    # Get the path of the image file
+    file_path = generate_filename(filename)
+    # Check if the file exists
+    if os.path.exists(file_path):
+        # Return the file path
+        return file_path, 200
+    else:
+        return "File not found", 404
 
 
 # SHOULD STAY AS LAST LOC
