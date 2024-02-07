@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { View, Text, Button, StyleSheet, Image} from "react-native"
+import { View, Text, Button, StyleSheet, Image, FlatList} from "react-native"
 import { baseUrl } from '../common/const';
 import axios from 'axios';
 import CrousteamButton from '../common/CrousteamButton.react';
 import AppContext from '../common/appcontext';
 import colors from '../common/Colors.react';
+import Line from '../common/Line.react';
+import ReturnButton from '../common/ReturnButton.react';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -18,19 +20,6 @@ const styles = StyleSheet.create({
       flexGrow:0.4,
       justifyContent: 'space-between',
       alignItems: 'center', // Center the content horizontally
-  },
-  buttonContainer: {
-      // This will also take the necessary space but allow other elements to grow
-      // Removed the flex: 2 for the same reason as above
-      marginTop: 16, // Add some margin at the top for spacing
-      justifyContent:'center',
-      alignItems:'center',
-  },
-  logoutContainer: {
-      justifyContent:'center',
-      alignItems:'center',
-      // This ensures the logout button sticks to the bottom
-      // Removed justifyContent: 'center' to align the logout button at the top of its container
   },
   footer: {
       // Ensure the footer is always at the bottom
@@ -50,24 +39,73 @@ const styles = StyleSheet.create({
       fontFamily:'Arista-Pro-Alternate-Bold-trial',
       fontSize:40,
       color:colors.primaryText
-
   },
   pseudo:{
       fontFamily:'Arista-Pro-Alternate-Bold-trial',
       fontSize:20,
       color:colors.secondaryText
+  },
+  buttonContainer:{
+    justifyContent:'center',
+    alignItems:'center'
+  },
+  biographyContainer:{
+    marginHorizontal:20
+  },
+  biography:{
+    marginBottom:20,
+    fontFamily:'Arista-Pro-Alternate-Bold-trial',
+    fontSize:20,
+    color:colors.primaryText
+  },
+  sectionTitle:{
+    marginTop:20,
+    fontFamily:'Arista-Pro-Alternate-Bold-trial',
+    fontSize:40,
+    color:colors.secondaryText,
+  },
+  preferenceItem:{
+    fontFamily:'Arista-Pro-Alternate-Bold-trial',
+    fontSize:24,
+    color:colors.primaryText
   }
 });
 
 export default function ProfileDisplayView({ gid, setGid, log, setLog,}) {
 
     const {username, setPage, authToken}= useContext(AppContext)
+
+    const [preferences, setPreferences] = useState([])
     const [, setIsLoading] = useState(false);
     const [info, setInfo] = useState('');
     const [lid, setLid] = useState();
     const [hasPermissionError, setPermissionError] = useState(false);
     const [isPosting, setIsPosting] = useState(false);
     const [postError, setPostError] = useState(false);
+    const [hasFailure, setHasFailure] = useState(false);
+
+    const getUserPreferences = () => {
+      setIsLoading(true);
+      axios({
+          baseURL: baseUrl,
+          url: `/preferences-for-given-user/${log}`,
+          method: 'GET',
+      }).then(response => {
+          setIsLoading(false)
+          if (response.status >= 200 && response.status < 300) {
+              setHasFailure(false)
+              setPreferences(response.data)
+              console.log(`les préférences sélectionnées sont ${response.data}`)
+          } else {
+              setHasFailure(true)
+          }
+      }).catch(err => {
+          console.error(`something went wrong ${err.message}`)
+          setIsLoading(false)
+          setHasFailure(true)
+      })
+  }
+
 
     const getGid = useCallback(() => {
         setIsLoading(true)
@@ -150,6 +188,7 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog,}) {
 
     useEffect(() => {
         loadInfo();
+        getUserPreferences();
         getGid();
     }, [authToken]);
 
@@ -161,29 +200,43 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog,}) {
       }
       else {
         return(
-        <CrousteamButton title="Chat" onPress={() => {setPage("chatdisplay")}}/>
+        <CrousteamButton title="CHAT" onPress={() => {setPage("chatdisplay")}}/>
         )
       }
     }
 
+    const renderItem = ({item}) => {return(<Text style={styles.preferenceItem}> {item}</Text>)}
+
     return (
       <View style={styles.mainContainer}>
+        <ReturnButton title="Retour" onPress={() => { setLog('null'); setPage("friender") }}></ReturnButton>
         <View style = {styles.identityContainer}>
           <Image style = {styles.image} source={require('../loggedOut/ic_launcher_round.png')}></Image>
           <View style ={styles.nameContainer}>
               <Text style={styles.name}>{info[1]} {info[2]} </Text>
               <View style={{flexDirection:'row'}}>
                   <Text style={{color:colors.secondaryText, fontWeight:'bold'}} >@</Text>
-                  <Text style={styles.pseudo}>{info[0]}</Text>
+                  <Text style={styles.pseudo}>{log}</Text>
               </View>
           </View>
         </View>
-        <View>
+        <Line/>
+        <Text style={styles.sectionTitle}> BIOGRAPHY</Text>
+        <View style={styles.biographyContainer}>
+          <Text style={styles.biography}>{info[3]}</Text>
+        </View>
+        <Line/>
+        <Text style={styles.sectionTitle}> PREFERENCES </Text>
+        <View style={styles.biographyContainer}>
+          <FlatList
+          data={preferences}
+          keyExtractor={(item) => {item}}
+          renderItem={renderItem}/>
+        </View>
+        <View style={styles.buttonContainer}>
           <BoutonChat/>
         </View>
-        <View>
-          <CrousteamButton title="Retour" onPress={() => { setLog('null'); setPage("friender") }}></CrousteamButton>
-        </View>
+          
       </View>
     )
 };

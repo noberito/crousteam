@@ -1,16 +1,17 @@
 import React, { useState, useContext, useEffect } from 'react';
 
-import { Text, Button, View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { Text, Button, View, StyleSheet, TouchableOpacity, FlatList , Image} from 'react-native';
 
 import AppContext from '../common/appcontext';
 
 import CrousteamButton from '../common/CrousteamButton.react';
 
-import KivCard from '../common/CrousteamCard.react';
-
+import colors from '../common/Colors.react';
 import axios from 'axios';
 
 import { baseUrl } from '../common/const';
+import CrousteamCard from '../common/CrousteamCard.react';
+import ReturnButton from '../common/ReturnButton.react';
 
  
 
@@ -144,6 +145,7 @@ export default function GeneralSettingsView() {
 
             if (response.status >= 200 && response.status < 300) {
 
+                
                 setHasFailure(false)
 
             } else {
@@ -179,15 +181,10 @@ export default function GeneralSettingsView() {
     const renderPreferenceItem = ({ item }) => (
 
         <TouchableOpacity
-
-            style={[styles.preferenceItem, { backgroundColor: selectedPreferences.includes(item) ? '#4CAF50' : '#e0e0e0' }]}
-
+            style={[styles.preferenceItem, { backgroundColor: selectedPreferences.includes(item) ? colors.primaryText : colors.background }]}
             onPress={() => handlePreferenceClick(item)}
-
         >
-
-            <Text style={styles.preferenceText}>{item}</Text>
-
+            <Text style={[styles.preferenceText, { color: selectedPreferences.includes(item) ? colors.background : colors.primaryText }]}>{item}</Text>
         </TouchableOpacity>
 
     );
@@ -306,7 +303,10 @@ export default function GeneralSettingsView() {
 
         title: {
 
-            fontSize: 24,
+            fontSize: 40,
+            fontFamily:'Arista-Pro-Alternate-Bold-trial',
+            color:colors.secondaryText,
+            marginBottom:10
 
         },
 
@@ -323,90 +323,51 @@ export default function GeneralSettingsView() {
         },
 
         buttonRow: {
-
             flexDirection: 'row'
-
         },
-
         button: {
-
             flexGrow: 1,
-
-            padding: 2
-
+            padding: 2,
+            alignItems:'center'
         },
-
         itemContainer: {
-
             flex: 1 / 2, // Trois éléments par ligne
-
-            margin: 4,
-
+            margin: 0,
             justifyContent: 'center',
-
             alignItems: 'center',
-
         },
-
         selectedItem: {
 
-            borderColor: 'green', // Couleur de la bordure lorsqu'il est sélectionné
-
+             // Couleur de la bordure lorsqu'il est sélectionné
             borderWidth: 2, // Largeur de la bordure lorsqu'il est sélectionné
-
-            color: 'green', // Couleur du texte lorsqu'il est sélectionné
-
-        },
-
-        itemImage: {
-
-            width: '100%',
-
-            height: 150,
-
-            borderRadius: 8,
-
-            marginBottom: 8,
-
-        },
-
-        itemTitle: {
-
-            fontSize: 16,
-
-            fontWeight: 'bold',
-
-            textAlign: 'center',
-
+            color: colors.secondaryText, // Couleur du texte lorsqu'il est sélectionné
         },
 
         preferenceItem: {
-
             flex: 1,
-
             margin: 8,
-
             borderRadius: 8,
-
             overflow: 'hidden',
-
             alignItems: 'center',
-
             justifyContent: 'center',
-
-            height: 80,
+            elevation: 3, // for Android
+            shadowColor: colors.primaryText, 
+            shadowOffset: { width: 0, height: 2 }, 
+            shadowOpacity: 0.3, 
+            shadowRadius: 4,
+            height: 'auto',
 
         },
-
         preferenceText: {
-
+            padding:20,
             fontSize: 16,
-
-            fontWeight: 'bold',
-
+            fontFamily:'Arista-Pro-Alternate-Bold-trial',
             textAlign: 'center',
-
         },
+        imageContainer:{
+            alignItems:'center',
+            marginBottom:20
+        }
 
     });
 
@@ -415,51 +376,29 @@ export default function GeneralSettingsView() {
     return (
 
         <View>
-
- 
-
-            <KivCard>
-
+            <ReturnButton onPress={() => { setPage("myprofile") }} title="Retour"></ReturnButton>
+            <View style={styles.imageContainer}>
+                <Image source={require('../loggedOut/ic_launcher_round.png')}/>
+            </View>
+            <CrousteamCard>
                 <View style={styles.titleContainer}>
-
-                    <Text >{test}</Text>
-
+                    <Text style={styles.title}> YOUR PREFERENCES </Text>
                 </View>
-
                 {hasFailure && <View style={styles.incorrectWarning}>
-
                     <Text style={styles.inputLabel}>Something went wrong while creating the user</Text>
-
                 </View>}
-
- 
-
                 <FlatList
-
-                    data={preferencesRows}
-
-                    keyExtractor={(row, index) => index.toString()}
-
+                    data={preferences}
+                    keyExtractor={(index) => index.toString()}
                     renderItem={renderRow}
-
+                    numColumns={3}
                 />
-
- 
-
                 <View style={styles.buttonRow}>
-
                     <View style={styles.button}>
-
-                        <Button title="Change preferences" disabled={isLoading} onPress={() => { SendPreferences(); }} />
-
+                        <CrousteamButton title="CHANGE PREFERENCES" disabled={isLoading} onPress={() => { SendPreferences(); }} />
                     </View>
-
                 </View>
-
-            </KivCard>
-
-            <CrousteamButton onPress={() => { setPage("myprofile") }} title="Retour"></CrousteamButton>
-
+            </CrousteamCard>
         </View>
 
     );

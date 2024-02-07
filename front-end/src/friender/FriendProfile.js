@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     margin: 10,
     elevation: 3, // for Android
-    shadowColor: '#000', 
+    shadowColor: colors.secondaryText, 
     shadowOffset: { width: 0, height: 2 }, 
     shadowOpacity: 0.3, 
     shadowRadius: 4,

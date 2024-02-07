@@ -4,13 +4,10 @@ import AppContext from './appcontext';
 import colors from './Colors.react';
 
 const styles = StyleSheet.create({
-    button:{
-        width:'100%',
-        height:'100%',
-    },
     text:{
         fontFamily:'Arista-Pro-Alternate-Light-trial',
-        fontSize:100
+        fontSize:70,
+        color:colors.primaryText
     }
 })
 
