@@ -7,6 +7,9 @@ import KivTextInput from '../common/CrousteamTextInput.react';
 import KivCard from '../common/CrousteamCard.react';
 import AppContext from '../common/appcontext';
 import CrousteamButton from '../common/CrousteamButton.react';
+import CrousteamCard from '../common/CrousteamCard.react';
+import ReturnButton from '../common/ReturnButton.react';
+import colors from '../common/Colors.react';
 
 export default function GeneralSettingsView({ }) {
     const [info, setInfo] = useState([]);
@@ -79,24 +82,60 @@ export default function GeneralSettingsView({ }) {
         loadInfo()
     }, []);
 
+    const styles = StyleSheet.create({
+
+        titleContainer: {
+
+            paddingBottom: 16,
+
+            alignItems: 'center',
+
+            width: '100%'
+
+        },
+
+        title: {
+
+            fontSize: 40,
+            fontFamily: 'Arista-Pro-Alternate-Bold-trial',
+            color: colors.secondaryText,
+            marginBottom: 10
+
+        },
+        buttonRow: {
+            flexDirection: 'row'
+        },
+        button: {
+            flexGrow: 1,
+            padding: 2,
+            alignItems: 'center'
+        },
+    });
+
     return (
         <View>
+            <ReturnButton onPress={() => { setPage("myprofile") }} title="Retour"></ReturnButton>
 
-            <KivCard>
+            <CrousteamCard>
 
-                <Text> Change Preferences </Text>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}> GENERAL SETTINGS </Text>
+                </View>
                 <KivTextInput label="Login" value={username} onChangeText={value => setPseudo(value)} />
                 <KivTextInput label="First Name" value={firstName} onChangeText={value => setFirstName(value)} />
                 <KivTextInput label="Last Name" value={lastName} onChangeText={value => setLastName(value)} />
                 <KivTextInput label="naissance" value={naissance} onChangeText={value => setNaissance(value)} />
                 <KivTextInput label="bio" value={bio} onChangeText={value => setBio(value)} />
                 <KivTextInput label="photopath" value={photoPath} onChangeText={value => setPhotopath(value)} />
-                <Button title="Submit changes" disabled={isLoading} onPress={() => { SubmitInfo() }} />
+                <View style={styles.buttonRow}>
+                    <View style={styles.button}>
+                        <CrousteamButton title="Submit changes" disabled={isLoading} onPress={() => { SubmitInfo() }} />
+                    </View>
+                </View>
                 <Text>{firstName}</Text>
 
 
-            </KivCard>
-            <CrousteamButton title="Retour" onPress={() => { setPage("myprofile") }}></CrousteamButton>
+            </CrousteamCard>
         </View>
 
 
