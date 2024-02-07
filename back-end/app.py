@@ -71,8 +71,21 @@ class StrList(list):
 # access to messages and groups
 @app.object_perms("message")
 def check_user_perms_write_into_group(login: str, gid: int, _mode) -> bool:
+    adm = db.get_auth_login(login=login)
+    if adm[1]:
+        return True
     res = db.get_auth_write_group(login=login, gid=gid)
     return bool(res)
+
+
+# access for you and admins
+# @app.object_perms("only_you_and_admins")
+# def check_user_perms(login: str, _mode):
+#     adm = db.get_auth_login(login=login)
+#     if adm[1]:
+#         return True
+#     res = db.get_true_if_login(login=login)
+#     return bool(res)
 
 
 #
@@ -223,7 +236,7 @@ if app.config.get("APP_TEST", False):
 # ADD NEW CODE HERE
 
 
-@app.get("/messages/gid:<gid>", authorize="ANY")
+@app.get("/messages/gid:<gid>", authorize=("message", "gid"))
 def get_messages(gid: int):
     gid_valid = db.is_gid_valid(gid=gid)
     if gid_valid:
@@ -236,12 +249,13 @@ def get_messages(gid: int):
 def get_group_gid(login1: str, login2: str):
     lid1 = db.get_lid_from_login(login=login1)
     lid2 = db.get_lid_from_login(login=login2)
+    if not lid1 or not lid2:
+        return "no existing people", 404
     gid = db.is_people_already_in_the_same_group_with_login(lid1=lid1, lid2=lid2)
-    if gid:  
+    if gid:
         return json({"gid": gid}), 200
     else:
-        return json({"gid" : ""}), 200
-    
+        return json({"gid": ""}), 200
 
 
 @app.post(
@@ -345,7 +359,7 @@ def create_chat_between_2_users(login1: str, login2: str):
     return json(gid), 201
 
 
-@app.delete("/group-chat-2", authorize="ANY")
+@app.delete("/group-chat-2/gid:<gid>", authorize=("message", "gid"))
 def delete_group_chat(gid: int):
     to_delete = db.get_single_group_chat(gid=gid)
     if not to_delete:
@@ -411,7 +425,7 @@ def insert_people_into_the_event_group_chat(eid: int, login: str):
     return "", 201
 
 
-@app.get("/first-last-name/<login>", authorize="ANY")
+@app.get("/first-last-name/<login>", authorize="ANY", auth="basic")
 def get_first_last_name(login: str):
     res = db.get_first_last_name(login=login)
     if not res:

@@ -306,12 +306,21 @@ def test_messages(api):
         r"petit",
         login=ADMIN,
     )
+    api.check(
+        "GET",
+        "/messages/gid:1",
+        403,
+        login="jolly",
+    )
     api.check("GET", "/messages/gid:4000", 404, login=ADMIN)
     api.check(
         "GET", "/group-gid", 200, r"1", data={"login1": "calvin", "login2": "hobbes"}
     )
     api.check(
-        "GET", "/group-gid", 404, data={"login1": "calvin", "login2": "jean-paul"}
+        "GET", "/group-gid", 200, data={"login1": "hobbes", "login2": "jean-paul"}
+    )
+    api.check(
+        "GET", "/group-gid", 404, data={"login1": "brandon", "login2": "jean-paul"}
     )
     api.check(
         "POST",
@@ -420,8 +429,8 @@ def test_add_group_chat_of_2(api):
         login=ADMIN,
     )
     gid = res.json
-    api.check("DELETE", "/group-chat-2", 204, data={"gid": gid}, login=ADMIN)
-    api.check("DELETE", "/group-chat-2", 404, data={"gid": 30}, login=ADMIN)
+    api.check("DELETE", f"/group-chat-2/gid:{gid}", 204, login=ADMIN)
+    api.check("DELETE", "/group-chat-2/gid:300", 404, login=ADMIN)
 
 
 # event : creation, suppression, add of people
@@ -484,8 +493,8 @@ def test_add_event(api):
 
 # profile : get_info
 def test_get_info_profile(api):
-    api.check("GET", "/first-last-name/calvin", 200, r"dadson", login=ADMIN)
-    api.check("GET", "/first-last-name/brandon", 404, login=ADMIN)
+    api.check("GET", "/first-last-name/calvin", 200, r"dadson", login="calvin")
+    api.check("GET", "/first-last-name/brandon", 404, login="calvin")
     api.check("GET", "/all-info/hobbes", 200, r"tiger", login=ADMIN)
     api.check("GET", "/all-info/brandon", 404, login=ADMIN)
     api.check("GET", "/all-info", 404, login=ADMIN)

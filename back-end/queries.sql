@@ -24,6 +24,9 @@ SELECT TRUE FROM Auth
 JOIN UsersInGroup USING(lid)
 WHERE login = :login AND gid = :gid;
 
+-- name: get_true_if_login$
+SELECT TRUE FROM Auth WHERE login = :login;
+
 -- name: get_auth_all
 SELECT login, isAdmin
 FROM Auth
