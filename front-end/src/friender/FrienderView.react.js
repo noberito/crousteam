@@ -6,12 +6,13 @@ import AllFriends from './AllFriends.react';
 import MyProfileView from '../myProfile/MyProfileView.react';
 import ListChatView from '../listChat/ListChatView.react';
 import ListEventView from '../listEvent/ListEventView.react';
-import GeneralSettingsView from '../generalSettings/GeneralSettingsView.react';
-import ChangePreferencesView from '../changePreferences/changePreferencesView.react';
+import GeneralSettingsView from '../generalSettings/GeneralSettings.react';
+import ChangePreferencesView from '../changePreferences/ChangePreferencesView.react';
 import ProfileDisplayView from '../profileDisplay/profileDisplayView.react';
 import AppContext from '../common/appcontext';
 import ChatDisplayView from '../chatDisplay/ChatDisplayView.react';
 import EventDisplayView from '../eventDisplay/EventDisplayView.react';
+import AddEventView from '../addEvent/AddEventView.react';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -90,6 +91,9 @@ export default function FrienderView({logoutUser}) {
     }
     if (page == 'eventdisplay'){
       return(<EventDisplayView gid={gid} setGid={setGid} eid={eid} setEid={setEid}></EventDisplayView>)
+    }
+    if (page == 'addevent'){
+      return(<AddEventView></AddEventView>)
     }
 
 }

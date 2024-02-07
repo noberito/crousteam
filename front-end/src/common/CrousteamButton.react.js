@@ -5,13 +5,12 @@ import colors from './Colors.react';
 const buttonStyles = StyleSheet.create({
   buttonContainer: {
     width:'50%',
-    heigt:'8%',
     backgroundColor: colors.background,
     borderRadius: 10,
     padding: 20,
     justifyContent:'center',
     alignItems:'center',
-    margin: 10,
+    margin: 20,
     elevation: 3, // for Android
     shadowColor: colors.secondaryText, 
     shadowOffset: { width: 0, height: 7 }, 

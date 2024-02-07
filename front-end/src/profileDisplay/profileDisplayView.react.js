@@ -1,9 +1,63 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { View, Text, Button } from "react-native"
+import { View, Text, Button, StyleSheet, Image} from "react-native"
 import { baseUrl } from '../common/const';
 import axios from 'axios';
 import CrousteamButton from '../common/CrousteamButton.react';
 import AppContext from '../common/appcontext';
+import colors from '../common/Colors.react';
+
+const styles = StyleSheet.create({
+  mainContainer: {
+      flex: 1,
+      padding: 16,
+      justifyContent: ""
+  },
+
+  identityContainer: {
+      flexDirection:'row',
+      flexGrow:0.4,
+      justifyContent: 'space-between',
+      alignItems: 'center', // Center the content horizontally
+  },
+  buttonContainer: {
+      // This will also take the necessary space but allow other elements to grow
+      // Removed the flex: 2 for the same reason as above
+      marginTop: 16, // Add some margin at the top for spacing
+      justifyContent:'center',
+      alignItems:'center',
+  },
+  logoutContainer: {
+      justifyContent:'center',
+      alignItems:'center',
+      // This ensures the logout button sticks to the bottom
+      // Removed justifyContent: 'center' to align the logout button at the top of its container
+  },
+  footer: {
+      // Ensure the footer is always at the bottom
+      // FlexBasis removed to allow the footer to grow with its content up to 8% of the container
+      // If the BottomBar component has its own padding, this might not be necessary
+      height: '8%', // You can use height instead of flexBasis for a fixed height footer
+  },
+  image:{
+      width:'30%',
+      height:'70%',
+      marginLeft:'10%'
+  },
+  nameContainer:{
+      marginRight:'10%'
+  },
+  name:{
+      fontFamily:'Arista-Pro-Alternate-Bold-trial',
+      fontSize:40,
+      color:colors.primaryText
+
+  },
+  pseudo:{
+      fontFamily:'Arista-Pro-Alternate-Bold-trial',
+      fontSize:20,
+      color:colors.secondaryText
+  }
+});
 
 export default function ProfileDisplayView({ gid, setGid, log, setLog,}) {
 
@@ -113,15 +167,23 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog,}) {
     }
 
     return (
-        <View style={{ flex: 1 }}>
-            <Text>{info[1]}</Text>
-            <Text>{info[2]}</Text>
-            <Text>{info[3]}</Text>
-            <Text>{info[4]}</Text>
-            
-            <BoutonChat/>
-            
-            <Button title="Retour" onPress={() => { setLog('null'); setPage("friender") }}></Button>
+      <View style={styles.mainContainer}>
+        <View style = {styles.identityContainer}>
+          <Image style = {styles.image} source={require('../loggedOut/ic_launcher_round.png')}></Image>
+          <View style ={styles.nameContainer}>
+              <Text style={styles.name}>{info[1]} {info[2]} </Text>
+              <View style={{flexDirection:'row'}}>
+                  <Text style={{color:colors.secondaryText, fontWeight:'bold'}} >@</Text>
+                  <Text style={styles.pseudo}>{info[0]}</Text>
+              </View>
+          </View>
         </View>
+        <View>
+          <BoutonChat/>
+        </View>
+        <View>
+          <CrousteamButton title="Retour" onPress={() => { setLog('null'); setPage("friender") }}></CrousteamButton>
+        </View>
+      </View>
     )
 };

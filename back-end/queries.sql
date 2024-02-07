@@ -225,7 +225,7 @@ WHERE pftype = :pftype;
 DELETE FROM Preferences
 WHERE pftype = :pftype;
 
--- name: get_all_user_preferences!
+-- name: get_all_user_preferences
 SELECT pftype
 FROM Preferences
 JOIN UsersPref USING(pfid)

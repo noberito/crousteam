@@ -3,12 +3,14 @@ import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react
 import BottomBar from '../friender/BottomBar.react';
 import AppContext from '../common/appcontext';
 import AllEvents from './AllEvents.react';
+import CrousteamButton from '../common/CrousteamButton.react';
 
 const styles = StyleSheet.create({
     header:{
-        justifyContent:'center',
+        flexDirection:'row',
+        justifyContent:'space-between',
         alignItems:'center',
-        height:'5%'
+        height:'10%'
       },
     footer: {
         flexBasis: '8%',
@@ -22,6 +24,9 @@ const styles = StyleSheet.create({
         padding: 16,
         justifyContent: "space-between"
       },
+    correction:{
+        width:'20%',
+    }
 });
 
 
@@ -33,6 +38,9 @@ export default function ListEventView({ eid, setEid, gid, setGid}) {
         <View style={styles.mainContainer}>
             <View style={styles.header}>
                 <Image source={require('../loggedOut/ic_launcher_round.png')}></Image>
+                <View style = {styles.correction}>
+                    <CrousteamButton title ="+" onPress = {() => {setPage('addevent')}}></CrousteamButton>
+                </View>
             </View>
             <View style={{height:'78%'}}>
                 <AllEvents eid={eid} setEid={setEid}/>

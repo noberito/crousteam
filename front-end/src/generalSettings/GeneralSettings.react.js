@@ -8,7 +8,7 @@ import KivCard from '../common/CrousteamCard.react';
 import AppContext from '../common/appcontext';
 import CrousteamButton from '../common/CrousteamButton.react';
 
-export default function ChangePreferencesView({ }) {
+export default function GeneralSettingsView({ }) {
     const [info, setInfo] = useState([]);
     const [lid, setLid] = useState();
     const { username, setUsername, setPage } = useContext(AppContext);
