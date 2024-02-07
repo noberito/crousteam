@@ -5,15 +5,28 @@ import CrousteamCard from '../common/CrousteamCard.react';
 import axios from 'axios';
 import { baseUrl } from '../common/const';
 import AppContext from '../common/appcontext';
+import colors from '../common/Colors.react';
+import CrousteamButton from '../common/CrousteamButton.react';
 
 const styles = StyleSheet.create({
     titleContainer: {
+
         paddingBottom: 16,
+
         alignItems: 'center',
+
         width: '100%'
+
     },
+
     title: {
-        fontSize: 24,
+
+        fontSize: 40,
+        fontFamily: 'Arista-Pro-Alternate-Bold-trial',
+        color: colors.secondaryText,
+        marginBottom: 10
+
+
     },
     incorrectWarning: {
         backgroundColor: '#FF8A80',
@@ -28,6 +41,11 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         padding: 2
     },
+    Text: {
+        fontFamily: 'Arista-Pro-Alternate-Bold-trial',
+        fontSize: 20,
+    }
+
 });
 
 export default function CreateAccount({ onSuccess, onCancel }) {
@@ -84,17 +102,17 @@ export default function CreateAccount({ onSuccess, onCancel }) {
             </View>}
             <CrousteamTextInput label="First Name" value={firstName} onChangeText={value => setFirstName(value)} />
             <CrousteamTextInput label="Last Name" value={lastName} onChangeText={value => setLastName(value)} />
-            <CrousteamTextInput style={{fontFamily:'sans-serif'}}label="Birth date" value={naissance} onChangeText={value => setNaissance(value)} />
+            <CrousteamTextInput style={{ fontFamily: 'sans-serif' }} label="Birth date" value={naissance} onChangeText={value => setNaissance(value)} />
             <CrousteamTextInput label="Photo" value={photopath} onChangeText={value => setPhotopath(value)} />
             <CrousteamTextInput label="Biography" value={biography} onChangeText={value => setBiography(value)} />
 
 
             <View style={styles.buttonRow}>
                 <View style={styles.button}>
-                    <Button title="< Login" disabled={isLoading} onPress={() => { onCancel(); }} />
+                    <CrousteamButton title="< Login" disabled={isLoading} styleText={styles.Text} onPress={() => { onCancel(); }} />
                 </View>
                 <View style={styles.button}>
-                    <Button title="Create Account" disabled={isLoading} onPress={() => { sendUserCreationRequest(); }} />
+                    <CrousteamButton title="Create Account" disabled={isLoading} styleText={styles.Text} onPress={() => { sendUserCreationRequest(); }} />
                 </View>
             </View>
         </CrousteamCard>

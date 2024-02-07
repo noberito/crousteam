@@ -132,7 +132,6 @@ export default function GeneralSettingsView({ }) {
                         <CrousteamButton title="Submit changes" disabled={isLoading} onPress={() => { SubmitInfo() }} />
                     </View>
                 </View>
-                <Text>{firstName}</Text>
 
 
             </CrousteamCard>
