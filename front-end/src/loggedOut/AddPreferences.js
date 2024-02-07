@@ -11,14 +11,17 @@ import axios from 'axios';
 import { baseUrl } from '../common/const';
 
 import AppContext from '../common/appcontext';
-
+import CrousteamCard from '../common/CrousteamCard.react';
 import CrousteamButton from '../common/CrousteamButton.react';
+import colors from '../common/Colors.react';
 
- 
+
+
 
 export default function AddPreferences({ onSuccess, onCancel }) {
 
- 
+
+
 
     const [preferences, setPreferences] = useState([]);
 
@@ -31,7 +34,7 @@ export default function AddPreferences({ onSuccess, onCancel }) {
 
         <TouchableOpacity
 
-            style={[styles.preferenceItem, { backgroundColor: selectedPreferences.includes(item) ? '#4CAF50' : '#e0e0e0' }]}
+            style={[styles.preferenceItem, { backgroundColor: selectedPreferences.includes(item) ? colors.primaryText : colors.background }]}
 
             onPress={() => handlePreferenceClick(item)}
 
@@ -43,7 +46,7 @@ export default function AddPreferences({ onSuccess, onCancel }) {
 
     );
 
- 
+
 
     const renderRow = ({ item }) => (
 
@@ -61,7 +64,7 @@ export default function AddPreferences({ onSuccess, onCancel }) {
 
     );
 
- 
+
 
     const handlePreferenceClick = (preference) => {
 
@@ -69,7 +72,7 @@ export default function AddPreferences({ onSuccess, onCancel }) {
 
         // Sinon, ajoute-la à la liste
 
- 
+
 
         setSelectedPreferences((prevSelected) => {
 
@@ -111,15 +114,15 @@ export default function AddPreferences({ onSuccess, onCancel }) {
 
     };
 
- 
+
 
     const preferencesRows = chunkArray(preferences, 3);
 
- 
+
 
     const { lastUid, setLastUid, username, password } = useContext(AppContext);
 
- 
+
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -171,7 +174,7 @@ export default function AddPreferences({ onSuccess, onCancel }) {
 
     }
 
- 
+
 
     const SendPreferences = (list_preference) => {
 
@@ -221,7 +224,7 @@ export default function AddPreferences({ onSuccess, onCancel }) {
 
     }
 
- 
+
 
     useEffect(() => {
 
@@ -229,7 +232,7 @@ export default function AddPreferences({ onSuccess, onCancel }) {
 
     }, []);
 
- 
+
 
     const finalSend = () => {
 
@@ -265,7 +268,10 @@ export default function AddPreferences({ onSuccess, onCancel }) {
 
         title: {
 
-            fontSize: 24,
+            fontSize: 40,
+            fontFamily: 'Arista-Pro-Alternate-Bold-trial',
+            color: colors.secondaryText,
+            marginBottom: 10
 
         },
 
@@ -282,108 +288,71 @@ export default function AddPreferences({ onSuccess, onCancel }) {
         },
 
         buttonRow: {
-
             flexDirection: 'row'
-
         },
-
         button: {
-
             flexGrow: 1,
-
-            padding: 2
-
+            padding: 2,
+            alignItems: 'center'
         },
-
         itemContainer: {
-
             flex: 1 / 2, // Trois éléments par ligne
-
-            margin: 4,
-
+            margin: 0,
             justifyContent: 'center',
-
             alignItems: 'center',
-
         },
-
         selectedItem: {
 
-            borderColor: 'green', // Couleur de la bordure lorsqu'il est sélectionné
-
+            // Couleur de la bordure lorsqu'il est sélectionné
             borderWidth: 2, // Largeur de la bordure lorsqu'il est sélectionné
-
-            color: 'green', // Couleur du texte lorsqu'il est sélectionné
-
-        },
-
-        itemImage: {
-
-            width: '100%',
-
-            height: 150,
-
-            borderRadius: 8,
-
-            marginBottom: 8,
-
-        },
-
-        itemTitle: {
-
-            fontSize: 16,
-
-            fontWeight: 'bold',
-
-            textAlign: 'center',
-
+            color: colors.secondaryText, // Couleur du texte lorsqu'il est sélectionné
         },
 
         preferenceItem: {
-
             flex: 1,
-
             margin: 8,
-
             borderRadius: 8,
-
             overflow: 'hidden',
-
             alignItems: 'center',
-
             justifyContent: 'center',
-
-            height: 80,
+            elevation: 3, // for Android
+            shadowColor: colors.primaryText,
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.3,
+            shadowRadius: 4,
+            height: 'auto',
 
         },
-
         preferenceText: {
-
+            padding: 20,
             fontSize: 16,
-
-            fontWeight: 'bold',
-
+            fontFamily: 'Arista-Pro-Alternate-Bold-trial',
             textAlign: 'center',
-
         },
+        imageContainer: {
+            alignItems: 'center',
+            marginBottom: 20
+        },
+        Text: {
+            fontFamily: 'Arista-Pro-Alternate-Bold-trial',
+            fontSize: 20,
+        }
 
     });
 
- 
 
     return (
 
         <View>
 
- 
 
-            <KivCard>
+
+            <CrousteamCard>
 
                 <View style={styles.titleContainer}>
 
-                    <Text style={styles.title}>Add Information</Text>
+                    <Text style={styles.title}>ADD YOUR PREFERENCES</Text>
 
-                    <Text> {username}</Text>
 
                 </View>
 
@@ -397,7 +366,7 @@ export default function AddPreferences({ onSuccess, onCancel }) {
 
                 }
 
- 
+
 
                 <FlatList
 
@@ -409,30 +378,30 @@ export default function AddPreferences({ onSuccess, onCancel }) {
 
                 />
 
- 
+
 
                 <View style={styles.buttonRow}>
 
                     <View style={styles.button}>
 
-                        <Button title="< Login" disabled={isLoading} onPress={() => { onCancel(); }} />
+                        <CrousteamButton title="< Login" disabled={isLoading} styleText={styles.Text} onPress={() => { onCancel(); }} />
 
                     </View>
 
                     <View style={styles.button}>
 
-                        <Button title="Continue" disabled={isLoading} onPress={() => { finalSend(); }} />
+                        <CrousteamButton title="Continue" disabled={isLoading} styleText={styles.Text} onPress={() => { finalSend(); }} />
 
                     </View>
 
                 </View>
 
-            </KivCard >
+            </CrousteamCard >
 
         </View >
 
     );
 
- 
+
 
 }
