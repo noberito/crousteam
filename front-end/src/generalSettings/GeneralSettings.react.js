@@ -8,9 +8,19 @@ import KivCard from '../common/CrousteamCard.react';
 import AppContext from '../common/appcontext';
 import CrousteamButton from '../common/CrousteamButton.react';
 import CrousteamCard from '../common/CrousteamCard.react';
-import ReturnButton from '../common/ReturnButton.react';
 import colors from '../common/Colors.react';
 
+const styles = StyleSheet.create({
+    title:{
+        fontFamily:'Arista-Pro-Alternate-Bold-trial',
+        fontSize:40,
+        color:colors.secondaryText
+    },
+    titleContainer:{
+        alignItems:'center',
+        marginBottom:20
+    }
+})
 export default function GeneralSettingsView({ }) {
     const [info, setInfo] = useState([]);
     const [lid, setLid] = useState();
@@ -127,14 +137,12 @@ export default function GeneralSettingsView({ }) {
                 <KivTextInput label="naissance" value={naissance} onChangeText={value => setNaissance(value)} />
                 <KivTextInput label="bio" value={bio} onChangeText={value => setBio(value)} />
                 <KivTextInput label="photopath" value={photoPath} onChangeText={value => setPhotopath(value)} />
-                <View style={styles.buttonRow}>
-                    <View style={styles.button}>
-                        <CrousteamButton title="Submit changes" disabled={isLoading} onPress={() => { SubmitInfo() }} />
-                    </View>
-                </View>
+                <Button title="Submit changes" disabled={isLoading} onPress={() => { SubmitInfo() }} />
+                <Text>{firstName}</Text>
 
 
             </CrousteamCard>
+            <CrousteamButton title="Retour" onPress={() => { setPage("myprofile") }}></CrousteamButton>
         </View>
 
 
