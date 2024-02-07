@@ -315,10 +315,17 @@ def test_messages(api):
     )
     api.check(
         "POST",
-        "/messages",
+        "/messages/gid:1",
         201,
-        data={"login": "calvin", "mtext": "Je poste un message", "gid": 1},
-        login=ADMIN,
+        data={"login": "calvin", "mtext": "Je poste un message"},
+        login="calvin",
+    )
+    api.check(
+        "POST",
+        "/messages/gid:3",
+        403,
+        data={"login": "hobbes", "mtext": "Je poste un message"},
+        login="hobbes",
     )
 
 

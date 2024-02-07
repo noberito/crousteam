@@ -67,6 +67,14 @@ class StrList(list):
         super().__init__(li)
 
 
+# permissions
+# access to messages and groups
+@app.object_perms("message")
+def check_user_perms_write_into_group(login: str, gid: int, _mode) -> bool:
+    res = db.get_auth_write_group(login=login, gid=gid)
+    return bool(res)
+
+
 #
 # General information about running app.
 #
@@ -236,7 +244,9 @@ def get_group_gid(login1: str, login2: str):
     
 
 
-@app.post("/messages", authorize="ANY")
+@app.post(
+    "/messages/gid:<gid>", authorize=("message", "gid")
+)  # Attention FRONT a changer
 def post_messages(login: str, mtext: str, gid: int):
     lid = db.get_lid_from_login(login=login)
     db.post_messages(lid=lid, mtext=mtext, gid=gid)

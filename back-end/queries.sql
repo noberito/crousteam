@@ -19,6 +19,11 @@ FROM Auth
 WHERE login = :login
 FOR UPDATE;
 
+-- name: get_auth_write_group$
+SELECT TRUE FROM Auth
+JOIN UsersInGroup USING(lid)
+WHERE login = :login AND gid = :gid;
+
 -- name: get_auth_all
 SELECT login, isAdmin
 FROM Auth
