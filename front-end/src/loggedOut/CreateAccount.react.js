@@ -3,6 +3,7 @@ import { Button, View, Text, StyleSheet } from 'react-native';
 import CrousteamTextInput from '../common/CrousteamTextInput.react';
 import CrousteamCard from '../common/CrousteamCard.react';
 import AppContext from '../common/appcontext';
+import colors from '../common/Colors.react';
 
 import axios from 'axios';
 import { baseUrl } from '../common/const';
@@ -16,6 +17,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
+    color: colors.primaryText,
+    fontFamily: 'Arista-Pro-Alternate-Bold-trial'
   },
   incorrectWarning: {
     backgroundColor: '#FF8A80',
@@ -24,13 +27,17 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   buttonRow: {
-    justifyContent:'center',
-    alignItems:'center'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   button: {
     flexGrow: 1,
     padding: 2
   },
+  Text: {
+    fontFamily: 'Arista-Pro-Alternate-Bold-trial',
+    fontSize: 24,
+  }
 });
 
 export default function CreateAccount({ onSuccess, onCancel }) {
@@ -52,7 +59,7 @@ export default function CreateAccount({ onSuccess, onCancel }) {
         style={styles.titleContainer}>
         <Text
           style={styles.title}>
-          Create Account
+          CREATE ACCOUNT
         </Text>
       </View>
       {hasFailure && <View style={styles.incorrectWarning}>
@@ -64,8 +71,8 @@ export default function CreateAccount({ onSuccess, onCancel }) {
       <CrousteamTextInput label="Username" value={username} onChangeText={value => setUsername(value)} />
       <CrousteamTextInput label="Password" value={password} onChangeText={value => setPassword(value)} />
       <View style={styles.buttonRow}>
-          <CrousteamButton title="Continue" disabled={isLoading} onPress={() => { sendUserCreationRequest(); }} />
-          <CrousteamButton title="Login" disabled={isLoading} onPress={() => { onCancel(); }} /> 
+        <CrousteamButton title="Continue" disabled={isLoading} styleText={styles.Text} onPress={() => { sendUserCreationRequest(); }} />
+        <CrousteamButton title="Login" disabled={isLoading} styleText={styles.Text} onPress={() => { onCancel(); }} />
       </View>
     </CrousteamCard>
   );

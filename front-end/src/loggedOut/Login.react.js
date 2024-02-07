@@ -80,6 +80,12 @@ export default function Login({ onSuccess, onCancel }) {
   return (
 
     <CrousteamCard>
+      <View style={styles.titleContainer}>
+
+        <Text style={styles.title}>ENTER THE CROUSTEAMVERSE</Text>
+
+
+      </View>
 
       {hasInvalidLogin && <View style={styles.incorrectWarning}>
         <Text
