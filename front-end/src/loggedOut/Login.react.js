@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     color: colors.primaryText,
-    fontFamily:'Arista-Pro-Alternate-Bold-trial'
+    fontFamily: 'Arista-Pro-Alternate-Bold-trial'
   },
   incorrectWarning: {
     backgroundColor: '#FF8A80',
@@ -28,9 +28,14 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   buttonRow: {
-    justifyContent:'center',
-    alignItems:'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+
+  Text: {
+    fontFamily: 'Arista-Pro-Alternate-Bold-trial',
+    fontSize: 24,
+  }
 });
 
 /**
@@ -82,13 +87,13 @@ export default function Login({ onSuccess, onCancel }) {
           The username or password is incorrect
         </Text>
       </View>}
-      
+
       <CrousteamTextInput label="Username" value={username} onChangeText={value => setUsername(value)} />
       <CrousteamTextInput label="Password" value={password} onChangeText={value => setPassword(value)} />
 
       <View style={styles.buttonRow}>
-      <CrousteamButton title="Login" disabled={isLoading} onPress={() => { sendLoginRequest(); }} />
-      <CrousteamButton title="Create Account" disabled={isLoading} onPress={() => { onCancel(); }} />
+        <CrousteamButton title="Login" disabled={isLoading} styleText={styles.Text} onPress={() => { sendLoginRequest(); }} />
+        <CrousteamButton title="Create Account" disabled={isLoading} styleText={styles.Text} onPress={() => { onCancel(); }} />
       </View>
 
     </CrousteamCard>
