@@ -540,34 +540,32 @@ def test_preferences(api):
     )
     api.check(
         "DELETE",
-        "/preferences/calvin",
+        "/preferences",
         204,
         json={"list_pftype": ["philantropique"]},
-        login=ADMIN,
+        login="calvin",
     )
     api.check(
         "DELETE",
-        "/preferences/calvin",
+        "/preferences",
         404,
         json={"list_pftype": ["non existant"]},
-        login=ADMIN,
+        login="calvin",
     )
 
 
 def test_search_profile_with_preferences(api):
-    api.check("GET", "/users-with-preferences/calvin", 200, r"jean-paul", login=ADMIN)
-    api.check("GET", "/users-with-preferences/brandon", 404, login=ADMIN)
+    api.check("GET", "/users-with-preferences", 200, r"jean-paul", login="calvin")
 
 
 def test_search_profile_with_preferences_no_common_group_chat(api):
     api.check(
         "GET",
-        "/users-with-preferences-no-group-chat/calvin",
+        "/users-with-preferences-no-group-chat",
         200,
         r"jean-paul",
-        login=ADMIN,
+        login="calvin",
     )
-    api.check("GET", "/users-with-preferences-no-group-chat/brandon", 404, login=ADMIN)
 
 
 def test_insert_preference_type(api):

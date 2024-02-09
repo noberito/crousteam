@@ -12,7 +12,7 @@ export default function GeneralSettingsView() {
     const [selectedPreferences, setSelectedPreferences] = useState('cowboyvoleur');
     const [userPref, setUserPref] = useState([]);
     const [preferencesList, setPreferencesList] = useState([]);
-    const { username, setUsername, setPage } = useContext(AppContext);
+    const { username, setUsername, setPage, authToken } = useContext(AppContext);
     const [test, setTest] = useState([]);
 
     const getPreferences = () => {
@@ -64,7 +64,8 @@ export default function GeneralSettingsView() {
         setIsLoading(true);
         axios({
             baseURL: baseUrl,
-            url: `/preferences/${username}`,
+            url: `/preferences`,
+            headers: { Authorization: 'Bearer ' + authToken },
             method: 'PATCH',
             data: {
                 list_pftype: selectedPreferences.split(',')

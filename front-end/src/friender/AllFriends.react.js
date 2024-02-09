@@ -4,7 +4,7 @@ import axios from 'axios';
 import { baseUrl } from '../common/const';
 import FriendProfile from './FriendProfile';
 
-export default function AllFriends({username, page, setPage, log, setLog, authToken }) {
+export default function AllFriends({ username, page, setPage, log, setLog, authToken }) {
   const [users, setUsers] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -15,10 +15,10 @@ export default function AllFriends({username, page, setPage, log, setLog, authTo
     // Set refreshing to true when we are loading data on pull to refresh
     setRefreshing(true);
     axios({
-      baseURL : baseUrl,
-      url : '/users-with-preferences/' + username,
-      method : 'GET',
-      headers : { Authorization : 'Bearer ' + authToken},
+      baseURL: baseUrl,
+      url: '/users-with-preferences-no-group-chat',
+      method: 'GET',
+      headers: { Authorization: 'Bearer ' + authToken },
     }).then(response => {
       setIsLoading(false);
       setRefreshing(false); // Set refreshing to false when data is loaded
@@ -29,13 +29,13 @@ export default function AllFriends({username, page, setPage, log, setLog, authTo
         console.log(parsedData);
         setUsers(parsedData);
         setPermissionError(false);
-      } else if(response.status == 403) {
+      } else if (response.status == 403) {
         setPermissionError(true);
       }
     }).catch(err => {
       console.error(`Something went wrong ${err.message}`);
       setIsLoading(false);
-      setRefreshing(false); 
+      setRefreshing(false);
     });
   }, [authToken]);
 
@@ -43,7 +43,7 @@ export default function AllFriends({username, page, setPage, log, setLog, authTo
     getAllPossibleFriendsRequest();
   }, [authToken, getAllPossibleFriendsRequest]);
 
-  const renderItem = ({item}) => <FriendProfile setPage={setPage} setLog={setLog} item={item}/>;
+  const renderItem = ({ item }) => <FriendProfile setPage={setPage} setLog={setLog} item={item} />;
 
   return (
     <View>

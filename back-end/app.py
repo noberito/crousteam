@@ -435,7 +435,7 @@ def get_all_info(login: str):
     return json(res), 200
 
 
-@app.post("/preferences/<login>", authorize="ALL")
+@app.post("/preferences/<login>", authorize="ANY")
 def post_preferences(list_pftype: StrList, login: str):
     s = 0
     for pftype in list_pftype:
@@ -449,13 +449,13 @@ def post_preferences(list_pftype: StrList, login: str):
     return "", 201
 
 
-@app.delete("/preferences/<login>", authorize="ALL")
-def delete_preferences(list_pftype: StrList, login: str):
+@app.delete("/preferences", authorize="ALL")
+def delete_preferences(user: fsa.CurrentUser, list_pftype: StrList):
     s = 0
     for pftype in list_pftype:
-        already = db.preference_already(login=login, pftype=pftype)
+        already = db.preference_already(login=user, pftype=pftype)
         if already:
-            db.delete_preference(login=login, pftype=pftype)
+            db.delete_preference(login=user, pftype=pftype)
             s += 1
     if s == 0:
         return "Nothing to delete", 404
@@ -472,21 +472,15 @@ def update_info_profile_preferences(user: fsa.CurrentUser, list_pftype: StrList)
     return "", 204
 
 
-@app.get("/users-with-preferences/<login>", authorize="ALL")
-def get_users_with_same_preferences(login: str):
-    is_login_in = db.get_single_profile(login=login)
-    if not is_login_in:
-        return "no login", 404
-    res_login = db.get_login_who_matches_with_preferences(login=login)
+@app.get("/users-with-preferences", authorize="ALL")
+def get_users_with_same_preferences(user: fsa.CurrentUser):
+    res_login = db.get_login_who_matches_with_preferences(login=user)
     return list(res_login), 200
 
 
-@app.get("/users-with-preferences-no-group-chat/<login>", authorize="ALL")
-def get_users_with_same_preferences_no_group_chat(login: str):
-    is_login_in = db.get_single_profile(login=login)
-    if not is_login_in:
-        return "no login", 404
-    res_login = db.get_login_who_matches_with_preferences_no_group_chat(login=login)
+@app.get("/users-with-preferences-no-group-chat", authorize="ALL")
+def get_users_with_same_preferences_no_group_chat(user: fsa.CurrentUser):
+    res_login = db.get_login_who_matches_with_preferences_no_group_chat(login=user)
     return list(res_login), 200
 
 
@@ -508,7 +502,7 @@ def delete_preference_type(pftype: str):
     return "", 204
 
 
-@app.get("/preferences-for-given-user/<login>", authorize="ANY")
+@app.get("/preferences-for-given-user/<login>", authorize="ALL")
 def get_preferences_with_certain_user(login: str):
     login_in = db.get_single_profile(login=login)
     if not login_in:
