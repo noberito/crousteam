@@ -9,16 +9,17 @@ import AppContext from '../common/appcontext';
 import CrousteamButton from '../common/CrousteamButton.react';
 import CrousteamCard from '../common/CrousteamCard.react';
 import colors from '../common/Colors.react';
+import ReturnButton from '../common/ReturnButton.react';
 
 const styles = StyleSheet.create({
-    title:{
-        fontFamily:'Arista-Pro-Alternate-Bold-trial',
-        fontSize:40,
-        color:colors.secondaryText
+    title: {
+        fontFamily: 'Arista-Pro-Alternate-Bold-trial',
+        fontSize: 40,
+        color: colors.secondaryText
     },
-    titleContainer:{
-        alignItems:'center',
-        marginBottom:20
+    titleContainer: {
+        alignItems: 'center',
+        marginBottom: 20
     }
 })
 export default function GeneralSettingsView({ }) {
@@ -120,6 +121,10 @@ export default function GeneralSettingsView({ }) {
             padding: 2,
             alignItems: 'center'
         },
+        Text: {
+            fontFamily: 'Arista-Pro-Alternate-Bold-trial',
+            fontSize: 24,
+        }
     });
 
     return (
@@ -137,8 +142,8 @@ export default function GeneralSettingsView({ }) {
                 <KivTextInput label="naissance" value={naissance} onChangeText={value => setNaissance(value)} />
                 <KivTextInput label="bio" value={bio} onChangeText={value => setBio(value)} />
                 <KivTextInput label="photopath" value={photoPath} onChangeText={value => setPhotopath(value)} />
-                <Button title="Submit changes" disabled={isLoading} onPress={() => { SubmitInfo() }} />
-                <Text>{firstName}</Text>
+                <CrousteamButton title="Submit changes" disabled={isLoading} styleText={styles.Text} onPress={() => { SubmitInfo() }} />
+
 
 
             </CrousteamCard>
