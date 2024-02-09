@@ -299,3 +299,7 @@ SELECT TRUE FROM UsersInGroup WHERE gid = :gid AND lid = :lid;
 
 -- name: test
 SELECT gname, isGroupChat, creationDate::TEXT FROM AppGroup;
+
+-- name: get_event_info
+SELECT ename, eloc, etime::TEXT, eduree::TEXT, edescr, gid FROM Event
+WHERE gid = :gid;
