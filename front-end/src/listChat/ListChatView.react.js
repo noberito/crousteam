@@ -53,49 +53,49 @@ const styles = StyleSheet.create({
     }
 });
 
-export default function ListChatView({gid, setGid}) {
+export default function ListChatView({ gid, setGid }) {
     const [searchText, setSearchText] = useState('');
-    const {username, page, setPage, authToken} = useContext(AppContext)
+    const { username, page, setPage, authToken } = useContext(AppContext)
     const [chats, setChats] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [hasPermissionError, setPermissionError] = useState(false);
-  
+
     const getAllChats = useCallback(() => {
-      setIsLoading(true);
-      // Set refreshing to true when we are loading data on pull to refresh
-      setRefreshing(true);
-      axios({
-        baseURL : baseUrl,
-        url : '/all-conversations/' + username,
-        method : 'GET',
-        headers : { Authorization : 'Bearer ' + authToken},
-      }).then(response => {
-        setIsLoading(false);
-        setRefreshing(false); // Set refreshing to false when data is loaded
-        if (response.status == 200) {
-          const parsedData = response.data.map(chat => ({
-            name: chat[0], gid:chat[2], time: chat[1]
-          }));
-          console.log(parsedData);
-          setChats(parsedData);
-          setPermissionError(false);
-        } else if(response.status == 403) {
-          setPermissionError(true);
-        }
-      }).catch(err => {
-        console.error(`Something went wrong ${err.message}`);
-        setIsLoading(false);
-        setRefreshing(false); 
-      });
+        setIsLoading(true);
+        // Set refreshing to true when we are loading data on pull to refresh
+        setRefreshing(true);
+        axios({
+            baseURL: baseUrl,
+            url: '/all-conversations',
+            method: 'GET',
+            headers: { Authorization: 'Bearer ' + authToken },
+        }).then(response => {
+            setIsLoading(false);
+            setRefreshing(false); // Set refreshing to false when data is loaded
+            if (response.status == 200) {
+                const parsedData = response.data.map(chat => ({
+                    name: chat[0], gid: chat[2], time: chat[1]
+                }));
+                console.log(parsedData);
+                setChats(parsedData);
+                setPermissionError(false);
+            } else if (response.status == 403) {
+                setPermissionError(true);
+            }
+        }).catch(err => {
+            console.error(`Something went wrong ${err.message}`);
+            setIsLoading(false);
+            setRefreshing(false);
+        });
     }, [authToken]);
-  
+
     useEffect(() => {
-      getAllChats();
+        getAllChats();
     }, [authToken, getAllChats]);
 
     const renderChatItem = ({ item }) => (
-        <TouchableOpacity onPress={() => {setGid(item.gid), setPage('chatdisplay')}}>
+        <TouchableOpacity onPress={() => { setGid(item.gid), setPage('chatdisplay') }}>
 
             <View style={styles.chatItem}>
                 <Text style={styles.contactName}>{item.name}</Text>

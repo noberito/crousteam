@@ -339,18 +339,18 @@ def test_messages(api):
 
 
 def test_conversations(api):
-    api.check("GET", "/all-conversations/calvin", 200, r"copaing", login=ADMIN)
-    api.check("GET", "/all-conversations/brandon", 404, login=ADMIN)
+    api.check("GET", "/all-conversations", 200, r"copaing", login=ADMIN)
+    # api.check("GET", "/all-conversations", 404, login="brandon")
 
 
 # /Profile -> Post Information
 def test_add_profile(api):
-    api.check("GET", "/profile/calvin", 200, login=ADMIN)
-    api.check("GET", "/profile/hector", 404, login=ADMIN)
-    api.check("GET", "/profile", 200, r"jean-paul", login=ADMIN)
+    api.check("GET", "/profile", 200, login=ADMIN)
+    # api.check("GET", "/profile/hector", 404, login=ADMIN)
+    api.check("GET", "/profiles", 200, r"jean-paul", login=ADMIN)
     api.check(
         "POST",
-        "/profile/foo",
+        "/profile",
         201,
         data={
             "lid": 6,
@@ -360,11 +360,11 @@ def test_add_profile(api):
             "naissance": "1999-01-08",
             "photoPath": "/this/is/photo/path",
         },
-        login=ADMIN,
+        login="foo",
     )
     api.check(
         "POST",
-        "/profile/foo",
+        "/profile",
         404,
         data={
             "lid": 6,
@@ -374,36 +374,36 @@ def test_add_profile(api):
             "naissance": "1999-01-08",
             "photoPath": "/this/is/photo/path",
         },
-        login=ADMIN,
+        login="foo",
     )
     api.check(
         "PATCH",
-        "/profile/foo",
+        "/profile",
         204,
         data={
-            "firstName": "foo",
+            "firstName": "fool",
             "lastName": "bla",
-            "bio": "Je m appelle Foobla",
+            "bio": "Je m appelle Foolbla",
             "naissance": "1999-01-08",
             "photoPath": "/this/is/photo/path",
         },
-        login=ADMIN,
+        login="calvin",
     )
-    api.check(
-        "PATCH",
-        "/profile/guignol",
-        404,
-        data={
-            "firstName": "foo",
-            "lastName": "bla",
-            "bio": "Je m appelle Foobla",
-            "naissance": "1999-01-08",
-            "photoPath": "/this/is/photo/path",
-        },
-        login=ADMIN,
-    )
-    api.check("DELETE", "/profile/foo", 204, login=ADMIN)
-    api.check("DELETE", "/profile/foo", 404, login=ADMIN)
+    # api.check(
+    #     "PATCH",
+    #     "/profile/guignol",
+    #     404,
+    #     data={
+    #         "firstName": "foo",
+    #         "lastName": "bla",
+    #         "bio": "Je m appelle Foobla",
+    #         "naissance": "1999-01-08",
+    #         "photoPath": "/this/is/photo/path",
+    #     },
+    #     login=ADMIN,
+    # )
+    api.check("DELETE", "/profile", 204, login="nermine")
+    api.check("DELETE", "/profile", 404, login="nermine")
 
 
 def test_add_group_chat_of_2(api):
@@ -444,6 +444,7 @@ def test_add_event(api):
             "ename": "PSG-MU au Parc",
             "eloc": "Paris",
             "etime": "2024-02-25",
+            "eduree": "3 hours",
         },
         login=ADMIN,
     )
@@ -456,6 +457,7 @@ def test_add_event(api):
             "ename": "PSG-MU au Parc",
             "eloc": "Paris",
             "etime": "2024-02-25",
+            "eduree": "3 hours",
         },
         login=ADMIN,
     )
@@ -468,6 +470,7 @@ def test_add_event(api):
             "ename": "PSG-City au Parc",
             "eloc": "Paris",
             "etime": "2024-04-25",
+            "eduree": "3 hours",
         },
         login=ADMIN,
     )
@@ -493,8 +496,7 @@ def test_add_event(api):
 
 # profile : get_info
 def test_get_info_profile(api):
-    api.check("GET", "/first-last-name/calvin", 200, r"dadson", login="calvin")
-    api.check("GET", "/first-last-name/brandon", 404, login="calvin")
+    api.check("GET", "/first-last-name", 200, r"dalton", login="joe")
     api.check("GET", "/all-info/hobbes", 200, r"tiger", login=ADMIN)
     api.check("GET", "/all-info/brandon", 404, login=ADMIN)
     api.check("GET", "/all-info", 404, login=ADMIN)
@@ -617,3 +619,4 @@ def test_get_all_preferences_for_given_user(api):
 
 def test_get_all_preferences(api):
     api.check("GET", "/all-possible-preferences/", 200, r"cowboy", login=ADMIN)
+    api.check("GET", "/all-possible-preferences-with-id", 200, r"cowboy", login=ADMIN)

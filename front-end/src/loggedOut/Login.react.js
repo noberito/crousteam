@@ -30,6 +30,8 @@ const styles = StyleSheet.create({
   buttonRow: {
     justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   Text: {
@@ -54,12 +56,8 @@ export default function Login({ onSuccess, onCancel }) {
 
     console.log(`Request GET on ${baseUrl}/login`)
 
-    axios({
-      baseURL: baseUrl,
-      url: '/login',
-      method: 'GET',
+    axios.get('/login', {
       headers: { 'Authorization': 'Basic ' + encode(username + ':' + password) }
-      // auth : {username : username, password : password} "Property 'btoa' doesn't exist"
     }).then(result => {
       console.log('OK ! ' + result.data)
       setIsLoading(false)

@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
+import axios from 'axios';
 import LoggedOutView from './loggedOut/LoggedOutView.react';
 import FrienderView from './friender/FrienderView.react';
 import Header from './header/Header.react';
 import AppContext from './common/appcontext';
+import { baseUrl } from './common/const';
 import colors from './common/Colors.react';
 import CrousteamButton from './common/CrousteamButton.react';
+
+// URL de base par défaut pour toutes les requêtes Axios
+axios.defaults.baseURL = baseUrl;
 
 const styles = StyleSheet.create({
   container: {

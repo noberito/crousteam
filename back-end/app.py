@@ -78,16 +78,6 @@ def check_user_perms_write_into_group(login: str, gid: int, _mode) -> bool:
     return bool(res)
 
 
-# access for you and admins
-# @app.object_perms("only_you_and_admins")
-# def check_user_perms(login: str, _mode):
-#     adm = db.get_auth_login(login=login)
-#     if adm[1]:
-#         return True
-#     res = db.get_true_if_login(login=login)
-#     return bool(res)
-
-
 #
 # General information about running app.
 #
@@ -258,50 +248,41 @@ def get_group_gid(login1: str, login2: str):
         return json({"gid": ""}), 200
 
 
-@app.post(
-    "/messages/gid:<gid>", authorize=("message", "gid")
-)  # Attention FRONT a changer
+@app.post("/messages/gid:<gid>", authorize=("message", "gid"))
 def post_messages(login: str, mtext: str, gid: int):
     lid = db.get_lid_from_login(login=login)
     db.post_messages(lid=lid, mtext=mtext, gid=gid)
     return "", 201
 
 
-@app.get("/all-conversations/<login>", authorize="ANY")
-def get_all_conversations(login: str):
-    exist = db.get_single_profile(login=login)
-    if not exist:
-        return "login incorrect", 404
-    res = db.get_all_conversations(login=login)
+@app.get("/all-conversations", authorize="ALL")
+def get_all_conversations(user: fsa.CurrentUser):
+    res = db.get_all_conversations(login=user)
     return json(res), 200
 
 
-@app.get("/profile", authorize="ANY")
+@app.get("/profiles", authorize="ANY")
 def get_all_profile():
     res_tot = db.all_info_profile()
     return json(res_tot), 200
 
 
-@app.get("/profile/<login>", authorize="ANY")
-def get_single_profile(login: str):
-    res = db.get_single_profile(login=login)
-    if res:
-        # BIZARRE RENVOIE VRAIMENT CA ?
-        return json(res), 200
-    return "login not found", 404
+@app.get("/profile", authorize="ALL")
+def get_single_profile(user: fsa.CurrentUser):
+    res = db.get_single_profile(login=user)
+    return json(res), 200
 
 
-@app.post("/profile/<login>", authorize="ANY")
+@app.post("/profile", authorize="ALL")
 def post_info_register(
     lid: int,
     firstName: str,
     lastName: str,
-    login: str,
     bio: str,
     naissance: str,
     photoPath: str,
 ):
-    already_exist = db.get_single_profile(login=login)
+    already_exist = db.get_single_profile(login=app.current_user())
     if already_exist:
         return "profile of this login already exist", 404
     res = db.post_info_register(
@@ -315,31 +296,33 @@ def post_info_register(
     return json(res), 201
 
 
-@app.delete("/profile/<login>", authorize="ANY")
-def delete_info_profile(login: str):
-    exist = db.get_single_profile(login=login)
+@app.delete("/profile", authorize="ALL")
+def delete_info_profile():
+    exist = db.get_single_profile(login=app.current_user())
     if exist:
-        db.delete_info_profile(login=login)
+        db.delete_info_profile(login=app.current_user())
         return "", 204
     return "login not found", 404
 
 
-@app.patch("/profile/<login>", authorize="ANY")
+@app.patch("/profile", authorize="ALL")
 def update_info_profile(
-    login: str, firstName: str, lastName: str, bio: str, naissance: str, photoPath: str
+    user: fsa.CurrentUser,
+    firstName: str,
+    lastName: str,
+    bio: str,
+    naissance: str,
+    photoPath: str,
 ):
-    exist = db.get_single_profile(login=login)
-    if exist:
-        db.update_info_profile(
-            login=login,
-            firstName=firstName,
-            lastName=lastName,
-            bio=bio,
-            naissance=naissance,
-            photoPath=photoPath,
-        )
-        return "", 204
-    return "login not found", 404
+    db.update_info_profile(
+        login=user,
+        firstName=firstName,
+        lastName=lastName,
+        bio=bio,
+        naissance=naissance,
+        photoPath=photoPath,
+    )
+    return "", 204
 
 
 @app.post("/group-chat-2", authorize="ANY")
@@ -376,7 +359,7 @@ def get_event_with_preferences(preferences_list: StrList = None):
         res = db.get_all_events_with_preferences(
             preferences_list=json_dumps(preferences_list)
         )
-    return json(res), 200
+    return json_dumps(list(res)), 200
 
 
 @app.get("/event-gid", authorize="ANY")
@@ -386,12 +369,12 @@ def get_gid_from_eid(eid: int):
 
 
 @app.post("/event", authorize="ANY")
-def create_event(login: str, ename: str, eloc: str, etime: str):
+def create_event(login: str, ename: str, eloc: str, etime: str, eduree: str):
     exist_already = db.get_single_event(ename=ename, eloc=eloc, etime=etime)
     if exist_already:
         return "the same event already exist", 404
     gid = db.create_group_chat_link_to_the_event(ename=ename)
-    eid = db.add_event(ename=ename, eloc=eloc, etime=etime, gid=int(gid))
+    eid = db.add_event(ename=ename, eloc=eloc, etime=etime, eduree=eduree, gid=int(gid))
     lid = db.get_lid_from_login(login=login)
     if lid != 1:
         db.add_people_into_group(gid=gid, lid=1)
@@ -425,11 +408,9 @@ def insert_people_into_the_event_group_chat(eid: int, login: str):
     return "", 201
 
 
-@app.get("/first-last-name/<login>", authorize="ANY", auth="basic")
-def get_first_last_name(login: str):
-    res = db.get_first_last_name(login=login)
-    if not res:
-        return "login not found", 404
+@app.get("/first-last-name", authorize="ALL")
+def get_first_last_name(user: fsa.CurrentUser):
+    res = db.get_first_last_name(login=user)
     return json(res), 200
 
 
@@ -526,6 +507,12 @@ def get_preferences_with_certain_user(login: str):
 @app.get("/all-possible-preferences/", authorize="ANY")
 def get_all_preferences():
     res_login = db.get_all_preferences()
+    return json(res_login), 200
+
+
+@app.get("/all-possible-preferences-with-id", authorize="ANY")
+def get_all_preferences_with_id():
+    res_login = db.get_all_preferences_with_id()
     return json(res_login), 200
 
 

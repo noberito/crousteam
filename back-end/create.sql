@@ -77,6 +77,7 @@ CREATE TABLE IF NOT EXISTS Event(
   ename TEXT NOT NULL,
   eloc TEXT NOT NULL,
   etime DATE NOT NULL,
+  eduree INTERVAL NOT NULL,
   edescr TEXT DEFAULT NULL,
   gid INTEGER NOT NULL,
   UNIQUE (ename, eloc, etime),

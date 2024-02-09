@@ -72,7 +72,7 @@ export default function GeneralSettingsView({ }) {
 
         axios({
             baseURL: baseUrl,
-            url: `/profile/${username}`,
+            url: `/profile`,
             method: 'PATCH',
             params: { firstName, lastName, bio, naissance, photoPath }
             // auth : {username : username, password : password} "Property 'btoa' doesn't exist"

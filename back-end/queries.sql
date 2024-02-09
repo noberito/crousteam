@@ -87,7 +87,7 @@ SELECT lid FROM Auth WHERE login = :login;
 INSERT INTO Profile(lid, firstName, lastName, bio, naissance, photoPath)
 VALUES (:lid, :firstName, :lastName, :bio, :naissance, :photoPath);
 
--- name: get_single_profile^
+-- name: get_single_profile$
 SELECT TRUE FROM Profile WHERE lid = (SELECT lid FROM Auth WHERE login = :login);
 
 -- name: delete_info_profile!
@@ -239,23 +239,30 @@ WHERE login = :login;
 SELECT pftype
 FROM Preferences;
 
+-- name: get_all_preferences_with_id
+SELECT * FROM Preferences;
+
 -- name: get_single_event^
 SELECT TRUE FROM Event
 WHERE ename = :ename AND eloc = :eloc AND etime = :etime;
 
 -- name: get_all_events
-SELECT * FROM Event;
+SELECT ename, eloc, etime::TEXT, eduree::TEXT, edescr, gid FROM Event
+WHERE etime >= CURRENT_DATE;
 
 -- name: get_single_event_with_eid^
 SELECT TRUE FROM Event
 WHERE eid = :eid;
 
 -- name: get_all_events_with_preferences
-SELECT ename, eloc, etime, edescr, gid FROM Event
+SELECT ename, eloc,
+etime::TEXT,
+eduree::TEXT,
+edescr, gid FROM Event
 JOIN EventPreferences USING(eid)
 JOIN Preferences USING(pfid)
 WHERE ('"'||pftype||'"')::JSONB <@ :preferences_list::JSONB AND etime >= CURRENT_DATE
-ORDER BY etime;
+ORDER BY 3;
 
 -- name: get_gid_from_eid^
 SELECT gid FROM Event WHERE eid = :eid;
@@ -266,8 +273,8 @@ VALUES (:ename, TRUE)
 RETURNING gid;
 
 -- name: add_event$
-INSERT INTO Event (ename, eloc, etime, gid)
-VALUES (:ename, :eloc, :etime, :gid)
+INSERT INTO Event (ename, eloc, etime, eduree, gid)
+VALUES (:ename, :eloc, :etime, :eduree, :gid)
 RETURNING eid;
 
 -- name: delete_event!

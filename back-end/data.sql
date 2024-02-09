@@ -22,7 +22,8 @@ INSERT INTO AppGroup(gname, isGroupChat) VALUES
 ('justiciers', FALSE), ('les philosophes', TRUE),
 ('dalton -> prison', TRUE), ('les legendes', FALSE),
 ('calvin_averell', FALSE), ('Big Crous', TRUE),
-('Real-PSG', TRUE), ('Soiree en FAO', TRUE);
+('Real-PSG', TRUE), ('Soiree en FAO', TRUE),
+('Second Big Crous', TRUE);
 
 INSERT INTO UsersInGroup(gid, lid) VALUES
 (1, 1), (1, 2),
@@ -34,7 +35,8 @@ INSERT INTO UsersInGroup(gid, lid) VALUES
 (7, 1), (7, 10),
 (8, 1), (8, 5), (8, 8),
 (9, 1), (9, 2), (9, 7), (9, 9),
-(10, 1), (10, 4), (10, 7);
+(10, 1), (10, 4), (10, 7),
+(11, 1), (11, 4), (11, 7);
 
 INSERT INTO Messages(lid, mtext, mtime, gid) VALUES
 (1, 'Je suis grand', '1999-01-08 04:05:06', 1),
@@ -78,12 +80,15 @@ INSERT INTO UsersPref(lid, pfid) VALUES
 (12, 1), (12, 6),
 (13, 1);
 
-INSERT INTO Event(ename, eloc, etime, edescr, gid) VALUES
-('Big Crous', 'RU PR', '2024-02-06', 'Notre raison d être', 8),
-('Real-PSG', 'Bernabeu', '2024-02-14', 'Match champions league', 9),
-('Soiree en FAO', 'Meuh', '2024-02-26', 'Soiree collante', 10);
+INSERT INTO Event(ename, eloc, etime, eduree, edescr, gid) VALUES
+ ('Big Crous', 'RU PR', '2024-02-22', '1 hour', 'Notre raison d être', 8)
+,('Real-PSG', 'Bernabeu', '2024-02-14', '3 hours', 'Match champions league', 9)
+,('Soiree en FAO', 'Meuh', '2024-02-26', '7 hours', 'Soiree collante', 10)
+,('Big Crous', 'RU PR', '2024-02-02', '2 hour', 'Notre raison d être', 11)
+;
 
 INSERT INTO EventPreferences(eid, pfid) VALUES
 (1, 1), (1, 6),
 (2, 3),
-(3, 7);
+(3, 7),
+(4, 1), (4, 6);
