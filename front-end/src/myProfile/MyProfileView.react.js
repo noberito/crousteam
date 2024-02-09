@@ -62,6 +62,10 @@ const styles = StyleSheet.create({
         fontFamily: 'Arista-Pro-Alternate-Bold-trial',
         fontSize: 20,
         color: colors.secondaryText
+    },
+    Text: {
+        fontFamily: 'Arista-Pro-Alternate-Bold-trial',
+        fontSize: 24,
     }
 });
 
@@ -115,8 +119,8 @@ export default function MyProfileView({ logoutUser }) {
                 </View>
             </View>
             <View style={styles.buttonContainer}>
-                <CrousteamButton title="General Settings" onPress={() => { setPage("generalsettings") }} />
-                <CrousteamButton title="Change Preferences" onPress={() => { setPage("changepreferences") }} />
+                <CrousteamButton title="General Settings" styleText={styles.Text} onPress={() => { setPage("generalsettings") }} />
+                <CrousteamButton title="Change Preferences" styleText={styles.Text} onPress={() => { setPage("changepreferences") }} />
             </View>
             <View style={styles.logoutContainer}>
                 <LogOutButton title="Log Out" onPress={logoutUser} />
