@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 
-import { Text, Button, View, StyleSheet, TouchableOpacity, FlatList , Image} from 'react-native';
+import { Text, Button, View, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
 
 import AppContext from '../common/appcontext';
 
@@ -13,11 +13,11 @@ import { baseUrl } from '../common/const';
 import CrousteamCard from '../common/CrousteamCard.react';
 import ReturnButton from '../common/ReturnButton.react';
 
- 
+
 
 export default function GeneralSettingsView() {
 
- 
+
 
     const [preferences, setPreferences] = useState([]);
 
@@ -31,7 +31,7 @@ export default function GeneralSettingsView() {
 
     const [test, setTest] = useState([]);
 
- 
+
 
     const getPreferences = () => {
 
@@ -75,7 +75,7 @@ export default function GeneralSettingsView() {
 
     }
 
- 
+
 
     const getUserPreferences = () => {
 
@@ -119,7 +119,7 @@ export default function GeneralSettingsView() {
 
     }
 
- 
+
 
     const SendPreferences = () => {
 
@@ -145,7 +145,7 @@ export default function GeneralSettingsView() {
 
             if (response.status >= 200 && response.status < 300) {
 
-                
+
                 setHasFailure(false)
 
             } else {
@@ -166,7 +166,7 @@ export default function GeneralSettingsView() {
 
     }
 
- 
+
 
     useEffect(() => {
 
@@ -176,7 +176,7 @@ export default function GeneralSettingsView() {
 
     }, []);
 
- 
+
 
     const renderPreferenceItem = ({ item }) => (
 
@@ -189,7 +189,7 @@ export default function GeneralSettingsView() {
 
     );
 
- 
+
 
     const renderRow = ({ item }) => (
 
@@ -207,7 +207,7 @@ export default function GeneralSettingsView() {
 
     );
 
- 
+
 
     const handlePreferenceClick = (clickedPreference) => {
 
@@ -215,23 +215,23 @@ export default function GeneralSettingsView() {
 
             const preferencesArray = prevSelected.split(',').filter(item => item.trim() !== '');
 
- 
+
 
             console.log('Avant :', preferencesArray);
 
             console.log('clickedPreference :', clickedPreference);
 
- 
+
 
             // Si clickedPreference est un tableau, utilisons le premier élément
 
             const cleanPreference = Array.isArray(clickedPreference) ? clickedPreference[0] : clickedPreference;
 
- 
+
 
             const index = preferencesArray.indexOf(cleanPreference.trim());
 
- 
+
 
             if (index !== -1) {
 
@@ -247,11 +247,11 @@ export default function GeneralSettingsView() {
 
             }
 
- 
+
 
             console.log('Après :', preferencesArray);
 
- 
+
 
             // Retournons la chaîne résultante
 
@@ -261,7 +261,7 @@ export default function GeneralSettingsView() {
 
     };
 
- 
+
 
     const chunkArray = (array, size) => {
 
@@ -277,17 +277,17 @@ export default function GeneralSettingsView() {
 
     };
 
- 
+
 
     const preferencesRows = chunkArray(preferences, 3);
 
- 
+
 
     const [isLoading, setIsLoading] = useState(false);
 
     const [hasFailure, setHasFailure] = useState(false);
 
- 
+
 
     const styles = StyleSheet.create({
 
@@ -304,9 +304,9 @@ export default function GeneralSettingsView() {
         title: {
 
             fontSize: 40,
-            fontFamily:'Arista-Pro-Alternate-Bold-trial',
-            color:colors.secondaryText,
-            marginBottom:10
+            fontFamily: 'Arista-Pro-Alternate-Bold-trial',
+            color: colors.secondaryText,
+            marginBottom: 10
 
         },
 
@@ -328,7 +328,7 @@ export default function GeneralSettingsView() {
         button: {
             flexGrow: 1,
             padding: 2,
-            alignItems:'center'
+            alignItems: 'center'
         },
         itemContainer: {
             flex: 1 / 2, // Trois éléments par ligne
@@ -338,7 +338,7 @@ export default function GeneralSettingsView() {
         },
         selectedItem: {
 
-             // Couleur de la bordure lorsqu'il est sélectionné
+            // Couleur de la bordure lorsqu'il est sélectionné
             borderWidth: 2, // Largeur de la bordure lorsqu'il est sélectionné
             color: colors.secondaryText, // Couleur du texte lorsqu'il est sélectionné
         },
@@ -351,34 +351,38 @@ export default function GeneralSettingsView() {
             alignItems: 'center',
             justifyContent: 'center',
             elevation: 3, // for Android
-            shadowColor: colors.primaryText, 
-            shadowOffset: { width: 0, height: 2 }, 
-            shadowOpacity: 0.3, 
+            shadowColor: colors.primaryText,
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.3,
             shadowRadius: 4,
             height: 'auto',
 
         },
         preferenceText: {
-            padding:20,
+            padding: 20,
             fontSize: 16,
-            fontFamily:'Arista-Pro-Alternate-Bold-trial',
+            fontFamily: 'Arista-Pro-Alternate-Bold-trial',
             textAlign: 'center',
         },
-        imageContainer:{
-            alignItems:'center',
-            marginBottom:20
+        imageContainer: {
+            alignItems: 'center',
+            marginBottom: 20
+        },
+        Text: {
+            fontFamily: 'Arista-Pro-Alternate-Bold-trial',
+            fontSize: 24,
         }
 
     });
 
- 
+
 
     return (
 
         <View>
             <ReturnButton onPress={() => { setPage("myprofile") }} title="Retour"></ReturnButton>
             <View style={styles.imageContainer}>
-                <Image source={require('../loggedOut/ic_launcher_round.png')}/>
+                <Image source={require('../loggedOut/ic_launcher_round.png')} />
             </View>
             <CrousteamCard>
                 <View style={styles.titleContainer}>
@@ -395,7 +399,7 @@ export default function GeneralSettingsView() {
                 />
                 <View style={styles.buttonRow}>
                     <View style={styles.button}>
-                        <CrousteamButton title="CHANGE PREFERENCES" disabled={isLoading} onPress={() => { SendPreferences(); }} />
+                        <CrousteamButton title="CHANGE PREFERENCES" disabled={isLoading} styleText={styles.Text} onPress={() => { SendPreferences(); }} />
                     </View>
                 </View>
             </CrousteamCard>
@@ -403,6 +407,6 @@ export default function GeneralSettingsView() {
 
     );
 
- 
+
 
 }
