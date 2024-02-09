@@ -8,7 +8,8 @@ import ReturnButton from '../common/ReturnButton.react';
 import CrousteamCard from '../common/CrousteamCard.react';
 import colors from '../common/Colors.react';
 import CrousteamTextInput from '../common/CrousteamTextInput.react';
-import Datepicker from 'react-datepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 
 const styles = StyleSheet.create({
     mainContainer :{
@@ -54,7 +55,7 @@ export default function AddEventView({}){
     const [selectedPreferences, setSelectedPreferences] = useState({})
     const [name, setName] = useState("")
     const [location, setLocation] = useState("")
-    const [date, setDate] = useState("")
+    const [date, setDate] = useState(new Date())
     const [duration, setDuration] = useState("")
     const [preferences, setPreferences] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -148,7 +149,7 @@ export default function AddEventView({}){
                 </View>
                 <CrousteamTextInput onChangeText={(text)=> {setName(text)}}label = "Name" placeholder ="Enter a name"/>
                 <CrousteamTextInput onChangeText={(text)=> {setLocation(text)}} label = "Location" placeholder ="Enter a Location"/>
-                <CrousteamTextInput onChangeText={(text)=> {setDate(text)}} label = "Date" placeholder ="Enter a date"/>
+                
                 <CrousteamTextInput onChangeText={(text)=> {setDuration(text)}} label = "Duration" placeholder ="Enter a duration"/>
                 <View>
                 <FlatList
