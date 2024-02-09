@@ -10,11 +10,6 @@ import colors from '../common/Colors.react';
 export default function EventDisplayView({ eid, setEid, gid, setGid }) {
   const { username, setPage, authToken } = useContext(AppContext)
 
-<<<<<<< HEAD
-    return(
-        <View>
-            <Text> C'est la page d'event de {gid} et je suis {username}</Text>
-=======
   const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [hasPermissionError, setPermissionError] = useState(false);
@@ -87,7 +82,6 @@ export default function EventDisplayView({ eid, setEid, gid, setGid }) {
     }
 
   });
->>>>>>> 88f99fd (small changes in style)
 
   const getGroup = useCallback(() => {
     setIsLoading(true);
@@ -118,11 +112,6 @@ export default function EventDisplayView({ eid, setEid, gid, setGid }) {
     });
   }, [authToken]);
 
-<<<<<<< HEAD
-            <Button title="Retour" onPress={() => { setGid(-1); setPage("listevent") }}></Button>
-        </View>
-    )
-=======
   useEffect(() => {
     getGroup();
   }, [authToken, getGroup]);
@@ -137,5 +126,4 @@ export default function EventDisplayView({ eid, setEid, gid, setGid }) {
 
     </View>
   )
->>>>>>> 88f99fd (small changes in style)
 };

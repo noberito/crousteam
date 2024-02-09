@@ -8,30 +8,28 @@ import ReturnButton from '../common/ReturnButton.react';
 import CrousteamCard from '../common/CrousteamCard.react';
 import colors from '../common/Colors.react';
 import CrousteamTextInput from '../common/CrousteamTextInput.react';
-import DateTimePicker from '@react-native-community/datetimepicker';
-
 
 const styles = StyleSheet.create({
-    mainContainer :{
-        justifyContent:"",
-        flex:1
+    mainContainer: {
+        justifyContent: "",
+        flex: 1
     },
-    title:{
-        fontFamily:'Arista-Pro-Alternate-Bold-trial',
-        fontSize:40,
-        marginBottom:20,
-        color:colors.secondaryText
+    title: {
+        fontFamily: 'Arista-Pro-Alternate-Bold-trial',
+        fontSize: 40,
+        marginBottom: 20,
+        color: colors.secondaryText
     },
-    titleContainer:{
-        alignItems:'center'
+    titleContainer: {
+        alignItems: 'center'
     },
-    buttonContainer:{
-        alignItems:"center"
+    buttonContainer: {
+        alignItems: "center"
     },
-    preferenceContainer:{
-        backgroundColor:colors.background,
-        height:'auto',
-        width:'auto',
+    preferenceContainer: {
+        backgroundColor: colors.background,
+        height: 'auto',
+        width: 'auto',
         borderRadius: 10,
         padding: 20,
         justifyContent: 'center',
@@ -41,17 +39,17 @@ const styles = StyleSheet.create({
         shadowColor: colors.secondaryText,
         shadowOffset: { width: 0, height: 7 },
     },
-    preference:{
-        fontFamily:'Arista-Pro-Alternate-Bold-trial'
+    preference: {
+        fontFamily: 'Arista-Pro-Alternate-Bold-trial'
     }
 }
 )
 
 
 
-export default function AddEventView({}){
+export default function AddEventView({ }) {
 
-    const {setPage, authToken, username} = useContext(AppContext)
+    const { setPage, authToken, username } = useContext(AppContext)
     const [selectedPreferences, setSelectedPreferences] = useState({})
     const [name, setName] = useState("")
     const [location, setLocation] = useState("")
@@ -73,27 +71,27 @@ export default function AddEventView({}){
             headers: { Authorization: 'Bearer ' + authToken },
             data: {
                 login: username,
-                ename: name, 
-                eloc: location, 
-                etime: date, 
+                ename: name,
+                eloc: location,
+                etime: date,
                 eduree: duration, // Ajustez le nom de cette propriété selon votre API
-      }
+            }
         }).then(response => {
             setIsPosting(false);
             if (response.status === 200 || response.status === 201) {
-              // Message posté avec succès
-              console.log('Event posted successfully');
-              // Vous pouvez ici actualiser la liste des messages ou gérer la réponse comme souhaité
+                // Message posté avec succès
+                console.log('Event posted successfully');
+                // Vous pouvez ici actualiser la liste des messages ou gérer la réponse comme souhaité
             } else {
-              // Gérer d'autres codes de statut selon votre API
-              setPostError(true);
+                // Gérer d'autres codes de statut selon votre API
+                setPostError(true);
             }
-          }).catch(err => {
+        }).catch(err => {
             console.error(`Something went wrong while posting the event: ${err.message}`);
             setIsPosting(false);
             setPostError(true);
-          });
-        }; // Ajoutez d'autres dépendances si nécessaire
+        });
+    }; // Ajoutez d'autres dépendances si nécessaire
 
     const getPreferences = () => {
         setIsLoading(true);
@@ -105,11 +103,11 @@ export default function AddEventView({}){
             setIsLoading(false)
             if (response.status >= 200 && response.status < 300) {
                 const parsedData = response.data.map(preferences => ({
-                    id: preferences[0], name:preferences[1]
+                    id: preferences[0], name: preferences[1]
                 }));
                 setHasFailure(false)
                 setPreferences(parsedData)
-                
+
             } else {
                 setHasFailure(true)
             }
@@ -131,38 +129,39 @@ export default function AddEventView({}){
         }));
     };
 
-    const renderItem = ({item}) => {
-        return(
-        <TouchableOpacity 
-            style={[styles.preferenceContainer, {backgroundColor: (selectedPreferences[item.id]) ? colors.primaryText : colors.background }]} 
-            onPress ={() => {toggleItemSelection(item.id)}}>
-            <Text style={styles.preference}> {item.name} </Text>
-        </TouchableOpacity>
-    )}
+    const renderItem = ({ item }) => {
+        return (
+            <TouchableOpacity
+                style={[styles.preferenceContainer, { backgroundColor: (selectedPreferences[item.id]) ? colors.primaryText : colors.background }]}
+                onPress={() => { toggleItemSelection(item.id) }}>
+                <Text style={styles.preference}> {item.name} </Text>
+            </TouchableOpacity>
+        )
+    }
 
-    return(
+    return (
         <View style={styles.mainContainer}>
-            <ReturnButton onPress = {() => {setPage('listevent')}}/>
+            <ReturnButton onPress={() => { setPage('listevent') }} />
             <CrousteamCard>
                 <View style={styles.titleContainer}>
                     <Text style={styles.title}> NEW EVENT </Text>
                 </View>
-                <CrousteamTextInput onChangeText={(text)=> {setName(text)}}label = "Name" placeholder ="Enter a name"/>
-                <CrousteamTextInput onChangeText={(text)=> {setLocation(text)}} label = "Location" placeholder ="Enter a Location"/>
-                
-                <CrousteamTextInput onChangeText={(text)=> {setDuration(text)}} label = "Duration" placeholder ="Enter a duration"/>
+                <CrousteamTextInput onChangeText={(text) => { setName(text) }} label="Name" placeholder="Enter a name" />
+                <CrousteamTextInput onChangeText={(text) => { setLocation(text) }} label="Location" placeholder="Enter a Location" />
+                <CrousteamTextInput onChangeText={(text) => { setDate(text) }} label="Date" placeholder="Enter a date" />
+                <CrousteamTextInput onChangeText={(text) => { setDuration(text) }} label="Duration" placeholder="Enter a duration" />
                 <View>
-                <FlatList
-                    data={preferences}
-                    keyExtractor={item => item.id}
-                    renderItem={renderItem}
-                    numColumns={3}/>
+                    <FlatList
+                        data={preferences}
+                        keyExtractor={item => item.id}
+                        renderItem={renderItem}
+                        numColumns={3} />
                 </View>
                 <View style={styles.buttonContainer}>
-                    <CrousteamButton title="ADD EVENT" onPress={() => {postEvent(), setPage("listevent")}}/>
+                    <CrousteamButton title="ADD EVENT" onPress={() => { postEvent(), setPage("listevent") }} />
                 </View>
             </CrousteamCard>
-            
+
         </View>
     );
 }
