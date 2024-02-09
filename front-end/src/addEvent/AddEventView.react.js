@@ -8,6 +8,7 @@ import ReturnButton from '../common/ReturnButton.react';
 import CrousteamCard from '../common/CrousteamCard.react';
 import colors from '../common/Colors.react';
 import CrousteamTextInput from '../common/CrousteamTextInput.react';
+import Datepicker from 'react-datepicker';
 
 const styles = StyleSheet.create({
     mainContainer :{
