@@ -27,15 +27,30 @@ const styles = StyleSheet.create({
         alignItems:"center"
     },
     preferenceContainer:{
+        backgroundColor:colors.background,
         height:'auto',
-        width:'auto'
+        width:'auto',
+        borderRadius: 10,
+        padding: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 20,
+        elevation: 3, // for Android
+        shadowColor: colors.secondaryText,
+        shadowOffset: { width: 0, height: 7 },
     }
 }
 )
 
+
+
 export default function AddEventView({}){
 
     const {setPage, authToken} = useContext(AppContext)
+    const [name, setName] = useState("")
+    const [location, setLocation] = useState("")
+    const [day, setDay] = useState("")
+    const [time, setTime] = useState("")
     const [preferences, setPreferences] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasFailure, setHasFailure] = useState(false);
@@ -50,7 +65,7 @@ export default function AddEventView({}){
             setIsLoading(false)
             if (response.status >= 200 && response.status < 300) {
                 const parsedData = response.data.map(preferences => ({
-                    name:preferences[0]
+                    name:preferences[0], selected:0
                 }));
                 setHasFailure(false)
                 setPreferences(parsedData)
@@ -70,9 +85,10 @@ export default function AddEventView({}){
     }, [authToken]);
 
     const renderItem = ({item}) => {
+        console.log(item.selected)
         return(
-        <TouchableOpacity style={styles.preferenceContainer}>
-            <Text style={styles.preference}> {item.name} </Text>
+        <TouchableOpacity style={[styles.preferenceContainer, {backgroundColor: (item.selected === 1) ? colors.primaryText : colors.background }]} onPress ={() => {item.selected = 1 - item.selected} }>
+            <Text style={[styles.preference, ]}> {item.name} </Text>
         </TouchableOpacity>
     )}
 
@@ -83,10 +99,10 @@ export default function AddEventView({}){
                 <View style={styles.titleContainer}>
                     <Text style={styles.title}> NEW EVENT </Text>
                 </View>
-                <CrousteamTextInput label = "Name" placeholder ="Enter a name"/>
-                <CrousteamTextInput label = "Location" placeholder ="Enter a Location"/>
-                <CrousteamTextInput label = "Day" placeholder ="Enter a day"/>
-                <CrousteamTextInput label = "Time" placeholder ="Enter a time"/>
+                <CrousteamTextInput onChangeText={(text)=> {setName(text)}}label = "Name" placeholder ="Enter a name"/>
+                <CrousteamTextInput onChangeText={(text)=> {setLocation(text)}} label = "Location" placeholder ="Enter a Location"/>
+                <CrousteamTextInput onChangeText={(text)=> {setDay(text)}} label = "Day" placeholder ="Enter a day"/>
+                <CrousteamTextInput onChangeText={(text)=> {setTime(text)}} label = "Time" placeholder ="Enter a time"/>
                 <View>
                 <FlatList
                     data={preferences}
