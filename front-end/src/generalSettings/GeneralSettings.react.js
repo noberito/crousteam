@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 export default function GeneralSettingsView({ }) {
     const [info, setInfo] = useState([]);
     const [lid, setLid] = useState();
-    const { username, setUsername, setPage } = useContext(AppContext);
+    const { username, setUsername, setPage, authToken } = useContext(AppContext);
 
     const [login, setLogin] = useState('');
     const [firstName, setFirstName] = useState();
@@ -75,7 +75,8 @@ export default function GeneralSettingsView({ }) {
             baseURL: baseUrl,
             url: `/profile`,
             method: 'PATCH',
-            params: { firstName, lastName, bio, naissance, photoPath }
+            headers: { Authorization: 'Bearer ' + authToken },
+            data: { firstName, lastName, bio, naissance, photoPath }
             // auth : {username : username, password : password} "Property 'btoa' doesn't exist"
         }).then(result => {
             console.log('OK ! ' + result.data)

@@ -314,13 +314,19 @@ def test_messages(api):
     )
     api.check("GET", "/messages/gid:4000", 404, login=ADMIN)
     api.check(
-        "GET", "/group-gid", 200, r"1", data={"login1": "calvin", "login2": "hobbes"}
+        "GET",
+        "/group-gid",
+        200,
+        r"1",
+        data={"login2": "hobbes"},
+        login="calvin",
     )
     api.check(
-        "GET", "/group-gid", 200, data={"login1": "hobbes", "login2": "jean-paul"}
-    )
-    api.check(
-        "GET", "/group-gid", 404, data={"login1": "brandon", "login2": "jean-paul"}
+        "GET",
+        "/group-gid",
+        200,
+        data={"login2": "jean-paul"},
+        login="hobbes",
     )
     api.check(
         "POST",
@@ -340,13 +346,11 @@ def test_messages(api):
 
 def test_conversations(api):
     api.check("GET", "/all-conversations", 200, r"copaing", login=ADMIN)
-    # api.check("GET", "/all-conversations", 404, login="brandon")
 
 
 # /Profile -> Post Information
 def test_add_profile(api):
     api.check("GET", "/profile", 200, login=ADMIN)
-    # api.check("GET", "/profile/hector", 404, login=ADMIN)
     api.check("GET", "/profiles", 200, r"jean-paul", login=ADMIN)
     api.check(
         "POST",
@@ -389,19 +393,19 @@ def test_add_profile(api):
         },
         login="calvin",
     )
-    # api.check(
-    #     "PATCH",
-    #     "/profile/guignol",
-    #     404,
-    #     data={
-    #         "firstName": "foo",
-    #         "lastName": "bla",
-    #         "bio": "Je m appelle Foobla",
-    #         "naissance": "1999-01-08",
-    #         "photoPath": "/this/is/photo/path",
-    #     },
-    #     login=ADMIN,
-    # )
+    api.check(
+        "PATCH",
+        "/profile",
+        204,
+        data={
+            "firstName": "fool",
+            "lastName": "bla",
+            "bio": "Je m appelle Foolbla",
+            "naissance": "2000-01-08",
+            "photoPath": "/this/is/photo/path",
+        },
+        login="foo",
+    )
     api.check("DELETE", "/profile", 204, login="nermine")
     api.check("DELETE", "/profile", 404, login="nermine")
 
@@ -440,7 +444,6 @@ def test_add_event(api):
         "/event",
         201,
         data={
-            "login": "calvin",
             "ename": "PSG-MU au Parc",
             "eloc": "Paris",
             "etime": "2024-02-25",
@@ -453,7 +456,6 @@ def test_add_event(api):
         "/event",
         404,
         data={
-            "login": "calvin",
             "ename": "PSG-MU au Parc",
             "eloc": "Paris",
             "etime": "2024-02-25",
@@ -461,20 +463,20 @@ def test_add_event(api):
         },
         login=ADMIN,
     )
-    api.check(
+    res2 = api.check(
         "POST",
         "/event",
         201,
         data={
-            "login": "hobbes",
             "ename": "PSG-City au Parc",
             "eloc": "Paris",
             "etime": "2024-04-25",
             "eduree": "3 hours",
         },
-        login=ADMIN,
+        login="hobbes",
     )
     eid = res.json
+    eid2 = res2.json
     api.check("GET", "/events", 200, r"PSG-MU au Parc", login=ADMIN)
     api.check(
         "GET",
@@ -491,6 +493,7 @@ def test_add_event(api):
     api.check("POST", "/event/calvin", 404, data={"eid": eid}, login=ADMIN)
     api.check("POST", "/event/brandon", 404, data={"eid": eid}, login=ADMIN)
     api.check("DELETE", "/event", 204, data={"eid": eid}, login=ADMIN)
+    api.check("DELETE", "/event", 204, data={"eid": eid2}, login="hobbes")
     api.check("DELETE", "/event", 404, data={"eid": eid}, login=ADMIN)
 
 

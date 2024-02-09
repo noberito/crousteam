@@ -24,6 +24,12 @@ SELECT TRUE FROM Auth
 JOIN UsersInGroup USING(lid)
 WHERE login = :login AND gid = :gid;
 
+-- name: get_auth_delete_group$
+SELECT ecreator FROM Auth
+JOIN UsersInGroup USING(lid)
+JOIN Event USING(gid)
+WHERE login = :login AND eid = :eid;
+
 -- name: get_true_if_login$
 SELECT TRUE FROM Auth WHERE login = :login;
 
@@ -127,6 +133,10 @@ SELECT g1.gid
 -- name: add_people_into_group!
 INSERT INTO UsersInGroup(gid, lid)
 VALUES (:gid, :lid);
+
+-- name: add_people_into_group_ecreator!
+INSERT INTO UsersInGroup(gid, lid, ecreator)
+VALUES (:gid, :lid, TRUE);
 
 -- name: get_single_lid^
 SELECT login FROM Auth WHERE lid = :lid;

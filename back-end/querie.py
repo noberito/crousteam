@@ -13,7 +13,20 @@ def datetime_converter(o):
 db = anodb.DB("postgres", "dbname=crousteam", "queries.sql")
 login = "calvin"
 list_pftype = ["amateur de cinema", "philantropique", "cowboy"]
-res_login = db.get_all_events_with_preferences(preferences_list=json.dumps(list_pftype))
+
+ename = "Bigman_streep"
+eloc = "Paris"
+etime = "2024-04-25"
+eduree = "03:00:00"
+
+
+gid = db.create_group_chat_link_to_the_event(ename=ename)
+eid = db.add_event(ename=ename, eloc=eloc, etime=etime, eduree=eduree, gid=int(gid))
+lid = db.get_lid_from_login(login="hobbes")
+db.add_people_into_group_ecreator(gid=gid, lid=lid)
+res_login = db.get_all_events()
+
+# (preferences_list=json.dumps(list_pftype))
 # res_login = db.test()
 if res_login:
     # res_login = json.dumps(list(res_login), default=datetime_converter)

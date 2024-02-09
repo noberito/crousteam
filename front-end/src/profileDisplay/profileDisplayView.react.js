@@ -119,7 +119,7 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog, }) {
       url: '/group-gid',
       method: 'GET',
       headers: { Authorization: 'Bearer ' + authToken },
-      params: { login1: username, login2: log }
+      params: { login2: log }
     }).then(response => {
       setIsLoading(false); // Set refreshing to false when data is loaded
       if (response.status == 200) {

@@ -78,6 +78,15 @@ def check_user_perms_write_into_group(login: str, gid: int, _mode) -> bool:
     return bool(res)
 
 
+@app.object_perms("event")
+def check_user_perms_delete_group(login: str, eid: int, _mode) -> bool:
+    adm = db.get_auth_login(login=login)
+    if adm[1]:
+        return True
+    res = db.get_auth_delete_group(login=login, eid=eid)
+    return bool(res)
+
+
 #
 # General information about running app.
 #
@@ -235,12 +244,10 @@ def get_messages(gid: int):
     return "no group with this id", 404
 
 
-@app.get("/group-gid", authorize="ANY")
-def get_group_gid(login1: str, login2: str):
-    lid1 = db.get_lid_from_login(login=login1)
+@app.get("/group-gid", authorize="ALL")
+def get_group_gid(user: fsa.CurrentUser, login2: str):
+    lid1 = db.get_lid_from_login(login=user)
     lid2 = db.get_lid_from_login(login=login2)
-    if not lid1 or not lid2:
-        return "no existing people", 404
     gid = db.is_people_already_in_the_same_group_with_login(lid1=lid1, lid2=lid2)
     if gid:
         return json({"gid": gid}), 200
@@ -261,7 +268,7 @@ def get_all_conversations(user: fsa.CurrentUser):
     return json(res), 200
 
 
-@app.get("/profiles", authorize="ANY")
+@app.get("/profiles", authorize="ALL")
 def get_all_profile():
     res_tot = db.all_info_profile()
     return json(res_tot), 200
@@ -311,7 +318,7 @@ def update_info_profile(
     firstName: str,
     lastName: str,
     bio: str,
-    naissance: str,
+    naissance: datetime.date,
     photoPath: str,
 ):
     db.update_info_profile(
@@ -325,7 +332,7 @@ def update_info_profile(
     return "", 204
 
 
-@app.post("/group-chat-2", authorize="ANY")
+@app.post("/group-chat-2", authorize="ALL")
 def create_chat_between_2_users(login1: str, login2: str):
     lid1 = db.get_lid_from_login(login=login1)
     lid2 = db.get_lid_from_login(login=login2)
@@ -337,8 +344,8 @@ def create_chat_between_2_users(login1: str, login2: str):
     if group_exist:
         return "group already exists", 404
     gid = db.create_group_of_two(gname="test_name")
-    db.add_people_into_group(gid=gid, lid=lid1)
-    db.add_people_into_group(gid=gid, lid=lid2)
+    db.add_people_into_group_ecreator(gid=gid, lid=lid1)
+    db.add_people_into_group_ecreator(gid=gid, lid=lid2)
     return json(gid), 201
 
 
@@ -351,7 +358,7 @@ def delete_group_chat(gid: int):
     return "", 204
 
 
-@app.get("/events", authorize="ANY")
+@app.get("/events", authorize="ALL")
 def get_event_with_preferences(preferences_list: StrList = None):
     if not preferences_list:
         res = db.get_all_events()
@@ -362,29 +369,35 @@ def get_event_with_preferences(preferences_list: StrList = None):
     return json_dumps(list(res)), 200
 
 
-@app.get("/event-gid", authorize="ANY")
+@app.get("/event-gid", authorize="ALL")
 def get_gid_from_eid(eid: int):
     gid = db.get_gid_from_eid(eid=eid)
     return json(gid), 200
 
 
-@app.post("/event", authorize="ANY")
-def create_event(login: str, ename: str, eloc: str, etime: str, eduree: str):
+@app.post("/event", authorize="ALL")
+def create_event(
+    user: fsa.CurrentUser,
+    ename: str,
+    eloc: str,
+    etime: datetime.date,
+    eduree: datetime.time,
+):
     exist_already = db.get_single_event(ename=ename, eloc=eloc, etime=etime)
     if exist_already:
         return "the same event already exist", 404
     gid = db.create_group_chat_link_to_the_event(ename=ename)
     eid = db.add_event(ename=ename, eloc=eloc, etime=etime, eduree=eduree, gid=int(gid))
-    lid = db.get_lid_from_login(login=login)
+    lid = db.get_lid_from_login(login=user)
     if lid != 1:
-        db.add_people_into_group(gid=gid, lid=1)
+        db.add_people_into_group_ecreator(gid=gid, lid=1)
     else:
         db.add_people_into_group(gid=gid, lid=2)
-    db.add_people_into_group(gid=gid, lid=lid)
+    db.add_people_into_group_ecreator(gid=gid, lid=lid)
     return json(eid), 201
 
 
-@app.delete("/event", authorize="ANY")
+@app.delete("/event", authorize=("event", "eid"))
 def delete_event(eid: int):
     exist_already = db.get_single_event_with_eid(eid=eid)
     if not exist_already:
@@ -393,7 +406,7 @@ def delete_event(eid: int):
     return "", 204
 
 
-@app.post("/event/<login>", authorize="ANY")
+@app.post("/event/<login>", authorize="ALL")
 def insert_people_into_the_event_group_chat(eid: int, login: str):
     people_exist = db.get_single_profile(login=login)
     group_exist = db.get_single_event_with_eid(eid=eid)
@@ -422,7 +435,7 @@ def get_all_info(login: str):
     return json(res), 200
 
 
-@app.post("/preferences/<login>", authorize="ANY")
+@app.post("/preferences/<login>", authorize="ALL")
 def post_preferences(list_pftype: StrList, login: str):
     s = 0
     for pftype in list_pftype:
@@ -436,7 +449,7 @@ def post_preferences(list_pftype: StrList, login: str):
     return "", 201
 
 
-@app.delete("/preferences/<login>", authorize="ANY")
+@app.delete("/preferences/<login>", authorize="ALL")
 def delete_preferences(list_pftype: StrList, login: str):
     s = 0
     for pftype in list_pftype:
@@ -449,7 +462,7 @@ def delete_preferences(list_pftype: StrList, login: str):
     return "", 204
 
 
-@app.patch("/preferences/<login>", authorize="ANY")
+@app.patch("/preferences/<login>", authorize="ALL")
 def update_info_profile_preferences(list_pftype: StrList, login: str):
     s = 0
     db.delete_preferences_for_user(login=login)
@@ -459,7 +472,7 @@ def update_info_profile_preferences(list_pftype: StrList, login: str):
     return "", 204
 
 
-@app.get("/users-with-preferences/<login>", authorize="ANY")
+@app.get("/users-with-preferences/<login>", authorize="ALL")
 def get_users_with_same_preferences(login: str):
     is_login_in = db.get_single_profile(login=login)
     if not is_login_in:
@@ -468,7 +481,7 @@ def get_users_with_same_preferences(login: str):
     return list(res_login), 200
 
 
-@app.get("/users-with-preferences-no-group-chat/<login>", authorize="ANY")
+@app.get("/users-with-preferences-no-group-chat/<login>", authorize="ALL")
 def get_users_with_same_preferences_no_group_chat(login: str):
     is_login_in = db.get_single_profile(login=login)
     if not is_login_in:
@@ -477,7 +490,7 @@ def get_users_with_same_preferences_no_group_chat(login: str):
     return list(res_login), 200
 
 
-@app.post("/preference-type/<pftype>", authorize="ANY")
+@app.post("/preference-type/<pftype>", authorize="ALL")
 def create_preference_type(pftype: str):
     exists1 = db.get_single_preference_type(pftype=pftype)
     if exists1:
@@ -486,7 +499,7 @@ def create_preference_type(pftype: str):
     return "", 200
 
 
-@app.delete("/preference-type/<pftype>", authorize="ANY")
+@app.delete("/preference-type/<pftype>", authorize="ALL")
 def delete_preference_type(pftype: str):
     to_delete = db.get_single_preference_type(pftype=pftype)
     if not to_delete:
@@ -510,7 +523,7 @@ def get_all_preferences():
     return json(res_login), 200
 
 
-@app.get("/all-possible-preferences-with-id", authorize="ANY")
+@app.get("/all-possible-preferences-with-id", authorize="ALL")
 def get_all_preferences_with_id():
     res_login = db.get_all_preferences_with_id()
     return json(res_login), 200

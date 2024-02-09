@@ -64,7 +64,7 @@ INSERT INTO Messages(lid, mtext, mtime, gid) VALUES
 INSERT INTO Preferences(pftype) VALUES
 ('amateur de cinema'), ('lecteur avere'), ('sportif invetere'),
 ('blagueur du dimanche'), ('philantropique'), ('voleur'),
-('cowboy');
+('cowboy'), ('boulanger'), ('sportif');
 
 INSERT INTO UsersPref(lid, pfid) VALUES
 (1, 1), (1, 4),
