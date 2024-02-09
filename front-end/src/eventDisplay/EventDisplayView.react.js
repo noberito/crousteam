@@ -15,6 +15,7 @@ export default function EventDisplayView({ eid, setEid, gid, setGid }) {
   const [hasPermissionError, setPermissionError] = useState(false);
   const [isPosting, setIsPosting] = useState(false);
   const [postError, setPostError] = useState(false);
+  const [info, setInfo] = useState();
 
   const styles = StyleSheet.create({
     mainContainer: {
@@ -112,14 +113,37 @@ export default function EventDisplayView({ eid, setEid, gid, setGid }) {
     });
   }, [authToken]);
 
+  const getInfo = () => {
+    axios({
+      baseURL: baseUrl,
+      url: `/event-info/${gid}`,
+      method: 'GET',
+      headers: { Authorization: 'Bearer ' + authToken },
+    }).then(response => {
+      if (response.status == 200) {
+        console.log(response.data);
+        setInfo(response.data);
+        setPermissionError(false);
+      } else if (response.status == 403) {
+        setPermissionError(true);
+      }
+    }
+    ).catch(err => {
+      console.error(`Something went wrong ${err.message}`);
+      setIsLoading(false);
+      setRefreshing(false);
+    });
+  }
+
   useEffect(() => {
     getGroup();
+    getInfo();
   }, [authToken, getGroup]);
 
   return (
     <View>
       <ReturnButton title="Retour" onPress={() => { setEid(-1); setPage("listevent") }}></ReturnButton>
-      <Text> C'est la page d'event de {eid} et je suis {username}</Text>
+      <Text> C'est la page d'event de {eid} et je suis {username} et {info}</Text>
 
       <CrousteamButton title="Chat" styleText={styles.Text} onPress={() => { setPage("chatdisplay") }}></CrousteamButton>
 
