@@ -38,6 +38,9 @@ const styles = StyleSheet.create({
         elevation: 3, // for Android
         shadowColor: colors.secondaryText,
         shadowOffset: { width: 0, height: 7 },
+    },
+    preference:{
+        fontFamily:'Arista-Pro-Alternate-Bold-trial'
     }
 }
 )
@@ -46,26 +49,61 @@ const styles = StyleSheet.create({
 
 export default function AddEventView({}){
 
-    const {setPage, authToken} = useContext(AppContext)
+    const {setPage, authToken, username} = useContext(AppContext)
+    const [selectedPreferences, setSelectedPreferences] = useState({})
     const [name, setName] = useState("")
     const [location, setLocation] = useState("")
-    const [day, setDay] = useState("")
-    const [time, setTime] = useState("")
+    const [date, setDate] = useState("")
+    const [duration, setDuration] = useState("")
     const [preferences, setPreferences] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasFailure, setHasFailure] = useState(false);
+    const [isPosting, setIsPosting] = useState(false)
+    const [postError, setPostError] = useState(false);
+
+    const postEvent = () => {
+        setIsPosting(true)
+        console.log(username, name, location, date, duration)
+        axios({
+            baseURL: baseUrl,
+            url: '/event',
+            method: 'POST',
+            headers: { Authorization: 'Bearer ' + authToken },
+            data: {
+                login: username,
+                ename: name, 
+                eloc: location, 
+                etime: date, 
+                eduree: duration, // Ajustez le nom de cette propriété selon votre API
+      }
+        }).then(response => {
+            setIsPosting(false);
+            if (response.status === 200 || response.status === 201) {
+              // Message posté avec succès
+              console.log('Event posted successfully');
+              // Vous pouvez ici actualiser la liste des messages ou gérer la réponse comme souhaité
+            } else {
+              // Gérer d'autres codes de statut selon votre API
+              setPostError(true);
+            }
+          }).catch(err => {
+            console.error(`Something went wrong while posting the event: ${err.message}`);
+            setIsPosting(false);
+            setPostError(true);
+          });
+        }; // Ajoutez d'autres dépendances si nécessaire
 
     const getPreferences = () => {
         setIsLoading(true);
         axios({
             baseURL: baseUrl,
-            url: '/all-possible-preferences/',
+            url: '/all-possible-preferences-with-id',
             method: 'GET',
         }).then(response => {
             setIsLoading(false)
             if (response.status >= 200 && response.status < 300) {
                 const parsedData = response.data.map(preferences => ({
-                    name:preferences[0], selected:0
+                    id: preferences[0], name:preferences[1]
                 }));
                 setHasFailure(false)
                 setPreferences(parsedData)
@@ -84,11 +122,19 @@ export default function AddEventView({}){
         getPreferences();
     }, [authToken]);
 
+    const toggleItemSelection = (id) => {
+        setSelectedPreferences((prevSelectedItems) => ({
+            ...prevSelectedItems,
+            [id]: !prevSelectedItems[id], // Basculer la sélection
+        }));
+    };
+
     const renderItem = ({item}) => {
-        console.log(item.selected)
         return(
-        <TouchableOpacity style={[styles.preferenceContainer, {backgroundColor: (item.selected === 1) ? colors.primaryText : colors.background }]} onPress ={() => {item.selected = 1 - item.selected} }>
-            <Text style={[styles.preference, ]}> {item.name} </Text>
+        <TouchableOpacity 
+            style={[styles.preferenceContainer, {backgroundColor: (selectedPreferences[item.id]) ? colors.primaryText : colors.background }]} 
+            onPress ={() => {toggleItemSelection(item.id)}}>
+            <Text style={styles.preference}> {item.name} </Text>
         </TouchableOpacity>
     )}
 
@@ -101,17 +147,17 @@ export default function AddEventView({}){
                 </View>
                 <CrousteamTextInput onChangeText={(text)=> {setName(text)}}label = "Name" placeholder ="Enter a name"/>
                 <CrousteamTextInput onChangeText={(text)=> {setLocation(text)}} label = "Location" placeholder ="Enter a Location"/>
-                <CrousteamTextInput onChangeText={(text)=> {setDay(text)}} label = "Day" placeholder ="Enter a day"/>
-                <CrousteamTextInput onChangeText={(text)=> {setTime(text)}} label = "Time" placeholder ="Enter a time"/>
+                <CrousteamTextInput onChangeText={(text)=> {setDate(text)}} label = "Date" placeholder ="Enter a date"/>
+                <CrousteamTextInput onChangeText={(text)=> {setDuration(text)}} label = "Duration" placeholder ="Enter a duration"/>
                 <View>
                 <FlatList
                     data={preferences}
-                    keyExtractor={(index) => {index.name}}
+                    keyExtractor={item => item.id}
                     renderItem={renderItem}
                     numColumns={3}/>
                 </View>
                 <View style={styles.buttonContainer}>
-                    <CrousteamButton title="ADD EVENT"/>
+                    <CrousteamButton title="ADD EVENT" onPress={() => {postEvent(), setPage("listevent")}}/>
                 </View>
             </CrousteamCard>
             

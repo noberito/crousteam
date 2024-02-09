@@ -32,20 +32,22 @@ const styles = StyleSheet.create({
         color:colors.secondaryText
     },
     loc:{
-        fontSize:'Arista-Pro-Alternate-Bold-trial',
-        color:'black',
+        fontFamily:'Arista-Pro-Alternate-Bold-trial',
+        color:'black'
     }
 })
 
-export default function EventIcon({item, setEid}){
+export default function EventIcon({item, setGid}){
 
     const {page, setPage} = useContext(AppContext)
 
     return(
-        <TouchableOpacity style={styles.mainContainer} onPress={() => {setEid(item.eid); setPage("eventdisplay")}}>
+        <TouchableOpacity style={styles.mainContainer} onPress={() => {setGid(item.gid); setPage("eventdisplay")}}>
             <Image source={require('../loggedOut/ic_launcher_round.png')}></Image>
             <Text style={styles.eventtitle}> {item.title} </Text>
             <Text style={styles.description}> {item.description} </Text>
+            <Text style={styles.loc}> {item.loc} </Text>
+            <Text> {item.date} {item.duration} </Text>
         </TouchableOpacity>
     )
 };
