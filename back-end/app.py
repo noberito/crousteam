@@ -527,6 +527,12 @@ def get_all_preferences_with_id():
     return json(res_login), 200
 
 
+@app.get("/event-info/<gid>", authorize="ALL")
+def get_event_info(gid: int):
+    res = db.get_event_info(gid=gid)
+    return json(res), 200
+
+
 # SHOULD STAY AS LAST LOC
 log.debug("running…")
 
