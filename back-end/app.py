@@ -380,7 +380,7 @@ def create_event(
     user: fsa.CurrentUser,
     ename: str,
     eloc: str,
-    etime: datetime.date,
+    etime: datetime.datetime,
     eduree: datetime.time,
 ):
     exist_already = db.get_single_event(ename=ename, eloc=eloc, etime=etime)
@@ -462,12 +462,12 @@ def delete_preferences(list_pftype: StrList, login: str):
     return "", 204
 
 
-@app.patch("/preferences/<login>", authorize="ALL")
-def update_info_profile_preferences(list_pftype: StrList, login: str):
+@app.patch("/preferences", authorize="ALL")
+def update_info_profile_preferences(user: fsa.CurrentUser, list_pftype: StrList):
     s = 0
-    db.delete_preferences_for_user(login=login)
+    db.delete_preferences_for_user(login=user)
     for pftype in list_pftype:
-        db.insert_preference(login=login, pftype=pftype)
+        db.insert_preference(login=user, pftype=pftype)
         s += 1
     return "", 204
 

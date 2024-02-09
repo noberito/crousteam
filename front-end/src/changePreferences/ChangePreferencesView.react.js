@@ -27,7 +27,7 @@ export default function GeneralSettingsView() {
 
     const [preferencesList, setPreferencesList] = useState([]);
 
-    const { username, setUsername, setPage } = useContext(AppContext);
+    const { username, setUsername, setPage, authToken } = useContext(AppContext);
 
     const [test, setTest] = useState([]);
 
@@ -126,13 +126,10 @@ export default function GeneralSettingsView() {
         setIsLoading(true);
 
         axios({
-
             baseURL: baseUrl,
-
-            url: `/preferences/${username}`,
-
+            url: `/preferences`,
             method: 'PATCH',
-
+            headers: { Authorization: 'Bearer ' + authToken },
             data: {
 
                 list_pftype: selectedPreferences.split(',')

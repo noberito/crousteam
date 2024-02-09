@@ -47,7 +47,7 @@ RETURNING lid;
 DELETE FROM Auth WHERE login = :login;
 
 -- name: get_messages
-SELECT mid, mtext, mtime, login
+SELECT mid, mtext, mtime::TEXT, login
 FROM Messages
 JOIN AppGroup USING (gid)
 JOIN Auth USING (lid)
@@ -70,7 +70,7 @@ WITH Last_message_each_conversations AS (
     LEFT JOIN Messages AS m ON ag.gid=m.gid
     WHERE m.gid IS NULL
 )
-SELECT CASE WHEN COALESCE(gname, '') = '' THEN a2.login ELSE gname END AS name_chat, max_mtime, ag.gid FROM AppGroup AS ag
+SELECT CASE WHEN COALESCE(gname, '') = '' THEN a2.login ELSE gname END AS name_chat, max_mtime::TEXT, ag.gid FROM AppGroup AS ag
 JOIN UsersInGroup AS uig ON uig.gid = ag.gid
 JOIN Last_message_each_conversations AS lmec ON lmec.gid = ag.gid
 JOIN Auth AS a ON uig.lid = a.lid
@@ -78,7 +78,7 @@ JOIN UsersInGroup AS uig2 ON uig.gid=uig2.gid AND uig.lid != uig2.lid
 LEFT JOIN Auth AS a2 ON uig2.lid=a2.lid AND a2.login != :login
 WHERE a.login = :login
 UNION
-SELECT CASE WHEN COALESCE(gwm.gname, '') = '' THEN a2.login ELSE gname END AS name_chat, creationDate, gwm.gid FROM Group_without_messages AS gwm
+SELECT CASE WHEN COALESCE(gwm.gname, '') = '' THEN a2.login ELSE gname END AS name_chat, creationDate::TEXT, gwm.gid FROM Group_without_messages AS gwm
 JOIN UsersInGroup AS uig ON gwm.gid=uig.gid
 JOIN Auth AS a ON uig.lid=a.lid
 JOIN UsersInGroup AS uig2 ON uig.gid=uig2.gid AND uig.lid != uig2.lid
@@ -298,4 +298,4 @@ SELECT gid FROM Event WHERE eid = :eid;
 SELECT TRUE FROM UsersInGroup WHERE gid = :gid AND lid = :lid;
 
 -- name: test
-SELECT * FROM Auth;
+SELECT gname, isGroupChat, creationDate::TEXT FROM AppGroup;

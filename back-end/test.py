@@ -446,8 +446,8 @@ def test_add_event(api):
         data={
             "ename": "PSG-MU au Parc",
             "eloc": "Paris",
-            "etime": "2024-02-25",
-            "eduree": "3 hours",
+            "etime": "2024-02-25 20:00:00",
+            "eduree": "03:00:00",
         },
         login=ADMIN,
     )
@@ -458,8 +458,8 @@ def test_add_event(api):
         data={
             "ename": "PSG-MU au Parc",
             "eloc": "Paris",
-            "etime": "2024-02-25",
-            "eduree": "3 hours",
+            "etime": "2024-02-25 20:00:00",
+            "eduree": "03:00:00",
         },
         login=ADMIN,
     )
@@ -470,8 +470,8 @@ def test_add_event(api):
         data={
             "ename": "PSG-City au Parc",
             "eloc": "Paris",
-            "etime": "2024-04-25",
-            "eduree": "3 hours",
+            "etime": "2024-04-25 21:00:00",
+            "eduree": "03:00:00",
         },
         login="hobbes",
     )
@@ -589,29 +589,27 @@ def test_insert_preference_type(api):
 
 # preferences test for update:
 def test_update_preferences(api):
-    api.check(
-        "PATCH", "/preferences/calvin", 400, json={"list_pftype": 123}, login=ADMIN
-    )
+    api.check("PATCH", "/preferences", 400, json={"list_pftype": 123}, login="calvin")
     api.check(
         "PATCH",
-        "/preferences/calvin",
+        "/preferences",
         400,
         json={"list_pftype": ["ok", True]},
         login=ADMIN,
     )
     api.check(
         "PATCH",
-        "/preferences/calvin",
+        "/preferences",
         204,
         json={"list_pftype": ["philantropique", "blagueur du dimanche"]},
-        login=ADMIN,
+        login="calvin",
     )
     api.check(
         "PATCH",
-        "/preferences/calvin",
+        "/preferences",
         204,
         json={"list_pftype": ["cowboy"]},
-        login=ADMIN,
+        login="calvin",
     )
 
 
