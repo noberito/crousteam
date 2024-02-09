@@ -4,6 +4,7 @@ import BottomBar from '../friender/BottomBar.react';
 import AppContext from '../common/appcontext';
 import AllEvents from './AllEvents.react';
 import CrousteamButton from '../common/CrousteamButton.react';
+import MYEvents from './MYEvents.react';
 
 const styles = StyleSheet.create({
     header: {
