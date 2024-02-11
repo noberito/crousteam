@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback, useEffect } from 'react';
+import React, { useContext, useState, useCallback, useEffect, Image } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, TextInput, Button } from 'react-native';
 import axios from 'axios';
 import { baseUrl } from '../common/const';
@@ -6,6 +6,9 @@ import AppContext from '../common/appcontext';
 import CrousteamButton from '../common/CrousteamButton.react';
 import ReturnButton from '../common/ReturnButton.react'
 import colors from '../common/Colors.react';
+import Line from '../common/Line.react';
+
+
 
 export default function EventDisplayView({ eid, setEid, gid, setGid }) {
   const { username, setPage, authToken } = useContext(AppContext)
@@ -15,7 +18,7 @@ export default function EventDisplayView({ eid, setEid, gid, setGid }) {
   const [hasPermissionError, setPermissionError] = useState(false);
   const [isPosting, setIsPosting] = useState(false);
   const [postError, setPostError] = useState(false);
-  const [info, setInfo] = useState();
+  const [info, setInfo] = useState([[]]);
 
   const styles = StyleSheet.create({
     mainContainer: {
@@ -136,18 +139,34 @@ export default function EventDisplayView({ eid, setEid, gid, setGid }) {
   }
 
   useEffect(() => {
-    getGroup();
+
     getInfo();
   }, [authToken, getGroup]);
 
   return (
     <View>
       <ReturnButton title="Retour" onPress={() => { setEid(-1); setPage("listevent") }}></ReturnButton>
-      <Text> C'est la page d'event de {eid} et je suis {username} et {info}</Text>
+
+
+      <View style={styles.identityContainer}>
+        <View style={styles.nameContainer}>
+          <Text style={styles.name}>{info[0][0]}  </Text>
+        </View>
+      </View>
+      <Line />
+      <Text style={styles.sectionTitle}> LOCALISATION</Text>
+      <View style={styles.biographyContainer}>
+        <Text style={styles.biography}>{info[0][1]}</Text>
+      </View>
+      <Line />
+      <Text style={styles.sectionTitle}> DESCRIPTION</Text>
+      <View style={styles.biographyContainer}>
+        <Text style={styles.biography}>{info[0][4]}</Text>
+      </View>
+      <Line />
+      <Text style={styles.sectionTitle}> PREFERENCES </Text>
 
       <CrousteamButton title="Chat" styleText={styles.Text} onPress={() => { setPage("chatdisplay") }}></CrousteamButton>
-
-
     </View>
-  )
+  );
 };
