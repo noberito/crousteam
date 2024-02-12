@@ -675,7 +675,10 @@ def test_get_image_path(api):
             "POST",
             "/upload",
             201,  #
-            data={"imageInp": (file_data, "hello.jpg", "image/jpeg"), "login": "calvin"},
+            data={
+                "imageInp": (file_data, "hello.jpg", "image/jpeg"),
+                "login": "calvin",
+            },
             login=ADMIN,
         )
     print(response.text)
