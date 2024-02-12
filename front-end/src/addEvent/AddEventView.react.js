@@ -56,6 +56,7 @@ export default function AddEventView({ }) {
     const { setPage, authToken, username } = useContext(AppContext)
     const [selectedPreferences, setSelectedPreferences] = useState({})
     const [name, setName] = useState("")
+    const [description, setDescription] = useState("")
     const [location, setLocation] = useState("")
     const [preferences, setPreferences] = useState([]);
     const [datePickerOpen, setDatePickerOpen] = useState(false)
@@ -72,7 +73,6 @@ export default function AddEventView({ }) {
 
     const postEvent = () => {
         setIsPosting(true)
-        console.log(username, name, location, date, duration)
         axios({
             baseURL: baseUrl,
             url: '/event',
@@ -84,7 +84,8 @@ export default function AddEventView({ }) {
                 eloc: location, 
                 edate: state.date.toISOString().substr(0, 10), 
                 etime: state.date.toLocaleTimeString(),
-                eduree: duration // Ajustez le nom de cette propriété selon votre API
+                eduree: duration.time.toLocaleTimeString(),
+                preferences_elist:selectedPreferences, // Ajustez le nom de cette propriété selon votre API
       }
         }).then(response => {
             setIsPosting(false);
@@ -134,10 +135,12 @@ export default function AddEventView({ }) {
     }, [authToken]);
 
     const toggleItemSelection = (id) => {
+        
         setSelectedPreferences((prevSelectedItems) => ({
             ...prevSelectedItems,
-            [id]: !prevSelectedItems[id], // Basculer la sélection
-        }));
+            [id]: !prevSelectedItems[id],
+        })); // Basculer la sélection
+
     };
 
     const renderItem = ({ item }) => {
@@ -150,6 +153,16 @@ export default function AddEventView({ }) {
         )
     }
 
+    const getSelectedPreferenceFormatted = () => {
+        // Use Object.entries to iterate over key-value pairs and filter based on value
+        const selectedPreferenceIDs = Object.entries(selectedPreferences)
+            .filter(([key, value]) => value) // Filter pairs where the value is true
+            .map(([key, value]) => key)
+        ; // Map to the key (ID) of the preference
+        return selectedPreferenceIDs;
+    };
+
+    
     return (
         <View style={styles.mainContainer}>
             <ReturnButton onPress={() => { setPage('listevent') }} />
@@ -158,6 +171,7 @@ export default function AddEventView({ }) {
                     <Text style={styles.title}> NEW EVENT </Text>
                 </View>
                 <CrousteamTextInput onChangeText={(text)=> {setName(text)}}label = "Name" placeholder ="Enter a name"/>
+                <CrousteamTextInput onChangeText={(text)=> {setDescription(text)}} label = "Description" placeholder ="Enter a Description"/>
                 <CrousteamTextInput onChangeText={(text)=> {setLocation(text)}} label = "Location" placeholder ="Enter a Location"/>
                 <View style={{ flexDirection:'row', justifyContent: 'center', alignItems:'center'}}>
                     <Text >
