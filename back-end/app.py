@@ -396,6 +396,8 @@ def create_event(
     edate: datetime.date,
     etime: datetime.time,
     eduree: datetime.time,
+    edescr: str,
+    preferences_list: JsonData = None,
 ):
     exist_already = db.get_single_event(
         ename=ename, eloc=eloc, etime=etime, edate=edate
@@ -404,7 +406,13 @@ def create_event(
         return "the same event already exist", 404
     gid = db.create_group_chat_link_to_the_event(ename=ename)
     eid = db.add_event(
-        ename=ename, eloc=eloc, edate=edate, etime=etime, eduree=eduree, gid=int(gid)
+        ename=ename,
+        eloc=eloc,
+        edate=edate,
+        etime=etime,
+        eduree=eduree,
+        edescr=edescr,
+        gid=int(gid),
     )
     lid = db.get_lid_from_login(login=user)
     if lid != 1:
@@ -412,6 +420,10 @@ def create_event(
     else:
         db.add_people_into_group(gid=gid, lid=2)
     db.add_people_into_group_ecreator(gid=gid, lid=lid)
+    if preferences_list:
+        for preference in preferences_list:
+            if preference[1]:
+                db.add_event_preferences(eid=eid, pfid=preference[0])
     return json(eid), 201
 
 

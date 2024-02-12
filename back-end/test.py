@@ -448,6 +448,7 @@ def test_add_event(api):
             "edate": "2024-02-25",
             "etime": "20:00:00",
             "eduree": "03:00:00",
+            "edescr": "Maaatch",
         },
         login=ADMIN,
     )
@@ -461,6 +462,22 @@ def test_add_event(api):
             "edate": "2024-02-25",
             "etime": "20:00:00",
             "eduree": "03:00:00",
+            "edescr": "Maaaatch",
+        },
+        login=ADMIN,
+    )
+    api.check(
+        "POST",
+        "/event",
+        201,
+        json={
+            "ename": "Départ S4E",
+            "eloc": "Paris",
+            "edate": "2024-02-25",
+            "etime": "20:00:00",
+            "eduree": "03:00:00",
+            "edescr": "Trop triste, c'est la fin",
+            "preferences_list": [[1, False], [3, True], [4, True]],
         },
         login=ADMIN,
     )
@@ -474,6 +491,7 @@ def test_add_event(api):
             "edate": "2024-04-25",
             "etime": "21:00:00",
             "eduree": "03:00:00",
+            "edescr": "Maaaatch",
         },
         login="hobbes",
     )

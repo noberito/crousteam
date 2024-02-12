@@ -285,8 +285,8 @@ VALUES (:ename, TRUE)
 RETURNING gid;
 
 -- name: add_event$
-INSERT INTO Event (ename, eloc, edate, etime, eduree, gid)
-VALUES (:ename, :eloc, :edate, :etime, :eduree, :gid)
+INSERT INTO Event (ename, eloc, edate, etime, eduree, edescr, gid)
+VALUES (:ename, :eloc, :edate, :etime, :eduree, :edescr, :gid)
 RETURNING eid;
 
 -- name: delete_event!
@@ -303,8 +303,13 @@ SELECT TRUE FROM UsersInGroup WHERE gid = :gid AND lid = :lid;
 SELECT gname, isGroupChat, creationDate::TEXT FROM AppGroup;
 
 -- name: get_event_info^
-SELECT ename, eloc, edate::TEXT, etime::TEXT, eduree::TEXT, edescr, gid FROM Event
-WHERE gid = :gid;
+SELECT ename, eloc, edate::TEXT, etime::TEXT, eduree::TEXT, edescr, gid, ARRAY_AGG(p.pftype)
+FROM Event
+JOIN UsersInGroup USING(gid)
+JOIN EventPreferences AS ep USING(eid)
+RIGHT JOIN Preferences AS p ON ep.pfid = p.pfid
+WHERE gid = :gid
+GROUP BY eid;
 
 -- name: get_event_user_create
 SELECT eid, ename, eloc, edate::TEXT, etime::TEXT, eduree::TEXT, edescr, gid, ARRAY_AGG(p.pftype)
@@ -315,3 +320,7 @@ RIGHT JOIN Preferences AS p ON ep.pfid = p.pfid
 WHERE ecreator = TRUE AND lid = (SELECT lid FROM Auth WHERE login = :login)
 GROUP BY eid
 ORDER BY edate, etime, ename;
+
+-- name: add_event_preferences!
+INSERT INTO EventPreferences(eid, pfid) VALUES
+(:eid, :pfid);
