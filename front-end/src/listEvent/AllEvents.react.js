@@ -33,7 +33,7 @@ export default function AllEvents({eid, setGid, log, setLog}){
       setRefreshing(false); // Set refreshing to false when data is loaded
       if (response.status == 200) {
         const parsedData = response.data.map(event => ({
-          title:event[0], loc: event[1], date:event[2], duration:event[3], description:event[4], gid:event[5]
+          title:event[0], loc: event[1], date:event[2], time:event[3], duration:event[4], description:event[5], gid:event[6]
         }));
         console.log(parsedData);
         setEvents(parsedData);
