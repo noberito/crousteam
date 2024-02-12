@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import AppContext from '../common/appcontext';
 
@@ -20,33 +20,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     margin: 10,
     elevation: 3, // for Android
-    shadowColor: colors.secondaryText, 
-    shadowOffset: { width: 0, height: 2 }, 
-    shadowOpacity: 0.3, 
+    shadowColor: colors.secondaryText,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
     shadowRadius: 4,
   },
   pseudo: {
     fontSize: 24,
-    fontFamily:'Arista-Pro-Alternate-Bold-trial',
+    fontFamily: 'Arista-Pro-Alternate-Bold-trial',
     marginBottom: 8,
     color: colors.primaryText,
   },
   bio: {
     fontSize: 16,
     color: colors.secondaryText,
-    fontFamily:'Arista-Pro-Alternate-Bold-trial',
+    fontFamily: 'Arista-Pro-Alternate-Bold-trial',
     textAlign: 'center',
   },
 });
 
 // Usage of UserBio component
-export default function FriendProfile({setLog, item, key}) {
-      const {setPage} = useContext(AppContext)
-      return(
-      <TouchableOpacity onPress={() => {setLog(item.login); setPage('profiledisplay')}}>
+export default function FriendProfile({ setLog, item, key }) {
+  const { setPage } = useContext(AppContext)
+  return (
+    <TouchableOpacity onPress={() => { setLog(item.login); setPage('profiledisplay') }}>
       <View style={styles.profile}>
         <Text style={styles.pseudo}>{item.login}</Text>
-        <Text style={styles.bio}>{item.bio}</Text>
+        <Text style={styles.bio}>{item.bio.length > 50 ? `${item.bio.substring(0, 50)}...` : item.bio}</Text>
       </View>
-      </TouchableOpacity>)
-    };
+    </TouchableOpacity>)
+};
