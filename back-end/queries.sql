@@ -258,7 +258,8 @@ WHERE ename = :ename AND eloc = :eloc AND etime = :etime AND edate = :edate;
 
 -- name: get_all_events
 SELECT ename, eloc, edate::TEXT, etime::TEXT, eduree::TEXT, edescr, gid FROM Event
-WHERE edate >= CURRENT_DATE;
+WHERE edate >= CURRENT_DATE
+ORDER BY edate, etime, ename;
 
 -- name: get_single_event_with_eid^
 SELECT TRUE FROM Event
@@ -273,7 +274,7 @@ edescr, gid FROM Event
 JOIN EventPreferences USING(eid)
 JOIN Preferences USING(pfid)
 WHERE ('"'||pftype||'"')::JSONB <@ :preferences_list::JSONB AND edate >= CURRENT_DATE
-ORDER BY 3;
+ORDER BY edate, etime, ename;
 
 -- name: get_gid_from_eid^
 SELECT gid FROM Event WHERE eid = :eid;
