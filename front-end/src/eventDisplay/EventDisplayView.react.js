@@ -1,3 +1,4 @@
+EventDisplay
 import React, { useContext, useState, useCallback, useEffect, Image } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, TextInput, Button } from 'react-native';
 import axios from 'axios';
@@ -151,22 +152,24 @@ export default function EventDisplayView({ eid, setEid, gid, setGid }) {
       <View style={styles.identityContainer}>
 
         <View style={styles.nameContainer}>
-          <Text style={styles.name}>{info[0][0]}  </Text>
+          <Text style={styles.name}>{info[0]}  </Text>
         </View>
       </View>
       <Line />
       <Text style={styles.sectionTitle}> LOCALISATION</Text>
       <View style={styles.biographyContainer}>
-        <Text style={styles.biography}>{info[0][1]} - {info[0][2]}</Text>
+        <Text style={styles.biography}>{info[1]} - {info[2]}</Text>
 
       </View>
       <Line />
       <Text style={styles.sectionTitle}> DESCRIPTION</Text>
       <View style={styles.biographyContainer}>
-        <Text style={styles.biography}>{info[0][4]}</Text>
+        <Text style={styles.biography}>{info[4]}</Text>
       </View>
       <Line />
       <Text style={styles.sectionTitle}> PREFERENCES </Text>
+      <Text style={styles.name}>{info}  </Text>
+
 
       <CrousteamButton title="Chat" styleText={styles.Text} onPress={() => { setPage("chatdisplay") }}></CrousteamButton>
     </View>
