@@ -577,20 +577,18 @@ def generate_filename(filename):
     return unique_filename
 
 
-UPLOAD_FOLDER = "Images"
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-
-
 # attention, cette route devrait être protégée !
 @app.post("/upload", authorize="ANY")
 def post_upload(imageInp: fsa.FileStorage):
-    upload_path = os.path.join(app.root_path, app.config["UPLOAD_FOLDER"])
+    upload_path = app.config["UPLOAD_FOLDER"]
     unique_filename = generate_filename(imageInp.filename)
     log.debug(f"fn1={os.path.join(upload_path, unique_filename)}")
     saveLink = os.path.join(upload_path, unique_filename)
     imageInp.save(saveLink)
+    url = app.config["UPLOADED_URL"]
+    log.debug(f"imageLink = {url + unique_filename}")
     if os.path.exists(saveLink):
-        return saveLink, 201
+        return app.config["UPLOADED_URL"] + unique_filename, 201
 
 
 @app.get("/get_image_path/<filename>", authorize="ANY")
