@@ -1,4 +1,4 @@
-Listeventview
+
 import React, { useContext, useCallback, useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import BottomBar from '../friender/BottomBar.react';

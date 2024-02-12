@@ -1,4 +1,4 @@
-EventDisplay
+
 import React, { useContext, useState, useCallback, useEffect, Image } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, TextInput, Button } from 'react-native';
 import axios from 'axios';
