@@ -551,6 +551,12 @@ def get_event_info(gid: int):
     return json(res), 200
 
 
+@app.get("/event-info-creator", authorize="ALL")
+def get_event_info_creator(login: fsa.CurrentUser):
+    res = db.get_event_user_create(login=login)
+    return json(res), 200
+
+
 # SHOULD STAY AS LAST LOC
 log.debug("running…")
 

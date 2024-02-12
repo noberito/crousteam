@@ -301,6 +301,16 @@ SELECT TRUE FROM UsersInGroup WHERE gid = :gid AND lid = :lid;
 -- name: test
 SELECT gname, isGroupChat, creationDate::TEXT FROM AppGroup;
 
--- name: get_event_info
-SELECT ename, eloc, etime::TEXT, eduree::TEXT, edescr, gid FROM Event
+-- name: get_event_info^
+SELECT ename, eloc, edate::TEXT, etime::TEXT, eduree::TEXT, edescr, gid FROM Event
 WHERE gid = :gid;
+
+-- name: get_event_user_create
+SELECT eid, ename, eloc, edate::TEXT, etime::TEXT, eduree::TEXT, edescr, gid, ARRAY_AGG(p.pftype)
+FROM Event
+JOIN UsersInGroup USING(gid)
+JOIN EventPreferences AS ep USING(eid)
+RIGHT JOIN Preferences AS p ON ep.pfid = p.pfid
+WHERE ecreator = TRUE AND lid = (SELECT lid FROM Auth WHERE login = :login)
+GROUP BY eid
+ORDER BY edate, etime, ename;

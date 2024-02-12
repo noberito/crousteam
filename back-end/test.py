@@ -620,3 +620,8 @@ def test_get_all_preferences_for_given_user(api):
 def test_get_all_preferences(api):
     api.check("GET", "/all-possible-preferences/", 200, r"cowboy", login=ADMIN)
     api.check("GET", "/all-possible-preferences-with-id", 200, r"cowboy", login=ADMIN)
+
+
+def test_get_info_on_event(api):
+    api.check("GET", "/event-info-creator", 200, r"Big Crous", login="jean-paul")
+    api.check("GET", "/event-info/10", 200, r"FAO", login="hobbes")

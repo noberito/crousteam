@@ -33,10 +33,16 @@ INSERT INTO UsersInGroup(gid, lid) VALUES
 (5, 7), (5, 9), (5, 10), (5, 11), (5, 12),
 (6, 14), (6, 7),
 (7, 1), (7, 10),
-(8, 1), (8, 5), (8, 8),
-(9, 1), (9, 2), (9, 7), (9, 9),
-(10, 1), (10, 4), (10, 7),
-(11, 1), (11, 4), (11, 7);
+(8, 2), (8, 5), (8, 8),
+(9, 2), (9, 7), (9, 9),
+(10, 2), (10, 4), (10, 7),
+(11, 2), (11, 4), (11, 7);
+
+INSERT INTO UsersInGroup(gid, lid, ecreator) VALUES
+(8, 3, TRUE),
+(9, 1, TRUE),
+(10, 1, TRUE),
+(11, 1, TRUE);
 
 INSERT INTO Messages(lid, mtext, mtime, gid) VALUES
 (1, 'Je suis grand', '1999-01-08 04:05:06', 1),
