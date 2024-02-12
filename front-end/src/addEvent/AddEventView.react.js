@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, Button, StyleSheet, FlatList, TouchableOpacity, Controller, useWatch } from "react-native"
+=======
+import React, { useEffect, useState, useContext} from 'react';
+import { View, Text, Button, StyleSheet, FlatList, TouchableOpacity, Controller, useWatch, ScrollView } from "react-native"
+>>>>>>> 6635e0a (to push)
 import { baseUrl } from '../common/const';
 import axios from 'axios';
 import CrousteamButton from '../common/CrousteamButton.react';
@@ -12,7 +17,6 @@ import DatePicker from 'react-native-date-picker';
 
 const styles = StyleSheet.create({
     mainContainer: {
-        justifyContent: "",
         flex: 1
     },
     title: {
@@ -43,9 +47,22 @@ const styles = StyleSheet.create({
     preference: {
         fontFamily: 'Arista-Pro-Alternate-Bold-trial'
     },
+<<<<<<< HEAD
     dateStyle: {
         fontFamily: 'Arista-Pro-Alternate-Bold-trial'
     }
+=======
+    dateStyle:{
+        fontFamily:'Arista-Pro-Alternate-Bold-trial'
+    },
+    inputLabel: {
+        fontSize: 16,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        color:colors.secondaryText,
+        fontFamily:'Arista-Pro-Alternate-Bold-trial'
+    },
+>>>>>>> 6635e0a (to push)
 }
 )
 
@@ -164,21 +181,28 @@ export default function AddEventView({ }) {
 
 
     return (
-        <View style={styles.mainContainer}>
+        <ScrollView style={styles.mainContainer}>
             <ReturnButton onPress={() => { setPage('listevent') }} />
             <CrousteamCard>
                 <View style={styles.titleContainer}>
                     <Text style={styles.title}> NEW EVENT </Text>
                 </View>
+<<<<<<< HEAD
                 <CrousteamTextInput onChangeText={(text) => { setName(text) }} label="Name" placeholder="Enter a name" />
                 <CrousteamTextInput onChangeText={(text) => { setDescription(text) }} label="Description" placeholder="Enter a Description" />
                 <CrousteamTextInput onChangeText={(text) => { setLocation(text) }} label="Location" placeholder="Enter a Location" />
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+=======
+                <CrousteamTextInput onChangeText={(text)=> {setName(text)}}label = "Name" placeholder ="Enter a name"/>
+                <CrousteamTextInput onChangeText={(text)=> {setLocation(text)}} label = "Location" placeholder ="Enter a Location"/>
+                <View style={{ flexDirection:'row', justifyContent: 'center', alignItems:'center'}}>
+>>>>>>> 6635e0a (to push)
                     <Text >
                         {state.date.toDateString()}
                     </Text>
                     <CrousteamButton
                         title="Select date"
+                        styleText={styles.inputLabel}
                         onPress={() => setState({ date: state.date, open: true })}
                     />
                     <DatePicker
@@ -196,6 +220,7 @@ export default function AddEventView({ }) {
                     </Text>
                     <CrousteamButton
                         title="Select duration"
+                        styleText={styles.inputLabel}
                         onPress={() => setDuration({ time: duration.time, open: true })}
                     />
                     <DatePicker
@@ -209,18 +234,24 @@ export default function AddEventView({ }) {
                     />
                 </View>
 
+<<<<<<< HEAD
+=======
+                <CrousteamTextInput onChangeText={(text)=> {setDescription(text)}} label = "Description" placeholder ="Enter a Description"/>
+                
+>>>>>>> 6635e0a (to push)
                 <View>
                     <FlatList
                         data={preferences}
                         keyExtractor={item => item.id}
                         renderItem={renderItem}
-                        numColumns={3} />
+                        numColumns={3}
+                        nestedScrollEnabled={true} />
                 </View>
                 <View style={styles.buttonContainer}>
                     <CrousteamButton title="ADD EVENT" onPress={() => { postEvent(), setPage("listevent") }} />
                 </View>
             </CrousteamCard>
 
-        </View>
+        </ScrollView>
     );
 }
