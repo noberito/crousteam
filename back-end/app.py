@@ -457,7 +457,7 @@ def get_all_info_login(login: str):
     return json(res), 200
 
 
-@app.post("/preferences/<login>", authorize="ALL")
+@app.post("/preferences/<login>", authorize="ANY")
 def post_preferences(list_pftype: StrList, login: str):
     s = 0
     for pftype in list_pftype:
@@ -533,7 +533,7 @@ def get_preferences_with_certain_user(login: str):
     return json(res_login), 200
 
 
-@app.get("/all-possible-preferences/", authorize="ALL")
+@app.get("/all-possible-preferences/", authorize="ANY")
 def get_all_preferences():
     res_login = db.get_all_preferences()
     return json(res_login), 200
