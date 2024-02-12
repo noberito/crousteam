@@ -667,7 +667,7 @@ def test_get_file_path(api):
 
 def test_get_image_path(api):
     # Path to the image file you want to upload
-    image_path = "/home/mobapp/crousteam/back-end/hello.jpg"
+    image_path = "hello.jpg"
 
     with open(image_path, "rb") as file:
         file_data = FileStorage(file, filename=os.path.basename(image_path))
