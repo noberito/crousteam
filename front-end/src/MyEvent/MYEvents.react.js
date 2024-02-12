@@ -1,6 +1,6 @@
 import React, { useContext, useState, useCallback, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
-import EventIcon from '../listEvent/EventIcon.react';
+import MyEventIcon from './MyEventIcon.react';
 import AppContext from '../common/appcontext';
 import axios from 'axios';
 import { baseUrl } from '../common/const';
@@ -53,7 +53,7 @@ export default function AllEvents({ eid, setGid, log, setLog }) {
     }, [authToken, getAllEvents]);
 
 
-    const renderEventItem = ({ item }) => { return (<EventIcon item={item} setGid={setGid}></EventIcon>) }
+    const renderEventItem = ({ item }) => { return (<MyEventIcon item={item} setGid={setGid}></MyEventIcon>) }
 
     return (
         <View>
