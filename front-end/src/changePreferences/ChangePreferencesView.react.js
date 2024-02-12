@@ -88,7 +88,7 @@ export default function GeneralSettingsView() {
             url: `/preferences-for-given-user/${username}`,
 
             method: 'GET',
-
+            headers: { Authorization: 'Bearer ' + authToken },
         }).then(response => {
 
             setIsLoading(false)

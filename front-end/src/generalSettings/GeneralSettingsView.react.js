@@ -43,6 +43,7 @@ export default function GeneralSettingsView() {
             baseURL: baseUrl,
             url: `/preferences-for-given-user/${username}`,
             method: 'GET',
+            headers: { Authorization: 'Bearer ' + authToken },
         }).then(response => {
             setIsLoading(false)
             if (response.status >= 200 && response.status < 300) {

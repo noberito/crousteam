@@ -197,7 +197,7 @@ def post_register(
 # GET /login
 #
 # NOTE axios accepts `auth` to send a basic auth
-@app.get("/login", authorize="ANY", auth="basic")
+@app.get("/login", authorize="ALL", auth="basic")
 def get_login(user: fsa.CurrentUser):
     return json(app.create_token(user)), 200
 
@@ -427,11 +427,15 @@ def get_first_last_name(user: fsa.CurrentUser):
     return json(res), 200
 
 
-@app.get("/all-info/<login>", authorize="ANY")
-def get_all_info(login: str):
+@app.get("/all-info", authorize="ALL")
+def get_all_info(user: fsa.CurrentUser):
+    res = db.get_all_info(login=user)
+    return json(res), 200
+
+
+@app.get("/all-info/<login>", authorize="ALL")
+def get_all_info_login(login: str):
     res = db.get_all_info(login=login)
-    if not res:
-        return "login not found", 404
     return json(res), 200
 
 

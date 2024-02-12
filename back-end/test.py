@@ -500,9 +500,8 @@ def test_add_event(api):
 # profile : get_info
 def test_get_info_profile(api):
     api.check("GET", "/first-last-name", 200, r"dalton", login="joe")
-    api.check("GET", "/all-info/hobbes", 200, r"tiger", login=ADMIN)
-    api.check("GET", "/all-info/brandon", 404, login=ADMIN)
-    api.check("GET", "/all-info", 404, login=ADMIN)
+    api.check("GET", "/all-info", 200, r"tiger", login="hobbes")
+    api.check("GET", "/all-info/joe", 200, r"dalton", login="hobbes")
 
 
 # preferences :

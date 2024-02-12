@@ -95,6 +95,7 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog, }) {
       baseURL: baseUrl,
       url: `/preferences-for-given-user/${log}`,
       method: 'GET',
+      headers: { Authorization: 'Bearer ' + authToken },
     }).then(response => {
       setIsLoading(false)
       if (response.status >= 200 && response.status < 300) {
@@ -178,6 +179,7 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog, }) {
       baseURL: baseUrl,
       url: `/all-info/${log}`,
       method: 'GET',
+      headers: { Authorization: 'Bearer ' + authToken },
       // auth : {username : username, password : password} "Property 'btoa' doesn't exist"
     }).then(result => {
       console.log('OK ! ' + result.data)

@@ -157,7 +157,7 @@ JOIN Auth USING(lid)
 WHERE login = :login;
 
 -- name: get_all_info^
-SELECT * FROM Profile
+SELECT lid, firstName, lastName, bio, naissance::TEXT, photoPath FROM Profile
 JOIN Auth USING(lid)
 WHERE login = :login;
 

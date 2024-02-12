@@ -44,8 +44,9 @@ export default function GeneralSettingsView({ }) {
 
         axios({
             baseURL: baseUrl,
-            url: `/all-info/${username}`,
+            url: `/all-info`,
             method: 'GET',
+            headers: { Authorization: 'Bearer ' + authToken },
             // auth : {username : username, password : password} "Property 'btoa' doesn't exist"
         }).then(result => {
             console.log('OK ! ' + result.data)
