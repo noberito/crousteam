@@ -397,7 +397,7 @@ def create_event(
     etime: datetime.time,
     eduree: datetime.time,
     edescr: str,
-    preferences_list: JsonData = None,
+    preferences_list: dict = None,
 ):
     exist_already = db.get_single_event(
         ename=ename, eloc=eloc, etime=etime, edate=edate
@@ -421,9 +421,9 @@ def create_event(
         db.add_people_into_group(gid=gid, lid=2)
     db.add_people_into_group_ecreator(gid=gid, lid=lid)
     if preferences_list:
-        for preference in preferences_list:
-            if preference[1]:
-                db.add_event_preferences(eid=eid, pfid=preference[0])
+        for pfid in preferences_list.keys():
+            if preferences_list[pfid]:
+                db.add_event_preferences(eid=eid, pfid=pfid)
     return json(eid), 201
 
 
