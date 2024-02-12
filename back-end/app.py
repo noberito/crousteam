@@ -605,7 +605,7 @@ def generate_filename(filename):
 
 
 # attention, cette route devrait être protégée !
-@app.post("/upload", authorize="ANY")
+@app.post("/upload", authorize="ALL")
 def post_upload(imageInp: fsa.FileStorage, login: str):
     upload_path = app.config["UPLOAD_FOLDER"]
     unique_filename = generate_filename(imageInp.filename)
@@ -628,7 +628,7 @@ def post_upload(imageInp: fsa.FileStorage, login: str):
         return "failed to upload", 422
 
 
-@app.get("/get_image_path/<filename>", authorize="ANY")
+@app.get("/get_image_path/<filename>", authorize="ALL")
 def get_image_path(filename: fsa.path):
     log.debug(f"fn1={filename}")
     # Get the path of the image file
