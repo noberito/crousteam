@@ -16,7 +16,7 @@
     "react": "18.2.0",
     "react-datepicker": "^6.1.0",
     "react-native": "0.73.2",
-    "react-native-linear-gradient": "^2.8.3"
+    "react-native-date-picker": "^4.3.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
