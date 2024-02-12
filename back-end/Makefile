@@ -74,6 +74,8 @@ clean: full-stop
 	[ -f app.log ] && echo -e "# REMOVING app.log! RESTART \"make log\"…" >> app.log
 	$(RM) app.log app.pid $(F.gen) $(F.csv) .coverage *~
 	$(RM) -r __pycache__ .pytype .pytest_cache .postgres htmlcov
+	# cleanup static directory contents?
+	$(RM) static/*
 	dropdb $(DB) || exit 0
 
 .PHONY: clean.venv
