@@ -1,5 +1,3 @@
-
-
 import React, { useCallback, useContext, useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import AppContext from '../common/appcontext';
@@ -131,6 +129,20 @@ export default function ListChatView({ gid, setGid }) {
         getAllChats();
     }, [authToken, getAllChats]);
 
+    const [filteredChats, setFilteredChats] = useState(null);
+
+    // Mets à jour les chats filtrés lorsque le texte de recherche change
+    useEffect(() => {
+        if (!searchText) {
+            // Si le champ de recherche est vide, affiche tous les chats
+            setFilteredChats(chats);
+        } else {
+            // Sinon, filtre les chats en fonction du texte de recherche
+            const filtered = chats.filter(chat => chat.name.toLowerCase().includes(searchText.toLowerCase()));
+            setFilteredChats(filtered);
+        }
+    }, [searchText, chats]);
+
     const renderChatItem = ({ item }) => (
         <TouchableOpacity onPress={() => { setGid(item.gid), setPage('chatdisplay') }}>
 
@@ -160,7 +172,7 @@ export default function ListChatView({ gid, setGid }) {
                 />
 
                 <FlatList
-                    data={chats}
+                    data={filteredChats}
                     keyExtractor={(item) => item.gid}
                     renderItem={renderChatItem}
                 />
@@ -172,4 +184,3 @@ export default function ListChatView({ gid, setGid }) {
         </View>
     );
 };
-
