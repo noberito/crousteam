@@ -26,6 +26,8 @@ import datetime
 import logging
 from importlib.metadata import version as pkg_version
 from json import dumps as json_dumps
+from pathlib import Path
+from werkzeug.datastructures import FileStorage
 
 # initial logging configuration
 logging.basicConfig(level=logging.INFO)
@@ -575,29 +577,34 @@ def generate_filename(filename):
     return unique_filename
 
 
-UPLOAD_FOLDER = "uploads"
+UPLOAD_FOLDER = "Images"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 
 # attention, cette route devrait être protégée !
 @app.post("/upload", authorize="ANY")
-def post_upload(hello: fsa.FileStorage):
-    # usually: hello.save(some-clever-path)
-    unique_filename = generate_filename(hello.filename)
-    # Save the file to the upload folder
-    hello.save(unique_filename)
-    hello_data = hello.stream.read()
-    return f"received '{hello.filename}' ({hello.content_type}): {hello_data}", 201
+def post_upload(imageInp: fsa.FileStorage):
+    upload_path = os.path.join(app.root_path, app.config["UPLOAD_FOLDER"])
+    unique_filename = generate_filename(imageInp.filename)
+    log.debug(f"fn1={os.path.join(upload_path, unique_filename)}")
+    saveLink = os.path.join(upload_path, unique_filename)
+    imageInp.save(saveLink)
+    if os.path.exists(saveLink):
+        return saveLink, 201
 
 
-@app.get("/get_image_path/<filename>")
-def get_image_path(filename):
+@app.get("/get_image_path/<filename>", authorize="ANY")
+def get_image_path(filename: fsa.path):
+    log.debug(f"fn1={filename}")
     # Get the path of the image file
-    file_path = generate_filename(filename)
-    # Check if the file exists
-    if os.path.exists(file_path):
-        # Return the file path
-        return file_path, 200
+    filename = generate_filename(filename)
+    upload_path = os.path.join(app.root_path, app.config["UPLOAD_FOLDER"])
+    file_name = Path(os.path.join(upload_path, filename))
+    log.debug(f"fn2={file_name}")
+    if file_name.exists():
+        with open(file_name, "rb") as file:
+            file_data = FileStorage(file, filename=os.path.basename(file_name))
+            return file_data, 200
     else:
         return "File not found", 404
 

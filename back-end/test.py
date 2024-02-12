@@ -15,6 +15,8 @@ import os
 import flask_tester as ft
 import logging
 from database import db
+from werkzeug.datastructures import FileStorage
+
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("test")
@@ -643,3 +645,36 @@ def test_get_all_preferences(api):
 def test_get_info_on_event(api):
     api.check("GET", "/event-info-creator", 200, r"Big Crous", login="jean-paul")
     api.check("GET", "/event-info/10", 200, r"FAO", login="hobbes")
+
+
+def test_get_file_path(api):
+    # Path to the image file you want to upload
+    image_path = "/home/mobapp/crousteam/back-end/hello.text"
+
+    with open(image_path, "rb") as file:
+        file_data = FileStorage(file, filename=os.path.basename(image_path))
+        response = api.check(
+            "POST",
+            "/upload",
+            201,
+            data={"imageInp": (file_data, "hello.text", "text/plain")},
+            login=ADMIN,
+        )
+
+    print(response.text)
+
+
+def test_get_image_path(api):
+    # Path to the image file you want to upload
+    image_path = "/home/mobapp/crousteam/back-end/hello.jpg"
+
+    with open(image_path, "rb") as file:
+        file_data = FileStorage(file, filename=os.path.basename(image_path))
+        response = api.check(
+            "POST",
+            "/upload",
+            201,  #
+            data={"imageInp": (file_data, "hello.jpg", "image/jpeg")},
+            login=ADMIN,
+        )
+    print(response.text)
