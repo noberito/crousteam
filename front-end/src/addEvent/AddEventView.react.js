@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, Button, StyleSheet, FlatList, TouchableOpacity, Controller, useWatch } from "react-native"
-=======
 import React, { useEffect, useState, useContext} from 'react';
 import { View, Text, Button, StyleSheet, FlatList, TouchableOpacity, Controller, useWatch, ScrollView } from "react-native"
->>>>>>> 6635e0a (to push)
 import { baseUrl } from '../common/const';
 import axios from 'axios';
 import CrousteamButton from '../common/CrousteamButton.react';
@@ -47,11 +42,6 @@ const styles = StyleSheet.create({
     preference: {
         fontFamily: 'Arista-Pro-Alternate-Bold-trial'
     },
-<<<<<<< HEAD
-    dateStyle: {
-        fontFamily: 'Arista-Pro-Alternate-Bold-trial'
-    }
-=======
     dateStyle:{
         fontFamily:'Arista-Pro-Alternate-Bold-trial'
     },
@@ -62,7 +52,6 @@ const styles = StyleSheet.create({
         color:colors.secondaryText,
         fontFamily:'Arista-Pro-Alternate-Bold-trial'
     },
->>>>>>> 6635e0a (to push)
 }
 )
 
@@ -164,20 +153,13 @@ export default function AddEventView({ }) {
         return (
             <TouchableOpacity
                 style={[styles.preferenceContainer, { backgroundColor: (selectedPreferences[item.id]) ? colors.primaryText : colors.background }]}
-                onPress={() => { toggleItemSelection(item.id) }}>
+                onPress={() => { console.log(selectedPreferences), toggleItemSelection(item.id) }}>
                 <Text style={styles.preference}> {item.name} </Text>
             </TouchableOpacity>
         )
     }
 
-    const getSelectedPreferenceFormatted = () => {
-        // Use Object.entries to iterate over key-value pairs and filter based on value
-        const selectedPreferenceIDs = Object.entries(selectedPreferences)
-            .filter(([key, value]) => value) // Filter pairs where the value is true
-            .map(([key, value]) => key)
-            ; // Map to the key (ID) of the preference
-        return selectedPreferenceIDs;
-    };
+    
 
 
     return (
@@ -187,16 +169,9 @@ export default function AddEventView({ }) {
                 <View style={styles.titleContainer}>
                     <Text style={styles.title}> NEW EVENT </Text>
                 </View>
-<<<<<<< HEAD
-                <CrousteamTextInput onChangeText={(text) => { setName(text) }} label="Name" placeholder="Enter a name" />
-                <CrousteamTextInput onChangeText={(text) => { setDescription(text) }} label="Description" placeholder="Enter a Description" />
-                <CrousteamTextInput onChangeText={(text) => { setLocation(text) }} label="Location" placeholder="Enter a Location" />
-                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-=======
                 <CrousteamTextInput onChangeText={(text)=> {setName(text)}}label = "Name" placeholder ="Enter a name"/>
                 <CrousteamTextInput onChangeText={(text)=> {setLocation(text)}} label = "Location" placeholder ="Enter a Location"/>
                 <View style={{ flexDirection:'row', justifyContent: 'center', alignItems:'center'}}>
->>>>>>> 6635e0a (to push)
                     <Text >
                         {state.date.toDateString()}
                     </Text>
@@ -234,11 +209,8 @@ export default function AddEventView({ }) {
                     />
                 </View>
 
-<<<<<<< HEAD
-=======
                 <CrousteamTextInput onChangeText={(text)=> {setDescription(text)}} label = "Description" placeholder ="Enter a Description"/>
                 
->>>>>>> 6635e0a (to push)
                 <View>
                     <FlatList
                         data={preferences}
