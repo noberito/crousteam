@@ -1,3 +1,4 @@
+FrienderView
 import React, { useState, useContext, useEffect } from 'react';
 import { Button, View, StyleSheet, Image } from 'react-native';
 import BottomBar from './BottomBar.react';
@@ -13,6 +14,8 @@ import AppContext from '../common/appcontext';
 import ChatDisplayView from '../chatDisplay/ChatDisplayView.react';
 import EventDisplayView from '../eventDisplay/EventDisplayView.react';
 import AddEventView from '../addEvent/AddEventView.react';
+import MyEventDisplayView from '../eventDisplay/MyEventDisplayView.react'
+import MyListEventView from '../MyEvent/MyListEventView.react'
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -28,12 +31,12 @@ const styles = StyleSheet.create({
   footer: {
     flexBasis: '8%',
   },
-  logo:{
+  logo: {
   },
-  header:{
-    justifyContent:'center',
-    alignItems:'center',
-    height:'5%'
+  header: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '5%'
   }
 });
 
@@ -45,7 +48,7 @@ const styles = StyleSheet.create({
  */
 
 
-export default function FrienderView({logoutUser}) {
+export default function FrienderView({ logoutUser }) {
   const { username, setUsername, authToken, setAuthToken, page, setPage } = useContext(AppContext)
   const [log, setLog] = useState('null')
   const [eid, setEid] = useState(-1)
@@ -54,46 +57,51 @@ export default function FrienderView({logoutUser}) {
   if (page == 'friender') {
 
 
-      return (
+    return (
 
       <View style={styles.mainContainer}>
         <View style={styles.header}>
-          <Image style = {styles.logo} source={require('../../android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png')}></Image>
+          <Image style={styles.logo} source={require('../../android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png')}></Image>
         </View>
-        <View style={{height:'78%'}}>
-          <AllFriends username={username}  setLog={setLog} authToken={authToken}/>
+        <View style={{ height: '78%' }}>
+          <AllFriends username={username} setLog={setLog} authToken={authToken} />
         </View>
-        <View style = {styles.footer}>
-          <BottomBar/>
+        <View style={styles.footer}>
+          <BottomBar />
         </View>
       </View>)
-    }
-    if (page == 'myprofile') {
-      return (<MyProfileView logoutUser = {logoutUser}></MyProfileView>)
-    } 
-    if (page == 'listchat') {
-      return (<ListChatView gid={gid} setGid={setGid} ></ListChatView>)
-    }
-    if (page == 'changepreferences') {
-      return (<ChangePreferencesView></ChangePreferencesView>)
-    }
-    if (page == 'generalsettings') {
-      return (<GeneralSettingsView></GeneralSettingsView>)
-    }
-    if (page == 'profiledisplay') {
-      return (<ProfileDisplayView gid={gid} setGid={setGid} log={log} setLog={setLog}></ProfileDisplayView>)
-    }
-    if (page == 'chatdisplay'){
-      return (<ChatDisplayView gid={gid} setGid={setGid} log={log} setLog={setLog}></ChatDisplayView>)
-    }
-    if (page == 'listevent') {
-      return (<ListEventView gid={gid} setGid={setGid} eid={eid} setEid={setEid}></ListEventView>)
-    }
-    if (page == 'eventdisplay'){
-      return(<EventDisplayView gid={gid} setGid={setGid} eid={eid} setEid={setEid}></EventDisplayView>)
-    }
-    if (page == 'addevent'){
-      return(<AddEventView></AddEventView>)
-    }
-
+  }
+  if (page == 'myprofile') {
+    return (<MyProfileView logoutUser={logoutUser}></MyProfileView>)
+  }
+  if (page == 'listchat') {
+    return (<ListChatView gid={gid} setGid={setGid} ></ListChatView>)
+  }
+  if (page == 'changepreferences') {
+    return (<ChangePreferencesView></ChangePreferencesView>)
+  }
+  if (page == 'generalsettings') {
+    return (<GeneralSettingsView></GeneralSettingsView>)
+  }
+  if (page == 'profiledisplay') {
+    return (<ProfileDisplayView gid={gid} setGid={setGid} log={log} setLog={setLog}></ProfileDisplayView>)
+  }
+  if (page == 'chatdisplay') {
+    return (<ChatDisplayView gid={gid} setGid={setGid} log={log} setLog={setLog}></ChatDisplayView>)
+  }
+  if (page == 'listevent') {
+    return (<ListEventView gid={gid} setGid={setGid} eid={eid} setEid={setEid}></ListEventView>)
+  }
+  if (page == 'mylistevent') {
+    return (<MyListEventView gid={gid} setGid={setGid} eid={eid} setEid={setEid}></MyListEventView>)
+  }
+  if (page == 'eventdisplay') {
+    return (<EventDisplayView gid={gid} setGid={setGid} eid={eid} setEid={setEid}></EventDisplayView>)
+  }
+  if (page == 'addevent') {
+    return (<AddEventView></AddEventView>)
+  }
+  if (page == 'myeventdisplay') {
+    return (<MyEventDisplayView gid={gid} setGid={setGid} eid={eid} setEid={setEid}></MyEventDisplayView>)
+  }
 }

@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 
 
 
-export default function AllEvents({eid, setGid, log, setLog}){
+export default function AllEvents({ eid, setGid, log, setLog }) {
 
   const { page, setPage, authToken } = useContext(AppContext)
 
@@ -33,7 +33,7 @@ export default function AllEvents({eid, setGid, log, setLog}){
       setRefreshing(false); // Set refreshing to false when data is loaded
       if (response.status == 200) {
         const parsedData = response.data.map(event => ({
-          title:event[0], loc: event[1], date:event[2], time:event[3], duration:event[4], description:event[5], gid:event[6]
+          title: event[0], loc: event[1], date: event[2], time: event[3], duration: event[4], description: event[5], gid: event[6]
         }));
         console.log(parsedData);
         setEvents(parsedData);
@@ -51,18 +51,19 @@ export default function AllEvents({eid, setGid, log, setLog}){
   useEffect(() => {
     getAllEvents();
   }, [authToken, getAllEvents]);
-    
-    
-    const renderEventItem = ({item}) => {return(<EventIcon item={item} setGid={setGid}></EventIcon>)}
 
-    return(
-        <View>
-        {isLoading && <ActivityIndicator size='large' animating={true} color='#FF0000' />}
-            <FlatList
-                data={events}
-                keyExtractor={item => item.gid}
-                renderItem={renderEventItem}
-                numColumns={2}
-            />
-        </View>
-)};
+
+  const renderEventItem = ({ item }) => { return (<EventIcon item={item} setGid={setGid}></EventIcon>) }
+
+  return (
+    <View>
+      {isLoading && <ActivityIndicator size='large' animating={true} color='#FF0000' />}
+      <FlatList
+        data={events}
+        keyExtractor={item => item.gid}
+        renderItem={renderEventItem}
+        numColumns={2}
+      />
+    </View>
+  )
+};

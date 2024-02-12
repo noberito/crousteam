@@ -2,9 +2,9 @@ import React, { useContext, useCallback, useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import BottomBar from '../friender/BottomBar.react';
 import AppContext from '../common/appcontext';
-import AllEvents from './AllEvents.react';
+import AllEvents from '../listEvent/AllEvents.react';
 import CrousteamButton from '../common/CrousteamButton.react';
-import MYEvents from './MYEvents.react';
+import MYEvents from '../MyEvent/MYEvents.react';
 
 const styles = StyleSheet.create({
     header: {
@@ -41,15 +41,14 @@ export default function ListEventView({ eid, setEid, gid, setGid }) {
         <View style={styles.mainContainer}>
             <View style={styles.header}>
                 <Image source={require('../loggedOut/ic_launcher_round.png')}></Image>
-                <CrousteamButton title="My events" styleText={styles.Text} onPress={() => { setState('MY') }}></CrousteamButton>
-                <CrousteamButton title="All events" onPress={() => { setState('ALL') }}></CrousteamButton>
+                <CrousteamButton title="My events" styleText={styles.Text} onPress={() => { setPage('mylistevent') }}></CrousteamButton>
+                <CrousteamButton title="All events" onPress={() => { setPage('listevent') }}></CrousteamButton>
                 <View style={styles.correction}>
                     <CrousteamButton title="+" onPress={() => { setPage('addevent') }}></CrousteamButton>
                 </View>
             </View>
             <View style={{ height: '78%' }}>
-                {state === 'ALL' ? <AllEvents eid={eid} setGid={setGid} /> : <MYEvents setGid={setGid} eid={eid} setEid={setEid} />
-                }
+                <MYEvents setGid={setGid} eid={eid} setEid={setEid} />
             </View>
             <View style={styles.footer}>
                 <BottomBar page={page} setPage={setPage} />

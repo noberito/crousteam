@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext} from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, Button, StyleSheet, FlatList, TouchableOpacity, Controller, useWatch } from "react-native"
 import { baseUrl } from '../common/const';
 import axios from 'axios';
@@ -40,11 +40,11 @@ const styles = StyleSheet.create({
         shadowColor: colors.secondaryText,
         shadowOffset: { width: 0, height: 7 },
     },
-    preference:{
-        fontFamily:'Arista-Pro-Alternate-Bold-trial'
+    preference: {
+        fontFamily: 'Arista-Pro-Alternate-Bold-trial'
     },
-    dateStyle:{
-        fontFamily:'Arista-Pro-Alternate-Bold-trial'
+    dateStyle: {
+        fontFamily: 'Arista-Pro-Alternate-Bold-trial'
     }
 }
 )
@@ -80,13 +80,13 @@ export default function AddEventView({ }) {
             headers: { Authorization: 'Bearer ' + authToken },
             data: {
                 login: username,
-                ename: name, 
-                eloc: location, 
-                edate: state.date.toISOString().substr(0, 10), 
+                ename: name,
+                eloc: location,
+                edate: state.date.toISOString().substr(0, 10),
                 etime: state.date.toLocaleTimeString(),
                 eduree: duration.time.toLocaleTimeString(),
-                preferences_elist:selectedPreferences, // Ajustez le nom de cette propriété selon votre API
-      }
+                preferences_elist: selectedPreferences, // Ajustez le nom de cette propriété selon votre API
+            }
         }).then(response => {
             setIsPosting(false);
             if (response.status === 200 || response.status === 201) {
@@ -135,7 +135,7 @@ export default function AddEventView({ }) {
     }, [authToken]);
 
     const toggleItemSelection = (id) => {
-        
+
         setSelectedPreferences((prevSelectedItems) => ({
             ...prevSelectedItems,
             [id]: !prevSelectedItems[id],
@@ -158,11 +158,11 @@ export default function AddEventView({ }) {
         const selectedPreferenceIDs = Object.entries(selectedPreferences)
             .filter(([key, value]) => value) // Filter pairs where the value is true
             .map(([key, value]) => key)
-        ; // Map to the key (ID) of the preference
+            ; // Map to the key (ID) of the preference
         return selectedPreferenceIDs;
     };
 
-    
+
     return (
         <View style={styles.mainContainer}>
             <ReturnButton onPress={() => { setPage('listevent') }} />
@@ -170,10 +170,10 @@ export default function AddEventView({ }) {
                 <View style={styles.titleContainer}>
                     <Text style={styles.title}> NEW EVENT </Text>
                 </View>
-                <CrousteamTextInput onChangeText={(text)=> {setName(text)}}label = "Name" placeholder ="Enter a name"/>
-                <CrousteamTextInput onChangeText={(text)=> {setDescription(text)}} label = "Description" placeholder ="Enter a Description"/>
-                <CrousteamTextInput onChangeText={(text)=> {setLocation(text)}} label = "Location" placeholder ="Enter a Location"/>
-                <View style={{ flexDirection:'row', justifyContent: 'center', alignItems:'center'}}>
+                <CrousteamTextInput onChangeText={(text) => { setName(text) }} label="Name" placeholder="Enter a name" />
+                <CrousteamTextInput onChangeText={(text) => { setDescription(text) }} label="Description" placeholder="Enter a Description" />
+                <CrousteamTextInput onChangeText={(text) => { setLocation(text) }} label="Location" placeholder="Enter a Location" />
+                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <Text >
                         {state.date.toDateString()}
                     </Text>
@@ -186,11 +186,11 @@ export default function AddEventView({ }) {
                         open={state.open}
                         date={state.date}
                         onConfirm={(date) => setState({ date, open: false })}
-                        onCancel={() => setState({ date:state.date, open: false })}
+                        onCancel={() => setState({ date: state.date, open: false })}
                         androidVariant="nativeAndroid"
                     />
                 </View>
-                <View style={{ flexDirection:'row', justifyContent: 'center', alignItems:'center'}}>
+                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <Text >
                         {duration.time.toLocaleTimeString()}
                     </Text>
@@ -203,12 +203,12 @@ export default function AddEventView({ }) {
                         mode={'time'}
                         open={duration.open}
                         date={duration.time}
-                        onConfirm={(duration) => {console.log(duration), setDuration({ time:duration, open: false })}}
-                        onCancel={() => setDuration({ time:duration.time, open: false })}
+                        onConfirm={(duration) => { console.log(duration), setDuration({ time: duration, open: false }) }}
+                        onCancel={() => setDuration({ time: duration.time, open: false })}
                         androidVariant="nativeAndroid"
                     />
                 </View>
-                
+
                 <View>
                     <FlatList
                         data={preferences}
