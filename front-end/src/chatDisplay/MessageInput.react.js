@@ -55,7 +55,6 @@ const MessageInput = ({ gid, username }) => {
       method: 'POST',
       headers: { Authorization: 'Bearer ' + authToken },
       data: {
-        login: username, // Supposé que 'username' est l'utilisateur actuel, sinon ajustez selon le contexte
         mtext: content, // Ajustez le nom de cette propriété selon votre API
       }
     }).then(response => {

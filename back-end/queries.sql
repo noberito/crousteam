@@ -254,11 +254,11 @@ SELECT * FROM Preferences;
 
 -- name: get_single_event^
 SELECT TRUE FROM Event
-WHERE ename = :ename AND eloc = :eloc AND etime = :etime;
+WHERE ename = :ename AND eloc = :eloc AND etime = :etime AND edate = :edate;
 
 -- name: get_all_events
-SELECT ename, eloc, etime::TEXT, eduree::TEXT, edescr, gid FROM Event
-WHERE etime >= CURRENT_DATE;
+SELECT ename, eloc, edate::TEXT, etime::TEXT, eduree::TEXT, edescr, gid FROM Event
+WHERE edate >= CURRENT_DATE;
 
 -- name: get_single_event_with_eid^
 SELECT TRUE FROM Event
@@ -266,12 +266,13 @@ WHERE eid = :eid;
 
 -- name: get_all_events_with_preferences
 SELECT ename, eloc,
+edate::TEXT,
 etime::TEXT,
 eduree::TEXT,
 edescr, gid FROM Event
 JOIN EventPreferences USING(eid)
 JOIN Preferences USING(pfid)
-WHERE ('"'||pftype||'"')::JSONB <@ :preferences_list::JSONB AND etime >= CURRENT_DATE
+WHERE ('"'||pftype||'"')::JSONB <@ :preferences_list::JSONB AND edate >= CURRENT_DATE
 ORDER BY 3;
 
 -- name: get_gid_from_eid^
@@ -283,8 +284,8 @@ VALUES (:ename, TRUE)
 RETURNING gid;
 
 -- name: add_event$
-INSERT INTO Event (ename, eloc, etime, eduree, gid)
-VALUES (:ename, :eloc, :etime, :eduree, :gid)
+INSERT INTO Event (ename, eloc, edate, etime, eduree, gid)
+VALUES (:ename, :eloc, :edate, :etime, :eduree, :gid)
 RETURNING eid;
 
 -- name: delete_event!

@@ -235,6 +235,9 @@ if app.config.get("APP_TEST", False):
 # ADD NEW CODE HERE
 
 
+# ABOUT CONVERSATIONS
+#
+# Display the conversation with the id being gid
 @app.get("/messages/gid:<gid>", authorize=("message", "gid"))
 def get_messages(gid: int):
     gid_valid = db.is_gid_valid(gid=gid)
@@ -244,6 +247,7 @@ def get_messages(gid: int):
     return "no group with this id", 404
 
 
+# Get the group gid between the current user and someone else
 @app.get("/group-gid", authorize="ALL")
 def get_group_gid(user: fsa.CurrentUser, login2: str):
     lid1 = db.get_lid_from_login(login=user)
@@ -255,31 +259,31 @@ def get_group_gid(user: fsa.CurrentUser, login2: str):
         return json({"gid": ""}), 200
 
 
+# Post message on a group chat
 @app.post("/messages/gid:<gid>", authorize=("message", "gid"))
-def post_messages(login: str, mtext: str, gid: int):
+def post_messages(login: fsa.CurrentUser, mtext: str, gid: int):
     lid = db.get_lid_from_login(login=login)
     db.post_messages(lid=lid, mtext=mtext, gid=gid)
     return "", 201
 
 
+# Display all the conversations the user has
 @app.get("/all-conversations", authorize="ALL")
 def get_all_conversations(user: fsa.CurrentUser):
     res = db.get_all_conversations(login=user)
     return json(res), 200
 
 
-@app.get("/profiles", authorize="ALL")
+# INFO ON PROFILE
+#
+# Get all info on profiles (only for admin)
+@app.get("/profiles", authorize="ADMIN")
 def get_all_profile():
     res_tot = db.all_info_profile()
     return json(res_tot), 200
 
 
-@app.get("/profile", authorize="ALL")
-def get_single_profile(user: fsa.CurrentUser):
-    res = db.get_single_profile(login=user)
-    return json(res), 200
-
-
+# Post info on the profile
 @app.post("/profile", authorize="ALL")
 def post_info_register(
     lid: int,
@@ -303,6 +307,7 @@ def post_info_register(
     return json(res), 201
 
 
+# To delete your own profile
 @app.delete("/profile", authorize="ALL")
 def delete_info_profile():
     exist = db.get_single_profile(login=app.current_user())
@@ -312,6 +317,7 @@ def delete_info_profile():
     return "login not found", 404
 
 
+# To patch your own profile
 @app.patch("/profile", authorize="ALL")
 def update_info_profile(
     user: fsa.CurrentUser,
@@ -332,6 +338,9 @@ def update_info_profile(
     return "", 204
 
 
+# CREATION OF GROUP CHAT
+#
+# Create a new group of 2
 @app.post("/group-chat-2", authorize="ALL")
 def create_chat_between_2_users(login1: str, login2: str):
     lid1 = db.get_lid_from_login(login=login1)
@@ -349,6 +358,7 @@ def create_chat_between_2_users(login1: str, login2: str):
     return json(gid), 201
 
 
+# Delete a group chat
 @app.delete("/group-chat-2/gid:<gid>", authorize=("message", "gid"))
 def delete_group_chat(gid: int):
     to_delete = db.get_single_group_chat(gid=gid)
@@ -358,6 +368,9 @@ def delete_group_chat(gid: int):
     return "", 204
 
 
+#
+#
+#
 @app.get("/events", authorize="ALL")
 def get_event_with_preferences(preferences_list: StrList = None):
     if not preferences_list:
@@ -380,14 +393,19 @@ def create_event(
     user: fsa.CurrentUser,
     ename: str,
     eloc: str,
-    etime: datetime.datetime,
+    edate: datetime.date,
+    etime: datetime.time,
     eduree: datetime.time,
 ):
-    exist_already = db.get_single_event(ename=ename, eloc=eloc, etime=etime)
+    exist_already = db.get_single_event(
+        ename=ename, eloc=eloc, etime=etime, edate=edate
+    )
     if exist_already:
         return "the same event already exist", 404
     gid = db.create_group_chat_link_to_the_event(ename=ename)
-    eid = db.add_event(ename=ename, eloc=eloc, etime=etime, eduree=eduree, gid=int(gid))
+    eid = db.add_event(
+        ename=ename, eloc=eloc, edate=edate, etime=etime, eduree=eduree, gid=int(gid)
+    )
     lid = db.get_lid_from_login(login=user)
     if lid != 1:
         db.add_people_into_group_ecreator(gid=gid, lid=1)
@@ -515,7 +533,7 @@ def get_preferences_with_certain_user(login: str):
     return json(res_login), 200
 
 
-@app.get("/all-possible-preferences/", authorize="ANY")
+@app.get("/all-possible-preferences/", authorize="ALL")
 def get_all_preferences():
     res_login = db.get_all_preferences()
     return json(res_login), 200

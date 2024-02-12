@@ -17,11 +17,14 @@ list_pftype = ["amateur de cinema", "philantropique", "cowboy"]
 ename = "Bigman_streep"
 eloc = "Paris"
 etime = "2024-04-25"
+edate = "10:00:00"
 eduree = "03:00:00"
 
 
 gid = db.create_group_chat_link_to_the_event(ename=ename)
-eid = db.add_event(ename=ename, eloc=eloc, etime=etime, eduree=eduree, gid=int(gid))
+eid = db.add_event(
+    ename=ename, eloc=eloc, edate=edate, etime=etime, eduree=eduree, gid=int(gid)
+)
 lid = db.get_lid_from_login(login="hobbes")
 db.add_people_into_group_ecreator(gid=gid, lid=lid)
 res_login = db.get_all_info(login="hobbes")

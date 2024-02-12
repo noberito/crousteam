@@ -332,14 +332,14 @@ def test_messages(api):
         "POST",
         "/messages/gid:1",
         201,
-        data={"login": "calvin", "mtext": "Je poste un message"},
+        data={"mtext": "Je poste un message"},
         login="calvin",
     )
     api.check(
         "POST",
         "/messages/gid:3",
         403,
-        data={"login": "hobbes", "mtext": "Je poste un message"},
+        data={"mtext": "Je poste un message"},
         login="hobbes",
     )
 
@@ -350,7 +350,6 @@ def test_conversations(api):
 
 # /Profile -> Post Information
 def test_add_profile(api):
-    api.check("GET", "/profile", 200, login=ADMIN)
     api.check("GET", "/profiles", 200, r"jean-paul", login=ADMIN)
     api.check(
         "POST",
@@ -446,7 +445,8 @@ def test_add_event(api):
         data={
             "ename": "PSG-MU au Parc",
             "eloc": "Paris",
-            "etime": "2024-02-25 20:00:00",
+            "edate": "2024-02-25",
+            "etime": "20:00:00",
             "eduree": "03:00:00",
         },
         login=ADMIN,
@@ -458,7 +458,8 @@ def test_add_event(api):
         data={
             "ename": "PSG-MU au Parc",
             "eloc": "Paris",
-            "etime": "2024-02-25 20:00:00",
+            "edate": "2024-02-25",
+            "etime": "20:00:00",
             "eduree": "03:00:00",
         },
         login=ADMIN,
@@ -470,7 +471,8 @@ def test_add_event(api):
         data={
             "ename": "PSG-City au Parc",
             "eloc": "Paris",
-            "etime": "2024-04-25 21:00:00",
+            "edate": "2024-04-25",
+            "etime": "21:00:00",
             "eduree": "03:00:00",
         },
         login="hobbes",

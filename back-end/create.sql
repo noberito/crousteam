@@ -77,11 +77,12 @@ CREATE TABLE IF NOT EXISTS Event(
   eid SERIAL8 PRIMARY KEY,
   ename TEXT NOT NULL,
   eloc TEXT NOT NULL,
-  etime TIMESTAMP NOT NULL,
+  edate DATE NOT NULL,
+  etime TIME NOT NULL,
   eduree INTERVAL NOT NULL,
   edescr TEXT DEFAULT NULL,
   gid INTEGER NOT NULL,
-  UNIQUE (ename, eloc, etime),
+  UNIQUE (ename, eloc, etime, edate),
   UNIQUE (gid),
   CONSTRAINT fk_group
     FOREIGN KEY (gid)

@@ -73,7 +73,8 @@ export default function AddEventView({ }) {
                 login: username,
                 ename: name,
                 eloc: location,
-                etime: date,
+                edate: date,
+                etime: duration,
                 eduree: duration, // Ajustez le nom de cette propriété selon votre API
             }
         }).then(response => {
@@ -148,7 +149,6 @@ export default function AddEventView({ }) {
                 </View>
                 <CrousteamTextInput onChangeText={(text) => { setName(text) }} label="Name" placeholder="Enter a name" />
                 <CrousteamTextInput onChangeText={(text) => { setLocation(text) }} label="Location" placeholder="Enter a Location" />
-                <CrousteamTextInput onChangeText={(text) => { setDate(text) }} label="Date" placeholder="Enter a date" />
                 <CrousteamTextInput onChangeText={(text) => { setDuration(text) }} label="Duration" placeholder="Enter a duration" />
                 <View>
                     <FlatList

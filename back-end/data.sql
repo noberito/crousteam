@@ -80,11 +80,11 @@ INSERT INTO UsersPref(lid, pfid) VALUES
 (12, 1), (12, 6),
 (13, 1);
 
-INSERT INTO Event(ename, eloc, etime, eduree, edescr, gid) VALUES
- ('Big Crous', 'RU PR', '2024-02-22', '1 hour', 'Notre raison d être', 8)
-,('Real-PSG', 'Bernabeu', '2024-02-14', '3 hours', 'Match champions league', 9)
-,('Soiree en FAO', 'Meuh', '2024-02-26', '7 hours', 'Soiree collante', 10)
-,('Big Crous', 'RU PR', '2024-02-02', '2 hour', 'Notre raison d être', 11)
+INSERT INTO Event(ename, eloc, edate, etime, eduree, edescr, gid) VALUES
+ ('Big Crous', 'RU PR', '2024-02-22', '14:00:00', '1 hour', 'Notre raison d être', 8)
+,('Real-PSG', 'Bernabeu', '2024-02-14', '11:00:00', '3 hours', 'Match champions league', 9)
+,('Soiree en FAO', 'Meuh', '2024-02-26', '21:00:00', '7 hours', 'Soiree collante', 10)
+,('Big Crous', 'RU PR', '2024-02-02', '16:00:00', '2 hour', 'Notre raison d être', 11)
 ;
 
 INSERT INTO EventPreferences(eid, pfid) VALUES
