@@ -241,7 +241,7 @@ if app.config.get("APP_TEST", False):
 
 # ABOUT CONVERSATIONS
 #
-# Display the conversation with the id being gid
+# Displays the conversation with the id being gid
 @app.get("/messages/gid:<gid>", authorize=("message", "gid"))
 def get_messages(gid: int):
     gid_valid = db.is_gid_valid(gid=gid)
@@ -271,7 +271,7 @@ def post_messages(login: fsa.CurrentUser, mtext: str, gid: int):
     return "", 201
 
 
-# Display all the conversations the user has
+# Displays all the conversations the user has
 @app.get("/all-conversations", authorize="ALL")
 def get_all_conversations(user: fsa.CurrentUser):
     res = db.get_all_conversations(login=user)
@@ -372,9 +372,9 @@ def delete_group_chat(gid: int):
     return "", 204
 
 
+# CREATION AND DISPLAYS OF EVENTS
 #
-#
-#
+# Displays all events
 @app.get("/events", authorize="ALL")
 def get_event_with_preferences(preferences_list: StrList = None):
     if not preferences_list:
@@ -386,12 +386,14 @@ def get_event_with_preferences(preferences_list: StrList = None):
     return json_dumps(list(res)), 200
 
 
+# Get the group id linked to the event
 @app.get("/event-gid", authorize="ALL")
 def get_gid_from_eid(eid: int):
     gid = db.get_gid_from_eid(eid=eid)
     return json(gid), 200
 
 
+# Create a new event
 @app.post("/event", authorize="ALL")
 def create_event(
     user: fsa.CurrentUser,
@@ -431,6 +433,7 @@ def create_event(
     return json(eid), 201
 
 
+# Delete an event
 @app.delete("/event", authorize=("event", "eid"))
 def delete_event(eid: int):
     exist_already = db.get_single_event_with_eid(eid=eid)
@@ -440,6 +443,7 @@ def delete_event(eid: int):
     return "", 204
 
 
+# Add a new user to the event
 @app.post("/event/<login>", authorize="ALL")
 def insert_people_into_the_event_group_chat(eid: int, login: str):
     people_exist = db.get_single_profile(login=login)
@@ -455,24 +459,32 @@ def insert_people_into_the_event_group_chat(eid: int, login: str):
     return "", 201
 
 
+# GET INFORMATIONS
+#
+# Get first and last name from the user
 @app.get("/first-last-name", authorize="ALL")
 def get_first_last_name(user: fsa.CurrentUser):
     res = db.get_first_last_name(login=user)
     return json(res), 200
 
 
+# Get all the informations of the user
 @app.get("/all-info", authorize="ALL")
 def get_all_info(user: fsa.CurrentUser):
     res = db.get_all_info(login=user)
     return json(res), 200
 
 
+# Get all information of an user
 @app.get("/all-info/<login>", authorize="ALL")
 def get_all_info_login(login: str):
     res = db.get_all_info(login=login)
     return json(res), 200
 
 
+# ABOUT PREFERENCES OF USERS
+#
+# Post preferences of an user (when creating an account)
 @app.post("/preferences/<login>", authorize="ANY")
 def post_preferences(list_pftype: StrList, login: str):
     s = 0
@@ -487,6 +499,7 @@ def post_preferences(list_pftype: StrList, login: str):
     return "", 201
 
 
+# Delete preferences from the user
 @app.delete("/preferences", authorize="ALL")
 def delete_preferences(user: fsa.CurrentUser, list_pftype: StrList):
     s = 0
@@ -500,6 +513,7 @@ def delete_preferences(user: fsa.CurrentUser, list_pftype: StrList):
     return "", 204
 
 
+# Patch preferences from the user
 @app.patch("/preferences", authorize="ALL")
 def update_info_profile_preferences(user: fsa.CurrentUser, list_pftype: StrList):
     s = 0
@@ -510,18 +524,21 @@ def update_info_profile_preferences(user: fsa.CurrentUser, list_pftype: StrList)
     return "", 204
 
 
+# Displays all the users with preferences in common
 @app.get("/users-with-preferences", authorize="ALL")
 def get_users_with_same_preferences(user: fsa.CurrentUser):
     res_login = db.get_login_who_matches_with_preferences(login=user)
     return list(res_login), 200
 
 
+# Displays all the users with preferences in common where users are not linked
 @app.get("/users-with-preferences-no-group-chat", authorize="ALL")
 def get_users_with_same_preferences_no_group_chat(user: fsa.CurrentUser):
     res_login = db.get_login_who_matches_with_preferences_no_group_chat(login=user)
     return list(res_login), 200
 
 
+# Insert a new preference type
 @app.post("/preference-type/<pftype>", authorize="ALL")
 def create_preference_type(pftype: str):
     exists1 = db.get_single_preference_type(pftype=pftype)
@@ -531,6 +548,7 @@ def create_preference_type(pftype: str):
     return "", 200
 
 
+# Delete a preference type
 @app.delete("/preference-type/<pftype>", authorize="ALL")
 def delete_preference_type(pftype: str):
     to_delete = db.get_single_preference_type(pftype=pftype)
@@ -540,6 +558,7 @@ def delete_preference_type(pftype: str):
     return "", 204
 
 
+# Get preferences for a given user
 @app.get("/preferences-for-given-user/<login>", authorize="ALL")
 def get_preferences_with_certain_user(login: str):
     login_in = db.get_single_profile(login=login)
@@ -549,24 +568,30 @@ def get_preferences_with_certain_user(login: str):
     return json(res_login), 200
 
 
+# Get all preferences already implemented
 @app.get("/all-possible-preferences/", authorize="ANY")
 def get_all_preferences():
     res_login = db.get_all_preferences()
     return json(res_login), 200
 
 
+# Get all preferences (with id) already implemented
 @app.get("/all-possible-preferences-with-id", authorize="ALL")
 def get_all_preferences_with_id():
     res_login = db.get_all_preferences_with_id()
     return json(res_login), 200
 
 
+# INFORMATION OF EVENTS
+#
+# Get all informations of an event using the group id
 @app.get("/event-info/<gid>", authorize="ALL")
 def get_event_info(gid: int):
     res = db.get_event_info(gid=gid)
     return json(res), 200
 
 
+# Get all the informations of events created by the user
 @app.get("/event-info-creator", authorize="ALL")
 def get_event_info_creator(login: fsa.CurrentUser):
     res = db.get_event_user_create(login=login)
