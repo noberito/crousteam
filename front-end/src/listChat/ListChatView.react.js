@@ -8,6 +8,7 @@ import axios from 'axios';
 import { baseUrl } from '../common/const';
 import Line from '../common/Line.react';
 import CrousteamTextInput from '../common/CrousteamTextInput.react';
+import colors from '../common/Colors.react';
 
 const ChatList = [
     { id: '1', contactName: 'John Doe', lastMessage: 'Hello!', lastMessageTime: '10:30 AM' },
@@ -19,34 +20,70 @@ const ChatList = [
 ];
 
 const styles = StyleSheet.create({
+    titleContainer: {
+
+
+
+        alignItems: 'center',
+
+        width: '100%'
+
+    },
+
+    title: {
+
+        fontSize: 40,
+        fontFamily: 'Arista-Pro-Alternate-Bold-trial',
+        color: colors.secondaryText,
+        marginBottom: 10
+
+    },
     container: {
         flex: 1,
         padding: 16,
+        fontFamily: 'Arista-Pro-Alternate-Bold-trial'
     },
     searchInput: {
         height: 40,
-        borderColor: 'gray',
+        borderColor: colors.secondaryText,
         borderWidth: 1,
         marginBottom: 16,
         paddingHorizontal: 10,
+        borderRadius: 13,
+        color: 'black',
+        fontFamily: 'Arista-Pro-Alternate-Bold-trial'
+
     },
     chatItem: {
         padding: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: '#CCCCCC',
+        borderBottomWidth: 0,
+        borderLeftWidth: 1,
+        borderRightWidth: 1,
+        borderTopWidth: 2,
+        borderRightColor: colors.secondaryText,
+        borderBottomColor: colors.secondaryText,
+        borderLeftColor: colors.secondaryText,
+        borderTopColor: colors.secondaryText,
+        borderRadius: 13,
+        marginBottom: 0,
+        color: 'black',
+        fontFamily: 'Arista-Pro-Alternate-Bold-trial'
     },
     contactName: {
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 8,
+        color: 'black',
+        fontFamily: 'Arista-Pro-Alternate-Bold-trial'
     },
     lastMessageTime: {
-        color: '#888888',
+        color: colors.primaryText,
     },
     mainContainer: {
         flex: 1,
         padding: 16,
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        fontFamily: 'Arista-Pro-Alternate-Bold-trial'
     },
     footer: {
         flexBasis: '8%',
@@ -105,19 +142,30 @@ export default function ListChatView({ gid, setGid }) {
     );
 
     return (
-        <View style={styles.mainContainer}>
-            <CrousteamTextInput
-                style={styles.searchInput}
-                placeholder="Search..."
-                value={searchText}
-                onChangeText={(text) => setSearchText(text)}
-            />
 
-            <FlatList
-                data={chats}
-                keyExtractor={(item) => item.gid}
-                renderItem={renderChatItem}
-            />
+
+
+
+        <View style={styles.mainContainer}>
+            <View style={styles.titleContainer}>
+
+                <Text style={styles.title}>CROUSTEXT</Text>
+            </View>
+            <View style={styles.mainContainer}>
+                <CrousteamTextInput
+                    style={styles.searchInput}
+                    placeholder="Search..."
+                    value={searchText}
+                    onChangeText={(text) => setSearchText(text)}
+                />
+
+                <FlatList
+                    data={chats}
+                    keyExtractor={(item) => item.gid}
+                    renderItem={renderChatItem}
+                />
+
+            </View>
             <View style={styles.footer}>
                 <BottomBar page={page} setPage={setPage} />
             </View>
