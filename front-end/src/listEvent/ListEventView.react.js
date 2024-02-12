@@ -47,7 +47,7 @@ export default function ListEventView({ eid, setEid, gid, setGid }) {
                 </View>
             </View>
             <View style={{ height: '78%' }}>
-                {state === 'ALL' ? <AllEvents eid={eid} setGid={setGid} /> : <MYEvents eid={eid} setEid={setEid} />
+                {state === 'ALL' ? <AllEvents eid={eid} setGid={setGid} /> : <MYEvents setGid={setGid} eid={eid} setEid={setEid} />
                 }
             </View>
             <View style={styles.footer}>
