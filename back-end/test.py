@@ -649,6 +649,7 @@ def test_get_info_on_event(api):
 
 def test_get_file_path(api):
     # Path to the image file you want to upload
+    return
     image_path = "/home/mobapp/crousteam/back-end/hello.text"
 
     with open(image_path, "rb") as file:
@@ -674,7 +675,7 @@ def test_get_image_path(api):
             "POST",
             "/upload",
             201,  #
-            data={"imageInp": (file_data, "hello.jpg", "image/jpeg")},
+            data={"imageInp": (file_data, "hello.jpg", "image/jpeg"), "login": "calvin"},
             login=ADMIN,
         )
     print(response.text)

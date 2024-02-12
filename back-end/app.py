@@ -172,6 +172,7 @@ def post_register(
     naissance: str,
     photoPath: str,
 ):
+
     # check constraints on "login" (these tests are redundant with CHECK)
     if len(login) < 3:
         return "login must be at least 3 chars", 400
@@ -185,6 +186,7 @@ def post_register(
     lid = db.insert_auth(
         login=login, password=app.hash_password(password), is_admin=False
     )
+
     db.post_info_register(
         lid=int(lid),
         firstName=firstName,
@@ -579,7 +581,7 @@ def generate_filename(filename):
 
 # attention, cette route devrait être protégée !
 @app.post("/upload", authorize="ANY")
-def post_upload(imageInp: fsa.FileStorage):
+def post_upload(imageInp: fsa.FileStorage, login: str):
     upload_path = app.config["UPLOAD_FOLDER"]
     unique_filename = generate_filename(imageInp.filename)
     log.debug(f"fn1={os.path.join(upload_path, unique_filename)}")
@@ -588,7 +590,17 @@ def post_upload(imageInp: fsa.FileStorage):
     url = app.config["UPLOADED_URL"]
     log.debug(f"imageLink = {url + unique_filename}")
     if os.path.exists(saveLink):
-        return app.config["UPLOADED_URL"] + unique_filename, 201
+        exist = db.get_single_profile(login=login)
+        if exist:
+            db.update_image(
+                login=login,
+                photoPath=app.config["UPLOADED_URL"] + unique_filename,
+            )
+            return "", 201
+        else:
+            return "login doesn't exist", 404
+    else:
+        return "failed to upload", 422
 
 
 @app.get("/get_image_path/<filename>", authorize="ANY")

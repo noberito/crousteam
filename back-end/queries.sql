@@ -107,6 +107,12 @@ UPDATE Profile
 SET (firstName, lastName, bio, naissance, photoPath) = (:firstName, :lastName, :bio, :naissance, :photoPath)
 WHERE lid = (SELECT lid FROM Auth WHERE login = :login);
 
+-- name: update_image!
+UPDATE Profile
+SET photoPath = :photoPath
+WHERE lid = (SELECT lid FROM Auth WHERE login = :login);
+
+
 -- name: create_group_of_two$
 INSERT INTO AppGroup(gname)
 VALUES ('')
