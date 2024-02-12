@@ -64,7 +64,11 @@ export default function AddEventView({ }) {
     const [isPosting, setIsPosting] = useState(false)
     const [postError, setPostError] = useState(false);
     const [state, setState] = useState({ date: new Date(), open: false })
-    const [duration, setDuration] = useState({ time: new Date(), open: false })
+    const [duration, setDuration] = useState(() => {
+        const initialTime = new Date();
+        initialTime.setHours(0, 0, 0, 0); // Sets time to 00:00:00.000
+        return { time: initialTime, open: false };
+    });
 
     const postEvent = () => {
         setIsPosting(true)
@@ -174,7 +178,7 @@ export default function AddEventView({ }) {
                 </View>
                 <View style={{ flexDirection:'row', justifyContent: 'center', alignItems:'center'}}>
                     <Text >
-                        {duration.time.toDateString()}
+                        {duration.time.toLocaleTimeString()}
                     </Text>
                     <CrousteamButton
                         title="Select duration"
@@ -185,7 +189,7 @@ export default function AddEventView({ }) {
                         mode={'time'}
                         open={duration.open}
                         date={duration.time}
-                        onConfirm={(duration) => setDuration({ duration, open: false })}
+                        onConfirm={(duration) => {console.log(duration), setDuration({ time:duration, open: false })}}
                         onCancel={() => setDuration({ time:duration.time, open: false })}
                         androidVariant="nativeAndroid"
                     />
