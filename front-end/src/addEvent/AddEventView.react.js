@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext, useCallback, useSyncExternalStore } from 'react';
-import { View, Text, Button, StyleSheet, FlatList, TouchableOpacity } from "react-native"
+import React, { useEffect, useState, useContext} from 'react';
+import { View, Text, Button, StyleSheet, FlatList, TouchableOpacity, Controller, useWatch } from "react-native"
 import { baseUrl } from '../common/const';
 import axios from 'axios';
 import CrousteamButton from '../common/CrousteamButton.react';
@@ -40,8 +40,11 @@ const styles = StyleSheet.create({
         shadowColor: colors.secondaryText,
         shadowOffset: { width: 0, height: 7 },
     },
-    preference: {
-        fontFamily: 'Arista-Pro-Alternate-Bold-trial'
+    preference:{
+        fontFamily:'Arista-Pro-Alternate-Bold-trial'
+    },
+    dateStyle:{
+        fontFamily:'Arista-Pro-Alternate-Bold-trial'
     }
 }
 )
@@ -54,13 +57,14 @@ export default function AddEventView({ }) {
     const [selectedPreferences, setSelectedPreferences] = useState({})
     const [name, setName] = useState("")
     const [location, setLocation] = useState("")
-    const [date, setDate] = useState(new Date())
-    const [duration, setDuration] = useState("")
     const [preferences, setPreferences] = useState([]);
+    const [datePickerOpen, setDatePickerOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false);
     const [hasFailure, setHasFailure] = useState(false);
     const [isPosting, setIsPosting] = useState(false)
     const [postError, setPostError] = useState(false);
+    const [state, setState] = useState({ date: new Date(), open: false })
+    const [duration, setDuration] = useState({ time: new Date(), open: false })
 
     const postEvent = () => {
         setIsPosting(true)
@@ -72,12 +76,12 @@ export default function AddEventView({ }) {
             headers: { Authorization: 'Bearer ' + authToken },
             data: {
                 login: username,
-                ename: name,
-                eloc: location,
-                edate: date,
-                etime: duration,
-                eduree: duration, // Ajustez le nom de cette propriété selon votre API
-            }
+                ename: name, 
+                eloc: location, 
+                edate: state.date.toISOString().substr(0, 10), 
+                etime: state.date.toLocaleTimeString(),
+                eduree: duration // Ajustez le nom de cette propriété selon votre API
+      }
         }).then(response => {
             setIsPosting(false);
             if (response.status === 200 || response.status === 201) {
@@ -101,6 +105,7 @@ export default function AddEventView({ }) {
             baseURL: baseUrl,
             url: '/all-possible-preferences-with-id',
             method: 'GET',
+            headers: { Authorization: 'Bearer ' + authToken },
         }).then(response => {
             setIsLoading(false)
             if (response.status >= 200 && response.status < 300) {
@@ -148,9 +153,44 @@ export default function AddEventView({ }) {
                 <View style={styles.titleContainer}>
                     <Text style={styles.title}> NEW EVENT </Text>
                 </View>
-                <CrousteamTextInput onChangeText={(text) => { setName(text) }} label="Name" placeholder="Enter a name" />
-                <CrousteamTextInput onChangeText={(text) => { setLocation(text) }} label="Location" placeholder="Enter a Location" />
-                <CrousteamTextInput onChangeText={(text) => { setDuration(text) }} label="Duration" placeholder="Enter a duration" />
+                <CrousteamTextInput onChangeText={(text)=> {setName(text)}}label = "Name" placeholder ="Enter a name"/>
+                <CrousteamTextInput onChangeText={(text)=> {setLocation(text)}} label = "Location" placeholder ="Enter a Location"/>
+                <View style={{ flexDirection:'row', justifyContent: 'center', alignItems:'center'}}>
+                    <Text >
+                        {state.date.toDateString()}
+                    </Text>
+                    <CrousteamButton
+                        title="Select date"
+                        onPress={() => setState({ date: state.date, open: true })}
+                    />
+                    <DatePicker
+                        modal
+                        open={state.open}
+                        date={state.date}
+                        onConfirm={(date) => setState({ date, open: false })}
+                        onCancel={() => setState({ date:state.date, open: false })}
+                        androidVariant="nativeAndroid"
+                    />
+                </View>
+                <View style={{ flexDirection:'row', justifyContent: 'center', alignItems:'center'}}>
+                    <Text >
+                        {duration.time.toDateString()}
+                    </Text>
+                    <CrousteamButton
+                        title="Select duration"
+                        onPress={() => setDuration({ time: duration.time, open: true })}
+                    />
+                    <DatePicker
+                        modal
+                        mode={'time'}
+                        open={duration.open}
+                        date={duration.time}
+                        onConfirm={(duration) => setDuration({ duration, open: false })}
+                        onCancel={() => setDuration({ time:duration.time, open: false })}
+                        androidVariant="nativeAndroid"
+                    />
+                </View>
+                
                 <View>
                     <FlatList
                         data={preferences}
