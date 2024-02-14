@@ -147,8 +147,9 @@ export default function EventDisplayView({ eid, setEid, gid, setGid }) {
         }).then(response => {
             if (response.status == 200) {
                 console.log(response.data);
-                setPermissionError(false);
                 setPage("mylistevent");
+                setPermissionError(false);
+
             } else if (response.status == 403) {
                 setPermissionError(true);
             }
