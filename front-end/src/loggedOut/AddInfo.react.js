@@ -7,6 +7,9 @@ import { baseUrl } from '../common/const';
 import AppContext from '../common/appcontext';
 import colors from '../common/Colors.react';
 import CrousteamButton from '../common/CrousteamButton.react';
+import KivImagePicker from './ImagePick';
+import uploadImage from './ImageUploader';
+import axios from 'axios';
 
 const styles = StyleSheet.create({
     titleContainer: {
@@ -61,29 +64,42 @@ export default function CreateAccount({ onSuccess, onCancel }) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [hasFailure, setHasFailure] = useState(false);
-
-    const sendUserCreationRequest = () => {
+    const [filePath, setFilePath] = useState();
+    const sendUserCreationRequest = async () => {
         setIsLoading(true);
-        axios({
+        try {
+          const response = await axios({
             baseURL: baseUrl,
             url: '/register',
             method: 'POST',
-            data: { login: username, password: password, firstName: firstName, lastName: lastName, naissance: naissance, photoPath: photopath, bio: biography } // TODO   
-        }).then(response => {
-            setIsLoading(false)
-            if (response.status >= 200 && response.status < 300) {
-                setHasFailure(false)
-                setLastUid()
-                onSuccess()
-            } else {
-                setHasFailure(true)
-            }
-        }).catch(err => {
-            console.error(`something went wrong ${err.message}`)
-            setIsLoading(false)
-            setHasFailure(true)
-        })
-    }
+            data: { 
+              login: username, 
+              password: password, 
+              firstName: firstName, 
+              lastName: lastName, 
+              naissance: naissance, 
+              photoPath: photopath, 
+              bio: biography 
+            } 
+          });
+      
+          if (response.status >= 200 && response.status < 300) {
+            setHasFailure(false);
+            setLastUid();
+            onSuccess();
+            // Use await here if uploadImage needs to be awaited
+            await uploadImage(filePath, username, authToken, baseUrl);
+          } else {
+            setHasFailure(true);
+          }
+        } catch (error) {
+          console.error(`Something went wrong: ${error.message}`);
+          setHasFailure(true);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      
 
     return (
         <CrousteamCard>
@@ -105,6 +121,9 @@ export default function CreateAccount({ onSuccess, onCancel }) {
             <CrousteamTextInput style={{ fontFamily: 'sans-serif' }} label="Birth date" value={naissance} onChangeText={value => setNaissance(value)} />
             <CrousteamTextInput label="Photo" value={photopath} onChangeText={value => setPhotopath(value)} />
             <CrousteamTextInput label="Biography" value={biography} onChangeText={value => setBiography(value)} />
+            <View style={{ flex: 1 }}>
+                <KivImagePicker filePath={filePath} setFilePath={setFilePath} />
+            </View>
 
 
             <View style={styles.buttonRow}>
