@@ -145,7 +145,7 @@ export default function EventDisplayView({ eid, setEid, gid, setGid }) {
 
     return (
         <View>
-            <ReturnButton title="Retour" onPress={() => { setEid(-1); setPage("listevent") }}></ReturnButton>
+            <ReturnButton title="Retour" onPress={() => { setEid(-1); setPage("mylistevent") }}></ReturnButton>
 
 
             <View style={styles.identityContainer}>
