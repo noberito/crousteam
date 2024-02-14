@@ -396,7 +396,7 @@ export default function GeneralSettingsView() {
                 />
                 <View style={styles.buttonRow}>
                     <View style={styles.button}>
-                        <CrousteamButton title="CHANGE PREFERENCES" disabled={isLoading} styleText={styles.Text} onPress={() => { SendPreferences(); }} />
+                        <CrousteamButton title="CHANGE PREFERENCES" disabled={isLoading} styleText={styles.Text} onPress={() => { SendPreferences(); setPage('myprofile') }} />
                     </View>
                 </View>
             </CrousteamCard>
