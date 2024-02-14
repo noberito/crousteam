@@ -145,6 +145,7 @@ export default function EventDisplayView({ eid, setEid, gid, setGid }) {
   }, [authToken, getGroup]);
 
   const renderItem = ({ item }) => { return (<Text style={styles.preferenceItem}> {item}</Text>) }
+  const uniqueData = Array.from(new Set(info[7]));
 
   return (
     <View>
@@ -171,7 +172,7 @@ export default function EventDisplayView({ eid, setEid, gid, setGid }) {
       <Line />
       <Text style={styles.sectionTitle}> PREFERENCES </Text>
       <FlatList
-        data={info[7]}
+        data={uniqueData}
         keyExtractor={(item) => { item }}
         renderItem={renderItem} />
 
