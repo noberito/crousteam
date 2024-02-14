@@ -42,7 +42,7 @@ export default function AllEvents({ eid, setGid, log, setLog }) {
         setPermissionError(true);
       }
     }).catch(err => {
-      console.error(`Something went wrong ${err.message}`);
+      console.error(`Something went wrong while getting all events ${err.message}`);
       setIsLoading(false);
       setRefreshing(false);
     });

@@ -85,13 +85,13 @@ export default function AddEventView({ }) {
             method: 'POST',
             headers: { Authorization: 'Bearer ' + authToken },
             data: {
-                login: username,
                 ename: name,
                 eloc: location,
                 edate: state.date.toISOString().substr(0, 10),
                 etime: state.date.toLocaleTimeString(),
                 eduree: duration.time.toLocaleTimeString(),
-                preferences_elist: selectedPreferences, // Ajustez le nom de cette propriété selon votre API
+                edescr:description,
+                preferences_list: selectedPreferences, // Ajustez le nom de cette propriété selon votre API
             }
         }).then(response => {
             setIsPosting(false);
