@@ -8,6 +8,8 @@ import colors from '../common/Colors.react';
 import axios from 'axios';
 import { baseUrl } from '../common/const';
 import CrousteamButton from '../common/CrousteamButton.react';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -52,6 +54,57 @@ export default function CreateAccount({ onSuccess, onCancel }) {
     setPassword(password);
     onSuccess()
   }
+  const uploadImage = async (filePath) => {
+
+    try {
+
+      const formData = new FormData();
+
+      formData.append('imageInp', {
+
+        uri: filePath.uri,
+
+        type: filePath.type,
+
+        name: filePath.fileName,
+
+      });
+
+      formData.append('login', username);
+
+ 
+
+      const response = await axios.post(`${baseUrl}/upload`, formData, {
+
+        headers: {
+
+          Authorization: `Bearer ${authToken}`,
+
+          'Content-Type': 'multipart/form-data',
+
+        },
+
+      });
+
+ 
+
+      console.log('Upload success:', response.data);
+
+      return response.data;
+
+    } catch (error) {
+
+      console.error('Upload failed:', error);
+
+      throw error;
+
+    }
+
+  };
+
+ 
+
+ 
 
   return (
     <CrousteamCard>
