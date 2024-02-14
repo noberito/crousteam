@@ -144,7 +144,7 @@ export default function GeneralSettingsView({ }) {
                 <KivTextInput label="naissance" value={naissance} onChangeText={value => setNaissance(value)} />
                 <KivTextInput label="bio" value={bio} onChangeText={value => setBio(value)} />
                 <KivTextInput label="photopath" value={photoPath} onChangeText={value => setPhotopath(value)} />
-                <CrousteamButton title="Submit changes" disabled={isLoading} styleText={styles.Text} onPress={() => { SubmitInfo() }} />
+                <CrousteamButton title="Submit changes" disabled={isLoading} styleText={styles.Text} onPress={() => { SubmitInfo(); setPage("myprofile") }} />
 
 
 
