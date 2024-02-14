@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext} from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, Button, StyleSheet, FlatList, TouchableOpacity, Controller, useWatch, ScrollView } from "react-native"
 import { baseUrl } from '../common/const';
 import axios from 'axios';
@@ -42,15 +42,15 @@ const styles = StyleSheet.create({
     preference: {
         fontFamily: 'Arista-Pro-Alternate-Bold-trial'
     },
-    dateStyle:{
-        fontFamily:'Arista-Pro-Alternate-Bold-trial'
+    dateStyle: {
+        fontFamily: 'Arista-Pro-Alternate-Bold-trial'
     },
     inputLabel: {
         fontSize: 16,
         alignSelf: 'center',
         justifyContent: 'center',
-        color:colors.secondaryText,
-        fontFamily:'Arista-Pro-Alternate-Bold-trial'
+        color: colors.secondaryText,
+        fontFamily: 'Arista-Pro-Alternate-Bold-trial'
     },
 }
 )
@@ -88,9 +88,9 @@ export default function AddEventView({ }) {
                 ename: name,
                 eloc: location,
                 edate: state.date.toISOString().substr(0, 10),
-                etime: state.date.toLocaleTimeString(),
-                eduree: duration.time.toLocaleTimeString(),
-                edescr:description,
+                etime: state.date.toLocaleTimeString('fr-FR'),
+                eduree: duration.time.toLocaleTimeString('fr-FR'),
+                edescr: description,
                 preferences_list: selectedPreferences, // Ajustez le nom de cette propriété selon votre API
             }
         }).then(response => {
@@ -159,7 +159,7 @@ export default function AddEventView({ }) {
         )
     }
 
-    
+
 
 
     return (
@@ -169,9 +169,9 @@ export default function AddEventView({ }) {
                 <View style={styles.titleContainer}>
                     <Text style={styles.title}> NEW EVENT </Text>
                 </View>
-                <CrousteamTextInput onChangeText={(text)=> {setName(text)}}label = "Name" placeholder ="Enter a name"/>
-                <CrousteamTextInput onChangeText={(text)=> {setLocation(text)}} label = "Location" placeholder ="Enter a Location"/>
-                <View style={{ flexDirection:'row', justifyContent: 'center', alignItems:'center'}}>
+                <CrousteamTextInput onChangeText={(text) => { setName(text) }} label="Name" placeholder="Enter a name" />
+                <CrousteamTextInput onChangeText={(text) => { setLocation(text) }} label="Location" placeholder="Enter a Location" />
+                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <Text >
                         {state.date.toDateString()}
                     </Text>
@@ -191,7 +191,7 @@ export default function AddEventView({ }) {
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <Text >
-                        {duration.time.toLocaleTimeString()}
+                        {duration.time.toLocaleTimeString('fr-FR')}
                     </Text>
                     <CrousteamButton
                         title="Select duration"
@@ -203,14 +203,16 @@ export default function AddEventView({ }) {
                         mode={'time'}
                         open={duration.open}
                         date={duration.time}
+                        locale={'fr_FR'}
+                        is24hourSource='locale'
                         onConfirm={(duration) => { console.log(duration), setDuration({ time: duration, open: false }) }}
                         onCancel={() => setDuration({ time: duration.time, open: false })}
                         androidVariant="nativeAndroid"
                     />
                 </View>
 
-                <CrousteamTextInput onChangeText={(text)=> {setDescription(text)}} label = "Description" placeholder ="Enter a Description"/>
-                
+                <CrousteamTextInput onChangeText={(text) => { setDescription(text) }} label="Description" placeholder="Enter a Description" />
+
                 <View>
                     <FlatList
                         data={preferences}
