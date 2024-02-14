@@ -144,6 +144,8 @@ export default function EventDisplayView({ eid, setEid, gid, setGid }) {
     getInfo();
   }, [authToken, getGroup]);
 
+  const renderItem = ({ item }) => { return (<Text style={styles.preferenceItem}> {item}</Text>) }
+
   return (
     <View>
       <ReturnButton title="Retour" onPress={() => { setEid(-1); setPage("listevent") }}></ReturnButton>
@@ -164,11 +166,14 @@ export default function EventDisplayView({ eid, setEid, gid, setGid }) {
       <Line />
       <Text style={styles.sectionTitle}> DESCRIPTION</Text>
       <View style={styles.biographyContainer}>
-        <Text style={styles.biography}>{info[4]}</Text>
+        <Text style={styles.biography}>{info[5]}</Text>
       </View>
       <Line />
       <Text style={styles.sectionTitle}> PREFERENCES </Text>
-      <Text style={styles.name}>{info}  </Text>
+      <FlatList
+        data={info[7]}
+        keyExtractor={(item) => { item }}
+        renderItem={renderItem} />
 
 
       <CrousteamButton title="Chat" styleText={styles.Text} onPress={() => { setPage("chatdisplay") }}></CrousteamButton>
