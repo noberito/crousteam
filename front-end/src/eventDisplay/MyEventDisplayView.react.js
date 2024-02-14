@@ -138,6 +138,28 @@ export default function EventDisplayView({ eid, setEid, gid, setGid }) {
         });
     }
 
+    const deleteEvent = () => {
+        axios({
+            baseURL: baseUrl,
+            url: `/event-gid/${gid}`,
+            method: 'DELETE',
+            headers: { Authorization: 'Bearer ' + authToken },
+        }).then(response => {
+            if (response.status == 200) {
+                console.log(response.data);
+                setPermissionError(false);
+                setPage("mylistevent");
+            } else if (response.status == 403) {
+                setPermissionError(true);
+            }
+        }
+        ).catch(err => {
+            console.error(`Something went wrong ${err.message}`);
+            setIsLoading(false);
+            setRefreshing(false);
+        });
+    }
+
     useEffect(() => {
 
         getInfo();
@@ -171,7 +193,7 @@ export default function EventDisplayView({ eid, setEid, gid, setGid }) {
 
 
             <CrousteamButton title="Chat" styleText={styles.Text} onPress={() => { setPage("chatdisplay") }}></CrousteamButton>
-            <CrousteamButton title="Delete" styleText={styles.Text} onPress={() => { setPage("chatdisplay") }}></CrousteamButton>
+            <CrousteamButton title="Delete" styleText={styles.Text} onPress={() => { deleteEvent() }}></CrousteamButton>
         </View>
     );
 };

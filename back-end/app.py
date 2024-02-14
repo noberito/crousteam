@@ -443,7 +443,19 @@ def delete_event(eid: int):
     return "", 204
 
 
+<<<<<<< HEAD
 # Add a new user to the event
+=======
+@app.delete("/event-gid/<gid>", authorize="ALL")
+def delete_event_gid(gid: int):
+    exist_already = db.get_single_group_chat(gid=gid)
+    if not exist_already:
+        return "no event to delete", 404
+    db.delete_group_chat(gid=gid)
+    return "", 204
+
+
+>>>>>>> b2efc35 (working delete)
 @app.post("/event/<login>", authorize="ALL")
 def insert_people_into_the_event_group_chat(eid: int, login: str):
     people_exist = db.get_single_profile(login=login)
