@@ -5,10 +5,10 @@ import CrousteamCard from '../common/CrousteamCard.react';
 import AppContext from '../common/appcontext';
 import colors from '../common/Colors.react';
 
-import axios from 'axios';
+
 import { baseUrl } from '../common/const';
 import CrousteamButton from '../common/CrousteamButton.react';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+
 
 
 const styles = StyleSheet.create({
@@ -47,64 +47,21 @@ export default function CreateAccount({ onSuccess, onCancel }) {
   const [isLoading, setIsLoading] = useState(false);
   const [hasFailure, setHasFailure] = useState(false);
 
+
   const { setUsername, setPassword, username, password } = useContext(AppContext);
 
   const sendUserCreationRequest = () => { // get the lid from the server after sending post
+
+    
+
     setUsername(username);
     setPassword(password);
     onSuccess()
   }
-  const uploadImage = async (filePath) => {
 
-    try {
 
-      const formData = new FormData();
 
-      formData.append('imageInp', {
 
-        uri: filePath.uri,
-
-        type: filePath.type,
-
-        name: filePath.fileName,
-
-      });
-
-      formData.append('login', username);
-
- 
-
-      const response = await axios.post(`${baseUrl}/upload`, formData, {
-
-        headers: {
-
-          Authorization: `Bearer ${authToken}`,
-
-          'Content-Type': 'multipart/form-data',
-
-        },
-
-      });
-
- 
-
-      console.log('Upload success:', response.data);
-
-      return response.data;
-
-    } catch (error) {
-
-      console.error('Upload failed:', error);
-
-      throw error;
-
-    }
-
-  };
-
- 
-
- 
 
   return (
     <CrousteamCard>
@@ -123,6 +80,7 @@ export default function CreateAccount({ onSuccess, onCancel }) {
       </View>}
       <CrousteamTextInput label="Username" value={username} onChangeText={value => setUsername(value)} />
       <CrousteamTextInput label="Password" value={password} onChangeText={value => setPassword(value)} />
+
       <View style={styles.buttonRow}>
         <CrousteamButton title="Continue" disabled={isLoading} styleText={styles.Text} onPress={() => { sendUserCreationRequest(); }} />
         <CrousteamButton title="Login" disabled={isLoading} styleText={styles.Text} onPress={() => { onCancel(); }} />

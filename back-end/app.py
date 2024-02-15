@@ -613,7 +613,7 @@ def generate_filename(filename):
 
 
 # attention, cette route devrait être protégée !
-@app.post("/upload", authorize="ALL")
+@app.post("/upload", authorize="ANY")
 def post_upload(imageInp: fsa.FileStorage, login: str):
     upload_path = app.config["UPLOAD_FOLDER"]
     unique_filename = generate_filename(imageInp.filename)

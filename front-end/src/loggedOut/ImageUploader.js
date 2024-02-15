@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 
-const uploadImage = async (filePath, username, authToken, baseUrl) => {
+const uploadImage = async (filePath, login, baseUrl) => {
   try {
     const formData = new FormData();
     formData.append('imageInp', {
@@ -10,11 +10,10 @@ const uploadImage = async (filePath, username, authToken, baseUrl) => {
       type: filePath.type,
       name: filePath.fileName,
     });
-    formData.append('login', username);
+    formData.append('login', login);
 
     const response = await axios.post(`${baseUrl}/upload`, formData, {
       headers: {
-        Authorization: `Bearer ${authToken}`,
         'Content-Type': 'multipart/form-data',
       },
     });
