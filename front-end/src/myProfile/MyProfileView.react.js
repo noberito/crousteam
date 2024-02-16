@@ -74,7 +74,7 @@ export default function MyProfileView({ logoutUser }) {
     const { page, setPage, username, authToken } = useContext(AppContext)
     const [firstname, setFirstname] = useState('')
     const [lastname, setLastname] = useState('')
-    const [photoPath, setPhotoPath] = useState('')
+    const [photoPath, setPhotoPath] = useState("src/images/myprofile.png")
     const [isLoading, setIsLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [hasPermissionError, setPermissionError] = useState(false);

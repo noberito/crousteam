@@ -42,6 +42,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Arista-Pro-Alternate-Bold-trial',
     fontSize: 20,
   },
+  inputLabel: {
+    fontSize: 16,
+    alignSelf: 'center',
+    color: '#f8871f',
+    fontFamily: 'Arista-Pro-Alternate-Bold-trial',
+    marginBottom:0
+  },
 });
 
 export default function CreateAccount({onSuccess, onCancel}) {
@@ -123,23 +130,24 @@ export default function CreateAccount({onSuccess, onCancel}) {
         value={naissance}
         onChangeText={value => setNaissance(value)}
       />
-      <CrousteamTextInput
-        label="Photo"
-        value={photopath}
-        onChangeText={value => setPhotopath(value)}
-      />
+
       <CrousteamTextInput
         label="Biography"
         value={biography}
         onChangeText={value => setBiography(value)}
       />
-      <View style={{flex: 1}}>
+      <Text style={styles.inputLabel}>
+          Import Profile Photo
+        </Text>
+      <View style={{flex: 1, height: 200,marginBottom:100} }>
+
+
         <KivImagePicker filePath={filePath} setFilePath={setFilePath} />
       </View>
-
+       <View style={{margin:150}}>
       <View style={styles.buttonRow}>
         <View style={styles.button}>
-          <CrousteamButton
+          <CrousteamButton 
             title="< Login"
             disabled={isLoading}
             styleText={styles.Text}
@@ -157,6 +165,7 @@ export default function CreateAccount({onSuccess, onCancel}) {
               sendUserCreationRequest();
             }}
           />
+          </View>
         </View>
       </View>
     </CrousteamCard>
