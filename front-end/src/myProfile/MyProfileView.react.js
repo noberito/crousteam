@@ -74,6 +74,7 @@ export default function MyProfileView({ logoutUser }) {
     const { page, setPage, username, authToken } = useContext(AppContext)
     const [firstname, setFirstname] = useState('')
     const [lastname, setLastname] = useState('')
+    const [photoPath, setPhotoPath] = useState('')
     const [isLoading, setIsLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [hasPermissionError, setPermissionError] = useState(false);
@@ -82,7 +83,7 @@ export default function MyProfileView({ logoutUser }) {
         setIsLoading(true);
         // Set refreshing to true when we are loading data on pull to refresh
         setRefreshing(true);
-        axios.get('/first-last-name', {
+        axios.get('/first-last-name-photo', {
             headers: { Authorization: 'Bearer ' + authToken },
         }).then(response => {
             console.log('AAA>', JSON.stringify(response.data));
@@ -91,6 +92,7 @@ export default function MyProfileView({ logoutUser }) {
             if (response.status == 200) {
                 setFirstname(response.data[0]);
                 setLastname(response.data[1]);
+                setPhotoPath(response.data[2]);
             }
             else if (response.status == 403) {
                 setPermissionError(true);
@@ -105,11 +107,11 @@ export default function MyProfileView({ logoutUser }) {
     useEffect(() => {
         getInfo();
     }, [authToken]);
-
+    console.log(photoPath);
     return (
         <View style={styles.mainContainer}>
             <View style={styles.identityContainer}>
-                <Image style={styles.image} source={require('../loggedOut/ic_launcher_round.png')}></Image>
+                <Image style={styles.image} source={{uri:photoPath}}></Image>
                 <View style={styles.nameContainer}>
                     <Text style={styles.name}>{firstname} {lastname} </Text>
                     <View style={{ flexDirection: 'row' }}>

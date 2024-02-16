@@ -156,8 +156,8 @@ DELETE FROM AppGroup WHERE gid = :gid;
 -- name: get_gid_of_a_group^
 SELECT gid FROM AppGroup ORDER BY gid DESC LIMIT 1;
 
--- name: get_first_last_name^
-SELECT firstName, lastName
+-- name: get_first_last_name_photo^
+SELECT firstName, lastName, photoPath
 FROM Profile
 JOIN Auth USING(lid)
 WHERE login = :login;

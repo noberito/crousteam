@@ -470,9 +470,9 @@ def insert_people_into_the_event_group_chat(eid: int, login: str):
 # GET INFORMATIONS
 #
 # Get first and last name from the user
-@app.get("/first-last-name", authorize="ALL")
+@app.get("/first-last-name-photo", authorize="ALL")
 def get_first_last_name(user: fsa.CurrentUser):
-    res = db.get_first_last_name(login=user)
+    res = db.get_first_last_name_photo(login=user)
     return json(res), 200
 
 
