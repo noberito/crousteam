@@ -84,6 +84,7 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog, }) {
   const [, setIsLoading] = useState(false);
   const [info, setInfo] = useState('');
   const [lid, setLid] = useState();
+  const [photoPath, setPhotoPath] = useState('http://localhost:5000/static/ic_launcher_round.png');
   const [hasPermissionError, setPermissionError] = useState(false);
   const [isPosting, setIsPosting] = useState(false);
   const [postError, setPostError] = useState(false);
@@ -185,6 +186,9 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog, }) {
       console.log('OK ! ' + result.data)
       setIsLoading(false)
       setInfo(result.data)
+      if(result.data[5])
+      setPhotoPath(result.data[5])
+      console.log(result.data[5]);
       setLid(info['naissance'])
     }).catch(err => {
       console.error(`something went wrong here: ${err.message}`)
@@ -218,7 +222,7 @@ export default function ProfileDisplayView({ gid, setGid, log, setLog, }) {
     <View style={styles.mainContainer}>
       <ReturnButton title="Retour" onPress={() => { setLog('null'); setPage("friender") }}></ReturnButton>
       <View style={styles.identityContainer}>
-        <Image style={styles.image} source={require('../loggedOut/ic_launcher_round.png')}></Image>
+      <Image style={styles.image} source={{uri:photoPath}}></Image>
         <View style={styles.nameContainer}>
           <Text style={styles.name}>{info[1]} {info[2]} </Text>
           <View style={{ flexDirection: 'row' }}>

@@ -74,7 +74,7 @@ export default function MyProfileView({ logoutUser }) {
     const { page, setPage, username, authToken } = useContext(AppContext)
     const [firstname, setFirstname] = useState('')
     const [lastname, setLastname] = useState('')
-    const [photoPath, setPhotoPath] = useState("src/images/myprofile.png")
+    const [photoPath, setPhotoPath] = useState('http://localhost:5000/static/ic_launcher_round.png');
     const [isLoading, setIsLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
     const [hasPermissionError, setPermissionError] = useState(false);
@@ -92,6 +92,7 @@ export default function MyProfileView({ logoutUser }) {
             if (response.status == 200) {
                 setFirstname(response.data[0]);
                 setLastname(response.data[1]);
+                if(response.data[2])
                 setPhotoPath(response.data[2]);
             }
             else if (response.status == 403) {
