@@ -629,7 +629,7 @@ def post_upload(imageInp: fsa.FileStorage, login: str):
                 login=login,
                 photoPath=app.config["UPLOADED_URL"] + unique_filename,
             )
-            return "", 201
+            return url + unique_filename, 201
         else:
             return "login doesn't exist", 404
     else:
